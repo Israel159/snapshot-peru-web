@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snapshot Perú - Fotomonitoreo Nacional</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN - COPIAR ESTO EN TODAS LAS PÁGINAS -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">📷</span>
+                <span>Snapshot Perú</span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="sobre.html">Sobre el Proyecto</a></li>
+                <li><a href="colaboradores.html">Colaboradores</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
+                <li><a href="mapa.html">¿Quiénes se suman?</a></li>
+                <li><a href="galeria.html">Galería</a></li>
+                <li><a href="investigacion.html">Investigación</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- SECCIÓN HERO - PRESENTACIÓN PRINCIPAL -->
+    <section class="hero">
+        <div class="container">
+            <h1>Snapshot Perú</h1>
+            <p class="subtitle">Fotomonitoreo nacional para conocer, conservar y conectar la biodiversidad del Perú.</p>
+            <p class="descripcion">
+                Snapshot Perú es una iniciativa colaborativa orientada a integrar datos de cámaras trampa 
+                a nivel nacional para fortalecer el monitoreo de mamíferos terrestres, apoyar la toma de 
+                decisiones en conservación y promover estándares comunes de fotomonitoreo en el país.
+            </p>
+            <div class="mt-40">
+                <a href="sobre.html" class="btn btn-primario">Conoce el proyecto</a>
+                <a href="contacto.html" class="btn btn-secundario">Participa</a>
+                <a href="mapa.html" class="btn btn-secundario">Explora quiénes participan</a>
+                <a href="https://docs.google.com/document/d/1t6sX1TVXIEqcthvcypiBhHnVwJmLGqCp/edit?usp=drive_link" 
+                   class="btn btn-secundario" target="_blank">Descarga el protocolo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ¿QUÉ ES SNAPSHOT PERÚ? -->
+    <section class="bg-white">
+        <div class="container">
+            <h2 class="section-title">¿Qué es Snapshot Perú?</h2>
+            <p class="section-subtitle">
+                Una iniciativa que busca reunir esfuerzos de monitoreo con cámaras trampa realizados por 
+                instituciones públicas, ONG, universidades, áreas protegidas, comunidades, investigadores 
+                independientes y proyectos de conservación.
+            </p>
+            <div class="grid-3 mt-40">
+                <div class="card text-center">
+                    <div class="card-icon">🤝</div>
+                    <h3>Colaborativo</h3>
+                    <p>Trabajamos en red con múltiples actores del país para unificar esfuerzos de monitoreo.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="card-icon">📊</div>
+                    <h3>Estandarizado</h3>
+                    <p>Utilizamos protocolos técnicos comunes que permiten comparar datos a nivel nacional.</p>
+                </div>
+                <div class="card text-center">
+                    <div class="card-icon">🌎</div>
+                    <h3>Nacional</h3>
+                    <p>Cobertura en todo el territorio peruano, abarcando diversos ecosistemas y regiones.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ¿POR QUÉ ES IMPORTANTE? -->
+    <section class="bg-light">
+        <div class="container">
+            <h2 class="section-title">¿Por qué es importante?</h2>
+            <div class="grid-2 mt-40">
+                <div>
+                    <p style="margin-bottom: 20px;">
+                        <strong>Snapshot Perú se inspira en la experiencia de Snapshot USA</strong>, una iniciativa 
+                        de fotomonitoreo nacional lanzada en 2019 por el Smithsonian Institution y el North 
+                        Carolina Museum of Natural Sciences, que utiliza cámaras trampa y protocolos estandarizados 
+                        para monitorear mamíferos a gran escala en los Estados Unidos.
+                    </p>
+                    <p style="margin-bottom: 20px;">
+                        Desde entonces, este modelo ha demostrado el valor de generar bases de datos colaborativas, 
+                        comparables y de largo plazo para entender cómo las poblaciones de fauna responden a cambios 
+                        en el uso del suelo, la cobertura vegetal y el clima.
+                    </p>
+                    <p>
+                        Snapshot Perú propone desarrollar un fotomonitoreo nacional anual y colaborativo con 
+                        cámaras trampa, orientado al registro de mamíferos y otra fauna terrestre en todo el país.
+                    </p>
+                </div>
+                <div>
+                    <div class="card">
+                        <h3>🎯 Objetivos del fotomonitoreo</h3>
+                        <ul style="list-style: none; padding: 0; margin-top: 15px;">
+                            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">📍 Evaluar distribución y presencia de especies</li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">📈 Medir abundancia relativa</li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">🕐 Analizar patrones de actividad</li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">🌿 Comparar entre ecosistemas</li>
+                            <li style="padding: 10px 0;">👥 Evaluar impacto de intervención humana</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAPA RÁPIDO -->
+    <section class="bg-white">
+        <div class="container">
+            <h2 class="section-title">Mapa de Iniciativas</h2>
+            <p class="section-subtitle">Ubicación general de proyectos participantes en el fotomonitoreo</p>
+            <div id="mapa-inicio" class="mapa-container"></div>
+            <div class="text-center mt-20">
+                <a href="mapa.html" class="btn btn-primario">Ver mapa completo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER - COPIAR EN TODAS LAS PÁGINAS -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h4>📷 Snapshot Perú</h4>
+                    <p style="opacity: 0.8; margin-top: 10px;">
+                        Fotomonitoreo nacional de biodiversidad mediante cámaras trampa.
+                    </p>
+                </div>
+                <div>
+                    <h4>Enlaces rápidos</h4>
+                    <a href="sobre.html">Sobre el Proyecto</a>
+                    <a href="protocolo.html">Protocolo</a>
+                    <a href="galeria.html">Galería</a>
+                    <a href="contacto.html">Contacto</a>
+                </div>
+                <div>
+                    <h4>Participa</h4>
+                    <a href="contacto.html">Únete al proyecto</a>
+                    <a href="colaboradores.html">Red de colaboradores</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Snapshot Perú. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        // Menú móvil
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        // Mapa Leaflet
+        var mapa = L.map('mapa-inicio').setView([-9.19, -75.015], 5);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mapa);
+
+        // Sitios de ejemplo (reemplaza con tus datos reales)
+        var sitios = [
+            { coords: [-13.1631, -72.5450], nombre: "Machu Picchu - Cusco" },
+            { coords: [-5.1962, -80.6267], nombre: "Bosque Seco - Piura" },
+            { coords: [-12.0464, -77.0428], nombre: "Lomas de Lachay - Lima" },
+            { coords: [-3.7437, -73.2516], nombre: "Reserva Pacaya-Samiria - Loreto" },
+            { coords: [-11.5444, -75.3523], nombre: "Selva Central - Junín" },
+            { coords: [-15.8402, -70.0219], nombre: "Lago Titicaca - Puno" }
+        ];
+
+        sitios.forEach(function(sitio) {
+            L.marker(sitio.coords)
+                .addTo(mapa)
+                .bindPopup('<strong>' + sitio.nombre + '</strong><br>Zona de monitoreo');
+        });
+    </script>
+
+</body>
+</html>

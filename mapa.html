@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Quiénes se suman? - Snapshot Perú</title>
+    <link rel="stylesheet" href="estilos.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN (copiar de index.html) -->
+    
+    <section class="hero" style="padding: 60px 0;">
+        <div class="container">
+            <h1>¿Quiénes se suman?</h1>
+            <p class="subtitle">Cobertura nacional del fotomonitoreo</p>
+        </div>
+    </section>
+
+    <!-- ESTADÍSTICAS -->
+    <section class="bg-white">
+        <div class="container">
+            <h2 class="section-title">Resumen de Participación</h2>
+            
+            <div class="stats-container">
+                <div class="stat-box">
+                    <div class="stat-numero">0</div>
+                    <div class="stat-label">Cámaras por arreglo</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-numero">0</div>
+                    <div class="stat-label">Regiones inscritas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-numero">0</div>
+                    <div class="stat-label">Ecosistemas cubiertos</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-numero">0</div>
+                    <div class="stat-label">Organizaciones inscritas</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAPA INTERACTIVO -->
+    <section class="bg-light">
+        <div class="container">
+            <h2 class="section-title">Mapa de Iniciativas</h2>
+            <p class="section-subtitle">
+                Ubicación general de proyectos participantes. 
+                <strong>Nota:</strong> Las coordenadas están generalizadas para proteger especies sensibles.
+            </p>
+            
+            <div id="mapa-completo" class="mapa-container" style="height: 600px;"></div>
+            
+            <div class="text-center mt-20">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" 
+                   class="btn btn-primario" target="_blank">📍 Registra tu sitio de monitoreo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (copiar de index.html) -->
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+
+        // Mapa completo con más detalle
+        var mapa = L.map('mapa-completo').setView([-9.19, -75.015], 5);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(mapa);
+
+        // Aquí puedes agregar los marcadores reales desde tu Google Forms
+        // Por ahora, ejemplos de sitios
+        var sitios = [
+            { coords: [-13.1631, -72.5450], nombre: "Machu Picchu", tipo: "Santuario Histórico" },
+            { coords: [-5.1962, -80.6267], nombre: "Bosque Seco - Piura", tipo: "Área de monitoreo" },
+            { coords: [-12.0464, -77.0428], nombre: "Lomas de Lachay", tipo: "Reserva Nacional" },
+            { coords: [-3.7437, -73.2516], nombre: "Pacaya-Samiria", tipo: "Reserva Nacional" },
+            { coords: [-11.5444, -75.3523], nombre: "Selva Central", tipo: "Zona de monitoreo" },
+            { coords: [-15.8402, -70.0219], nombre: "Lago Titicaca", tipo: "Reserva Nacional" },
+            { coords: [-6.2309, -77.8712], nombre: "Cordillera Escalera", tipo: "Área de conservación" },
+            { coords: [-16.3988, -71.5369], nombre: "Valle del Colca", tipo: "Reserva Paisajística" }
+        ];
+
+        sitios.forEach(function(sitio) {
+            L.marker(sitio.coords)
+                .addTo(mapa)
+                .bindPopup('<strong>' + sitio.nombre + '</strong><br>' + sitio.tipo);
+        });
+    </script>
+
+</body>
+</html>

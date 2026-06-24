@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería - Snapshot Perú</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+
+    <!-- BARRA DE NAVEGACIÓN (copiar de index.html) -->
+    
+    <section class="hero" style="padding: 60px 0;">
+        <div class="container">
+            <h1>Galería de Biodiversidad</h1>
+            <p class="subtitle">Imágenes captadas por nuestra red de cámaras trampa</p>
+        </div>
+    </section>
+
+    <!-- FOTOS DESTACADAS -->
+    <section class="bg-white">
+        <div class="container">
+            <h2 class="section-title">Fotos Destacadas</h2>
+            
+            <div class="galeria-grid">
+                <!-- Aquí agregas tus fotos. Por ahora, placeholders -->
+                <div class="galeria-item">
+                    <img src="https://via.placeholder.com/400x300/1a5f2a/ffffff?text=Oso+de+Anteojos" alt="Oso de anteojos">
+                    <div class="galeria-overlay">Oso de anteojos - Amazonas</div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://via.placeholder.com/400x300/2d7a3e/ffffff?text=Puma" alt="Puma">
+                    <div class="galeria-overlay">Puma - Cusco</div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://via.placeholder.com/400x300/c9a227/ffffff?text=Tapir" alt="Tapir">
+                    <div class="galeria-overlay">Tapir andino - Junín</div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://via.placeholder.com/400x300/1a5f2a/ffffff?text=Jaguar" alt="Jaguar">
+                    <div class="galeria-overlay">Jaguar - Madre de Dios</div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://via.placeholder.com/400x300/2d7a3e/ffffff?text=Huemul" alt="Huemul">
+                    <div class="galeria-overlay">Venado cola blanca - Piura</div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://via.placeholder.com/400x300/c9a227/ffffff?text=Zorro" alt="Zorro">
+                    <div class="galeria-overlay">Zorro andino - Puno</div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-40">
+                <a href="https://drive.google.com/drive/folders/14biRLvgZKeDUrZeQrxk7FxUgwMnkRYbH" 
+                   class="btn btn-primario" target="_blank">📁 Ver más fotos en Drive</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- REGISTRO DEL MES -->
+    <section class="bg-light">
+        <div class="container">
+            <h2 class="section-title">Registro del Mes</h2>
+            <div class="card" style="max-width: 800px; margin: 0 auto;">
+                <div class="grid-2" style="align-items: center;">
+                    <div>
+                        <img src="https://via.placeholder.com/400x300/1a5f2a/ffffff?text=Especie+del+Mes" 
+                             alt="Especie del mes" style="width: 100%; border-radius: 8px;">
+                    </div>
+                    <div>
+                        <h3 style="color: var(--color-primario); margin-bottom: 15px;">
+                            🏆 Especie destacada: [Nombre de la especie]
+                        </h3>
+                        <p style="margin-bottom: 15px;">
+                            Descripción breve del hallazgo, por qué es importante y en qué zona fue captada.
+                        </p>
+                        <p style="color: var(--color-gris); font-size: 0.9rem;">
+                            <strong>Ubicación:</strong> [Región]<br>
+                            <strong>Fecha:</strong> [Mes, Año]<br>
+                            <strong>Fotógrafo:</strong> [Nombre del colaborador]
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER (copiar de index.html) -->
+    
+    <script>
+        function toggleMenu() {
+            document.getElementById('navLinks').classList.toggle('active');
+        }
+    </script>
+
+</body>
+</html>
