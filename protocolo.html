@@ -122,7 +122,7 @@
             margin-bottom: 10px; letter-spacing: -1px;
         }
         .page-header p {
-            font-size: 1.1rem; opacity: 0.85; max-width: 600px;
+            font-size: 1.1rem; opacity: 0.85; max-width: 700px;
         }
 
         /* SECCIONES */
@@ -140,39 +140,207 @@
         }
         .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
 
-        /* PROTOCOLO RESUMIDO */
-        .protocolo-card {
-            background: var(--blanco); border-radius: 16px; padding: 32px;
-            box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
-            margin-bottom: 20px; transition: var(--transicion);
+        /* RESUMEN EJECUTIVO */
+        .resumen-box {
+            background: linear-gradient(135deg, var(--verde-fondo), #e8f5e9);
+            border-left: 4px solid var(--verde-primario);
+            padding: 32px;
+            border-radius: 0 16px 16px 0;
+            margin-bottom: 40px;
         }
-        .protocolo-card:hover { box-shadow: var(--sombra-media); border-color: var(--verde-pastel); }
-        .protocolo-card h3 {
-            color: var(--verde-oscuro); font-size: 1.15rem; margin-bottom: 14px;
-            font-weight: 700; display: flex; align-items: center; gap: 10px;
-        }
-        .protocolo-card ul {
-            margin-left: 20px; color: var(--texto-claro);
-        }
-        .protocolo-card ul li {
-            margin-bottom: 10px; padding-left: 8px;
-        }
-        .protocolo-card p {
-            color: var(--texto-claro); margin-bottom: 10px;
-        }
-
-        /* PUNTOS CLAVE */
-        .punto-clave {
-            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
-            color: var(--blanco); border-radius: 16px; padding: 32px;
+        .resumen-box p {
+            color: var(--verde-oscuro);
+            font-size: 1.05rem;
+            line-height: 1.8;
             margin-bottom: 16px;
         }
-        .punto-clave h4 {
-            color: var(--dorado-claro); font-size: 1.1rem; margin-bottom: 12px;
+        .resumen-box p:last-child { margin-bottom: 0; }
+
+        /* ACORDEÓN PROTOCOLO */
+        .protocolo-accordion {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .accordion-item {
+            background: var(--blanco);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--gris-suave);
+            overflow: hidden;
+            transition: var(--transicion);
+        }
+        .accordion-item:hover {
+            box-shadow: var(--sombra-media);
+            border-color: var(--verde-pastel);
+        }
+        .accordion-header {
+            padding: 20px 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--blanco);
+            border: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--verde-oscuro);
+            transition: var(--transicion);
+        }
+        .accordion-header:hover {
+            background: var(--gris-fondo);
+        }
+        .accordion-header.active {
+            background: var(--verde-fondo);
+        }
+        .accordion-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+            color: var(--blanco);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .accordion-icon {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            color: var(--verde-primario);
+        }
+        .accordion-header.active .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease, padding 0.4s ease;
+            padding: 0 24px;
+        }
+        .accordion-content.active {
+            max-height: 2000px;
+            padding: 0 24px 24px;
+        }
+        .accordion-content p, .accordion-content li {
+            color: var(--texto-claro);
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .accordion-content ul {
+            margin-left: 20px;
+            margin-bottom: 16px;
+        }
+        .accordion-content li {
+            margin-bottom: 8px;
+        }
+        .accordion-content strong {
+            color: var(--verde-oscuro);
+        }
+
+        /* TABLA CONFIGURACIÓN */
+        .config-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--blanco);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--gris-suave);
+            margin: 20px 0;
+        }
+        .config-table th {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            color: var(--blanco);
+            padding: 14px 18px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .config-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid var(--gris-suave);
+            color: var(--texto-claro);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .config-table tr:last-child td { border-bottom: none; }
+        .config-table tr:nth-child(even) { background: var(--gris-fondo); }
+
+        /* CALENDARIO */
+        .timeline {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(180deg, var(--verde-primario), var(--verde-pastel));
+            border-radius: 3px;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 32px;
+        }
+        .timeline-item:last-child { margin-bottom: 0; }
+        .timeline-dot {
+            position: absolute;
+            left: 8px;
+            top: 4px;
+            width: 28px;
+            height: 28px;
+            background: var(--verde-primario);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blanco);
+            font-size: 0.8rem;
+            font-weight: 700;
+            border: 4px solid var(--blanco);
+            box-shadow: 0 0 0 3px var(--verde-pastel);
+        }
+        .timeline-content {
+            background: var(--blanco);
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--gris-suave);
+        }
+        .timeline-content h4 {
+            color: var(--verde-oscuro);
+            font-size: 1.05rem;
+            margin-bottom: 8px;
             font-weight: 700;
         }
-        .punto-clave p {
-            color: rgba(255,255,255,0.9); font-size: 0.95rem;
+        .timeline-content p {
+            color: var(--texto-claro);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .timeline-tag {
+            display: inline-block;
+            background: var(--verde-fondo);
+            color: var(--verde-oscuro);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
 
         /* BOTÓN DESCARGA */
@@ -187,6 +355,32 @@
             background: var(--verde-oscuro); transform: translateY(-2px);
             box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
             text-decoration: none; color: var(--blanco);
+        }
+
+        /* TARJETAS ESPECIFICACIONES */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        .spec-card {
+            background: var(--gris-fondo);
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 3px solid var(--verde-primario);
+        }
+        .spec-card h5 {
+            color: var(--verde-oscuro);
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        .spec-card p {
+            color: var(--texto-claro);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0;
         }
 
         /* FOOTER */
@@ -226,6 +420,9 @@
             .nav-cta { margin-left: 0 !important; text-align: center; }
             section { padding: 50px 0; }
             .page-header { padding: 100px 0 40px; }
+            .config-table { font-size: 0.8rem; }
+            .config-table th, .config-table td { padding: 10px 12px; }
+            .spec-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -258,69 +455,444 @@
         <div class="page-header-content">
             <a href="index.html" class="btn-volver">← Volver al inicio</a>
             <h1>Protocolo Nacional</h1>
-            <p>Estándares técnicos para el fotomonitoreo de biodiversidad</p>
+            <p>Estándares técnicos mínimos para el fotomonitoreo de biodiversidad con cámaras trampa en el Perú</p>
         </div>
     </header>
 
-    <!-- PROTOCOLO RESUMIDO -->
+    <!-- RESUMEN EJECUTIVO -->
     <section class="bg-white">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Documento técnico</span>
-                <h2 class="section-title">Protocolo de Fotomonitoreo</h2>
-                <p class="section-subtitle">Estándares mínimos para la instalación y manejo de cámaras trampa en Snapshot Perú</p>
+                <span class="section-tag">Documento oficial</span>
+                <h2 class="section-title">Protocolo Resumido</h2>
             </div>
             
-            <div class="protocolo-card">
-                <h3>📋 Contenido del Protocolo</h3>
-                <ul>
-                    <li>Diseño de muestreo y selección de sitios</li>
-                    <li>Instalación de cámaras trampa</li>
-                    <li>Configuración y calibración de equipos</li>
-                    <li>Períodos de monitoreo recomendados</li>
-                    <li>Manejo de datos y metadatos</li>
-                    <li>Identificación de especies</li>
-                    <li>Análisis de datos estandarizados</li>
-                    <li>Compartir resultados</li>
-                </ul>
+            <div class="resumen-box">
+                <p>
+                    <strong>Snapshot Perú</strong> propone un fotomonitoreo nacional anual y colaborativo con cámaras trampa, orientado al registro de mamíferos y otra fauna terrestre en todo el país. La iniciativa busca generar información estandarizada y comparable que permita evaluar cambios espaciales y temporales en la distribución, presencia, abundancia relativa y patrones de actividad de las especies.
+                </p>
+                <p>
+                    Cada área de estudio debe contar con un <strong>mínimo de 8 cámaras trampa</strong>, alcanzar <strong>400 trampas-noche</strong> y cubrir al menos <strong>15 ubicaciones distintas</strong> durante la ventana de muestreo preferente: <strong>1 de agosto al 30 de septiembre de 2026</strong>.
+                </p>
+                <p>
+                    Los datos se gestionan en la plataforma <strong>Wildlife Insights</strong>, con un período de acceso restringido de 12 meses para control de calidad y validación taxonómica.
+                </p>
             </div>
 
             <div class="text-center mt-40">
                 <a href="https://docs.google.com/document/d/1t6sX1TVXIEqcthvcypiBhHnVwJmLGqCp/edit?usp=drive_link&ouid=110345891361649735878&rtpof=true&sd=true" 
                    class="btn-descarga" target="_blank">
-                    📥 Descargar Protocolo Completo
+                    📥 Descargar Protocolo Completo (PDF)
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- PUNTOS CLAVE -->
+    <!-- ESPECIFICACIONES TÉCNICAS -->
     <section class="bg-light">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Resumen</span>
-                <h2 class="section-title">Puntos Clave del Protocolo</h2>
+                <span class="section-tag">Requisitos técnicos</span>
+                <h2 class="section-title">Especificaciones del Equipamiento</h2>
             </div>
-            
-            <div style="max-width: 800px; margin: 0 auto;">
-                <div class="punto-clave">
-                    <h4>📍 Arreglo de Cámaras</h4>
-                    <p>Número recomendado de cámaras por sitio de muestreo y distancias entre puntos. Se recomienda un mínimo de <strong>8 cámaras</strong> por área de estudio, con una distancia mínima de <strong>200 metros</strong> y máxima de <strong>5 km</strong> entre ellas.</p>
+
+            <div class="spec-grid">
+                <div class="spec-card">
+                    <h5>📷 Mínimo de cámaras</h5>
+                    <p>8 cámaras trampa por área de estudio. Se recomienda contar con equipos de respaldo para reemplazo por fallas, robo o daño.</p>
                 </div>
-                
-                <div class="punto-clave">
-                    <h4>📅 Tiempo de Muestreo</h4>
-                    <p>Duración mínima de monitoreo por sitio para obtener datos representativos. El período estándar es de <strong>60 días continuos</strong> de monitoreo, con un mínimo de <strong>400 noches-trampa</strong> por área de estudio.</p>
+                <div class="spec-card">
+                    <h5>⚡ Velocidad de disparo</h5>
+                    <p>Menor o igual a 0.5 – 1 segundos para capturar fauna en movimiento.</p>
                 </div>
-                
-                <div class="punto-clave">
-                    <h4>📝 Registro de Metadatos</h4>
-                    <p>Información obligatoria que debe acompañar cada foto: fecha, hora, coordenadas, hábitat, condiciones del sitio y cualquier observación relevante durante la instalación o revisión.</p>
+                <div class="spec-card">
+                    <h5>📸 Modo de captura</h5>
+                    <p>Foto obligatoria (no usar modo híbrido). Ráfaga de 3 a 5 imágenes por activación.</p>
                 </div>
+                <div class="spec-card">
+                    <h5>🔦 Flash</h5>
+                    <p>Infrarrojo obligatorio. No se permite flash blanco para evitar alteración del comportamiento animal.</p>
+                </div>
+                <div class="spec-card">
+                    <h5>🎞️ Resolución mínima</h5>
+                    <p>Mínimo 3 megapíxeles. Fecha y hora correctamente configuradas antes de cada instalación.</p>
+                </div>
+                <div class="spec-card">
+                    <h5>🔋 Baterías</h5>
+                    <p>Pilas AA alcalinas (Duracell o Energizer) nuevas al inicio de cada instalación.</p>
+                </div>
+            </div>
+
+            <div style="max-width: 900px; margin: 40px auto 0;">
+                <h3 style="color: var(--verde-oscuro); margin-bottom: 20px; font-size: 1.2rem;">📋 Configuración Obligatoria de Cámaras</h3>
+                <table class="config-table">
+                    <thead>
+                        <tr>
+                            <th>Parámetro</th>
+                            <th>Configuración mínima u obligatoria</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Velocidad de disparo</strong></td>
+                            <td>≤ 0.5 – 1 segundos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Flash</strong></td>
+                            <td>Infrarrojo. Flash blanco <strong>prohibido</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Modo de captura</strong></td>
+                            <td>Foto obligatoria. <strong>No usar modo híbrido</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Video</strong></td>
+                            <td>Opcional solo como complemento, no como base del muestreo</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ráfaga</strong></td>
+                            <td>3 a 5 imágenes por activación</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Intervalo entre activaciones</strong></td>
+                            <td>Preferentemente sin intervalo; máximo 3 segundos</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Resolución mínima</strong></td>
+                            <td>Mínimo 3 megapíxeles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fecha y hora</strong></td>
+                            <td>Correctamente configuradas antes de instalar</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Tarjeta de memoria</strong></td>
+                            <td>Formateada, con capacidad suficiente y código asociado a la cámara</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Baterías</strong></td>
+                            <td>Pilas AA alcalinas nuevas al inicio de cada instalación</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROTOCOLO DETALLADO -->
+    <section class="bg-white">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Guía completa</span>
+                <h2 class="section-title">Protocolo Detallado</h2>
+                <p class="section-subtitle">Haz clic en cada sección para expandir los detalles</p>
+            </div>
+
+            <div class="protocolo-accordion">
                 
-                <div class="punto-clave">
-                    <h4>🔒 Privacidad de Datos</h4>
-                    <p>Manejo de coordenadas exactas de especies sensibles y datos de comunidades. Las coordenadas precisas de especies en riesgo o de alto valor comercial se manejan con restricciones de acceso.</p>
+                <!-- 1. PARTICIPACIÓN -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">1</span>Participación</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Cada participante podrá incluir una o más áreas de estudio en Snapshot Perú. Cada formulario de inscripción corresponderá a una <strong>sola área de estudio</strong>. Si un equipo desea participar con más de un área, deberá completar un formulario independiente para cada una.</p>
+                        <p>Podrán participar:</p>
+                        <ul>
+                            <li>Instituciones públicas y áreas naturales protegidas</li>
+                            <li>Gobiernos regionales y locales</li>
+                            <li>Universidades y organizaciones de conservación</li>
+                            <li>Comunidades locales e investigadores independientes</li>
+                            <li>Proyectos privados con interés en monitoreo de biodiversidad</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 2. ÁREA DE ESTUDIO -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">2</span>Definición del área de estudio</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Cada área de estudio deberá definirse antes del muestreo y asignarse exclusivamente a:</p>
+                        <ul>
+                            <li><strong>Un único ecosistema predominante</strong> según la clasificación oficial de ecosistemas del MINAM (2019)</li>
+                            <li><strong>Un único nivel de urbanización:</strong> urbano, periurbano o rural</li>
+                        </ul>
+                        <p>Esto permite comparar resultados entre sitios, regiones y años sin mezclar condiciones ambientales o de intervención humana muy distintas.</p>
+                    </div>
+                </div>
+
+                <!-- 3. VENTANA DE MUESTREO -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">3</span>Ventana de muestreo</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p><strong>Primera edición 2026:</strong> época seca, entre el <strong>1 de agosto y el 30 de septiembre</strong>.</p>
+                        <p>Se acepta un margen operativo de <strong>dos semanas antes o después</strong> cuando existan razones justificadas de clima, seguridad, acceso, permisos o logística local.</p>
+                        <p>Para futuras ediciones, el comité científico podrá proponer una fecha estándar anual o ventanas diferenciadas por región, manteniendo siempre la comparabilidad de los datos.</p>
+                    </div>
+                </div>
+
+                <!-- 4. EQUIPAMIENTO MÍNIMO -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">4</span>Equipamiento mínimo</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Cada área de estudio deberá contar con un <strong>mínimo operativo de 8 cámaras trampa</strong>. Se recomienda contar con cámaras adicionales de respaldo para reemplazar equipos con fallas, pérdida de batería, daño por humedad, robo o interferencia.</p>
+                        <p>Marcas recomendadas: <strong>Bushnell, Browning, Reconyx, Moultrie o Spypoint</strong>, u otras que cumplan con las especificaciones técnicas mínimas. El equipo coordinador revisará las características de modelos distintos antes de confirmar la participación.</p>
+                    </div>
+                </div>
+
+                <!-- 5. ESFUERZO DE MUESTREO -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">5</span>Esfuerzo de muestreo</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Cada área de estudio deberá alcanzar como mínimo:</p>
+                        <ul>
+                            <li><strong>400 trampas-noche</strong> (número de cámaras activas × número de noches de funcionamiento)</li>
+                            <li><strong>15 ubicaciones distintas de muestreo</strong>, con funcionamiento ideal de al menos 4 semanas por ubicación</li>
+                        </ul>
+                        <p><strong>Ejemplo:</strong> 8 cámaras instaladas durante 30 días y luego reubicadas en 8 puntos nuevos durante otros 30 días = 480 trampas-noche y 16 ubicaciones muestreadas.</p>
+                        <p>Mientras mayor sea el esfuerzo y mejor distribuido esté dentro del área, mayor será la capacidad para detectar especies raras o crípticas.</p>
+                    </div>
+                </div>
+
+                <!-- 6. DISTRIBUCIÓN ESPACIAL -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">6</span>Distribución espacial de cámaras</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>Las cámaras deberán estar separadas <strong>mínimo 200 m</strong> entre sí y <strong>máximo 5 km</strong> dentro de la misma área de estudio</li>
+                            <li>Las ubicaciones deben representar el ecosistema y nivel de urbanización especificados</li>
+                            <li>Podrán instalarse en bosque, senderos, pasos de fauna, trochas o zonas de tránsito animal, registrándolo en la ficha de instalación</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 7. REGISTRO DE DATOS -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">7</span>Registro de datos y metadatos</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Para cada cámara y ubicación se completará una ficha de instalación y retiro con:</p>
+                        <ul>
+                            <li>Código del proyecto, área de estudio y cámara</li>
+                            <li>Nombre del responsable de instalación y retiro</li>
+                            <li>Fecha, hora de instalación y retiro</li>
+                            <li>Coordenadas en latitud/longitud (Datum WGS84) o UTM</li>
+                            <li>Altitud, región, provincia, distrito y localidad</li>
+                            <li>Ecosistema predominante (MINAM, 2019) y nivel de urbanización</li>
+                            <li>Marca, modelo y configuración de la cámara</li>
+                            <li>Observaciones: clima, vegetación, accesibilidad, presencia de personas, ganado, perros</li>
+                        </ul>
+                        <p>Se usarán <strong>formularios estandarizados descargables</strong> con listas desplegables para garantizar consistencia.</p>
+                    </div>
+                </div>
+
+                <!-- 8. VALIDACIÓN -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">8</span>Validación de instalación y retiro</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Cada cámara debe capturar al menos:</p>
+                        <ul>
+                            <li><strong>Una imagen de la persona que instala</strong></li>
+                            <li><strong>Una imagen de la persona que retira</strong> la cámara</li>
+                        </ul>
+                        <p>Antes de abandonar el punto, verificar que la cámara esté encendida, con memoria disponible, batería suficiente, fecha/hora correctas y sensor sin obstrucciones.</p>
+                    </div>
+                </div>
+
+                <!-- 9. CONFIGURACIÓN -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">9</span>Especificaciones y configuración</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Ver tabla de configuración obligatoria en la sección "Especificaciones del Equipamiento" superior.</p>
+                    </div>
+                </div>
+
+                <!-- 10. INSTALACIÓN EN CAMPO -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">10</span>Instalación en campo</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <ul>
+                            <li>Instalar entre <strong>20 y 50 cm del suelo</strong> (salvo ajustes justificados)</li>
+                            <li>Orientar <strong>paralelo a la pendiente</strong> para reducir falsas activaciones</li>
+                            <li>Preferentemente orientar hacia el <strong>sur</strong> para evitar reflejos solares</li>
+                            <li>Limpiar vegetación que pueda activar el sensor sin alterar el microhábitat</li>
+                            <li><strong>No usar cebos, sales, frutos, feromonas ni atrayentes olfativos</strong></li>
+                            <li>Evitar instalar en lugares que comprometan la privacidad de personas</li>
+                            <li>Registrar si apunta a senderos, caminos, trochas, pasos de fauna, bordes, quebradas o cuerpos de agua</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 11. ÉTICA Y PERMISOS -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">11</span>Consideraciones éticas, permisos y seguridad</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Cada equipo es responsable de contar con las autorizaciones necesarias:</p>
+                        <ul>
+                            <li>Permisos de administración del área</li>
+                            <li>Acuerdos con comunidades</li>
+                            <li>Autorizaciones institucionales o permisos de investigación</li>
+                        </ul>
+                        <p>El fotomonitoreo debe ser <strong>no invasivo</strong>: sin manipulación de fauna, sin atrayentes, sin interferir con rutas humanas. Las imágenes de personas deben tratarse con confidencialidad y no publicarse sin consentimiento.</p>
+                    </div>
+                </div>
+
+                <!-- 12. SUBIDA DE DATOS -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">12</span>Subida de datos y procesamiento</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Cada participante deberá cargar imágenes y metadatos en <strong>Wildlife Insights</strong> en un plazo máximo de <strong>30 días</strong> tras finalizar el trabajo de campo.</p>
+                        <ul>
+                            <li>Todas las imágenes asociadas a su cámara, ubicación y periodo de muestreo</li>
+                            <li>Especies identificadas al nivel taxonómico más preciso posible</li>
+                            <li>Imágenes sin fauna, con personas, ganado, perros: clasificación estandarizada</li>
+                            <li>Especies amenazadas o sensibles: criterios de resguardo de ubicación (Wildlife Insights tiene especificaciones para mantener estos datos en reserva)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 13. COMITÉ CIENTÍFICO -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">13</span>Comité científico nacional</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Conformado por investigadores peruanos y especialistas invitados de manera voluntaria. Funciones:</p>
+                        <ul>
+                            <li>Definir preguntas de investigación respondibles con los datos nacionales</li>
+                            <li>Revisar y actualizar el protocolo</li>
+                            <li>Proponer criterios de control de calidad, curaduría y validación taxonómica</li>
+                            <li>Apoyar análisis de distribución, ocupación, abundancia relativa y patrones de actividad</li>
+                            <li>Garantizar utilidad de resultados para objetivos globales y gestión territorial</li>
+                            <li>Promover participación justa, transparencia y devolución de resultados a los territorios</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 14. ACCESO A DATOS -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">14</span>Acceso a datos, resguardo y coautoría</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Los datos en Wildlife Insights estarán bajo <strong>acceso restringido de hasta 12 meses</strong> para control de calidad y validación. Luego podrán hacerse públicos, excepto ubicaciones de especies amenazadas o sensibles.</p>
+                        <p>Todos los participantes tienen acceso a sus cuentas y proyectos. Durante el período de restricción, si se genera un artículo o producto liderado por el equipo coordinador, se respetará la <strong>coautoría o reconocimiento formal</strong> a los responsables de cada subproyecto.</p>
+                        <p>Cuando los datos sean de dominio público, podrán utilizarse citando formalmente el conjunto de datos: autor/institución, nombre del subproyecto, versión y fecha de acceso.</p>
+                    </div>
+                </div>
+
+                <!-- 15. INSCRIPCIÓN -->
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span><span class="accordion-num">15</span>Inscripción, capacitación y contacto</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Para confirmar la colaboración, completar el <strong>formulario de inscripción</strong> por área de estudio. Los participantes inscritos recibirán acceso a seminarios en línea previos al muestreo.</p>
+                        <p><strong>Contacto:</strong></p>
+                        <ul>
+                            <li>snapshotperu@gmail.com</li>
+                            <li>tejedagomezv@si.edu</li>
+                            <li>linaresr@si.edu</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CALENDARIO 2026 -->
+    <section class="bg-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Primera edición</span>
+                <h2 class="section-title">Calendario Snapshot Perú 2026</h2>
+            </div>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot">1</div>
+                    <div class="timeline-content">
+                        <span class="timeline-tag">Junio – Julio 2026</span>
+                        <h4>Convocatoria y preparación</h4>
+                        <p>Convocatoria, inscripción, revisión de áreas de estudio y primera ronda de capacitaciones virtuales.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">2</div>
+                    <div class="timeline-content">
+                        <span class="timeline-tag">Julio – Agosto 2026</span>
+                        <h4>Capacitaciones y preparación de campo</h4>
+                        <p>Segunda ronda de capacitaciones virtuales. Preparación de equipos, permisos, fichas de campo y pruebas de cámaras.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">3</div>
+                    <div class="timeline-content">
+                        <span class="timeline-tag">Agosto 2026</span>
+                        <h4>🚀 Inicio de Snapshot Perú</h4>
+                        <p>Instalación de cámaras trampa en todo el país. Comienza el período de muestreo de 60 días.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">4</div>
+                    <div class="timeline-content">
+                        <span class="timeline-tag">Octubre 2026</span>
+                        <h4>Retiro y carga de datos</h4>
+                        <p>Retiro de cámaras, carga de imágenes y metadatos en Wildlife Insights (plazo: 30 días).</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">5</div>
+                    <div class="timeline-content">
+                        <span class="timeline-tag">Noviembre – Diciembre 2026</span>
+                        <h4>Clasificación y control de calidad</h4>
+                        <p>Clasificación de imágenes, control de calidad, revisión taxonómica y análisis preliminares.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot">6</div>
+                    <div class="timeline-content">
+                        <span class="timeline-tag">Enero – Marzo 2027</span>
+                        <h4>Reporte final</h4>
+                        <p>Elaboración y publicación del reporte nacional con los resultados de la primera edición.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -334,33 +906,50 @@
                 <h2 class="section-title">Condiciones de Participación</h2>
             </div>
             
-            <div class="protocolo-card">
-                <h3>✅ Requisitos obligatorios</h3>
-                <ul>
-                    <li><strong>Participación voluntaria</strong></li>
-                    <li><strong>Logística, materiales y equipos</strong> a cargo de cada participante o institución responsable</li>
-                    <li>Contar con al menos <strong>8 cámaras trampa</strong> disponibles para muestrear durante 60 días (pueden reubicarse o alternarse entre colaboradores, cumpliendo el mínimo de 400 noches-trampa)</li>
-                    <li><strong>Seguir rigurosamente el protocolo</strong> del proyecto</li>
-                    <li>Tener disponibilidad para realizar un <strong>muestreo al año durante 60 días continuos</strong></li>
-                    <li><strong>Participar en las capacitaciones</strong> del proyecto (asistencia obligatoria)</li>
-                    <li>Realizar la <strong>carga de fotos en Wildlife Insights</strong> y proporcionar información sobre los puntos de muestreo y la identificación de especies</li>
-                </ul>
-            </div>
+            <div class="protocolo-accordion">
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>✅ Requisitos obligatorios</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <ul>
+                            <li><strong>Participación voluntaria</strong></li>
+                            <li><strong>Logística, materiales y equipos</strong> a cargo de cada participante o institución</li>
+                            <li>Al menos <strong>8 cámaras trampa</strong> disponibles para muestrear durante 60 días (pueden reubicarse o alternarse entre colaboradores, cumpliendo el mínimo de 400 noches-trampa)</li>
+                            <li><strong>Seguir rigurosamente el protocolo</strong> del proyecto</li>
+                            <li>Tener disponibilidad para realizar un <strong>muestreo al año durante 60 días continuos</strong></li>
+                            <li><strong>Participar en las capacitaciones</strong> (asistencia obligatoria)</li>
+                            <li>Realizar la <strong>carga de fotos en Wildlife Insights</strong> y proporcionar información de puntos de muestreo e identificación de especies</li>
+                        </ul>
+                    </div>
+                </div>
 
-            <div class="protocolo-card">
-                <h3>📅 Plazos Importantes</h3>
-                <p>La carga de fotos en la plataforma <strong>Wildlife Insights</strong> debe realizarse en un plazo de <strong>30 días</strong> tras la finalización del período de muestreo de 60 días.</p>
-                <p>La identificación de especies debe completarse en un plazo de <strong>dos meses</strong> tras la finalización del muestreo. Se recibirá asistencia para este proceso.</p>
-            </div>
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>📅 Plazos importantes</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>La carga de fotos en <strong>Wildlife Insights</strong> debe realizarse en un plazo de <strong>30 días</strong> tras la finalización del período de muestreo de 60 días.</p>
+                        <p>La identificación de especies debe completarse en un plazo de <strong>dos meses</strong> tras la finalización del muestreo. Se recibirá asistencia para este proceso.</p>
+                    </div>
+                </div>
 
-            <div class="protocolo-card">
-                <h3>🎓 Capacitaciones</h3>
-                <p>Asistencia obligatoria para todos los participantes:</p>
-                <ul>
-                    <li><strong>Primera capacitación:</strong> Instalación correcta de cámaras trampa</li>
-                    <li><strong>Segunda capacitación:</strong> Uso de la plataforma Wildlife Insights para el almacenamiento de fotos</li>
-                </ul>
-                <p>Se ofrecerán <strong>fechas y horarios flexibles</strong> para facilitar la participación de todos.</p>
+                <div class="accordion-item">
+                    <button class="accordion-header" onclick="toggleAccordion(this)">
+                        <span>🎓 Capacitaciones</span>
+                        <span class="accordion-icon">▼</span>
+                    </button>
+                    <div class="accordion-content">
+                        <p>Asistencia obligatoria para todos los participantes:</p>
+                        <ul>
+                            <li><strong>Primera capacitación:</strong> Instalación correcta de cámaras trampa</li>
+                            <li><strong>Segunda capacitación:</strong> Uso de la plataforma Wildlife Insights para el almacenamiento de fotos</li>
+                        </ul>
+                        <p>Se ofrecerán <strong>fechas y horarios flexibles</strong> para facilitar la participación de todos.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -384,10 +973,11 @@
                     <h4>Participa</h4>
                     <a href="contacto.html">Únete al proyecto</a>
                     <a href="mapa.html">Ver mapa de participantes</a>
+                    <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform?usp=header" target="_blank">Formulario de inscripción</a>
                 </div>
                 <div class="footer-col">
                     <h4>Contacto</h4>
-                    <p>tejedagomezv@si.edu<br>linaresr@si.edu</p>
+                    <p>snapshotperu@gmail.com<br>tejedagomezv@si.edu<br>linaresr@si.edu</p>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -400,6 +990,24 @@
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+        
+        function toggleAccordion(button) {
+            const content = button.nextElementSibling;
+            const isActive = button.classList.contains('active');
+            
+            // Cerrar todos los demás
+            document.querySelectorAll('.accordion-header.active').forEach(header => {
+                if (header !== button) {
+                    header.classList.remove('active');
+                    header.nextElementSibling.classList.remove('active');
+                }
+            });
+            
+            // Toggle el actual
+            button.classList.toggle('active');
+            content.classList.toggle('active');
+        }
+        
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) nav.classList.add('scrolled');

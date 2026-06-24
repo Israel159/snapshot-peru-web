@@ -141,7 +141,114 @@
             font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--verde-oscuro);
             margin-bottom: 14px; font-weight: 800; letter-spacing: -1px;
         }
-        .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 7; }
+        .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
+
+        /* ORIGEN */
+        .origen-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .origen-content p {
+            color: var(--texto-claro);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        .origen-content p:last-child {
+            margin-bottom: 0;
+        }
+        .origen-highlight {
+            background: linear-gradient(135deg, var(--verde-fondo), #e8f5e9);
+            border-left: 4px solid var(--verde-primario);
+            padding: 24px 28px;
+            border-radius: 0 12px 12px 0;
+            margin: 30px 0;
+        }
+        .origen-highlight p {
+            margin: 0;
+            color: var(--verde-oscuro);
+            font-weight: 500;
+        }
+
+        /* VISIÓN Y MISIÓN */
+        .vision-mision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 32px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .vision-mision-card {
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 40px 32px;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--gris-suave);
+            position: relative;
+            overflow: hidden;
+        }
+        .vision-mision-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--verde-primario), var(--verde-claro));
+        }
+        .vision-mision-card .card-icon {
+            width: 56px; height: 56px;
+            background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+            border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            color: var(--blanco);
+        }
+        .vision-mision-card h3 {
+            color: var(--verde-oscuro);
+            font-size: 1.3rem;
+            margin-bottom: 14px;
+            font-weight: 700;
+        }
+        .vision-mision-card p {
+            color: var(--texto-claro);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        /* ENFOQUE TÉCNICO */
+        .enfoque-table {
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--blanco);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--gris-suave);
+        }
+        .enfoque-table th {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            color: var(--blanco);
+            padding: 18px 24px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .enfoque-table th:first-child { width: 35%; }
+        .enfoque-table td {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--gris-suave);
+            color: var(--texto-claro);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .enfoque-table tr:last-child td { border-bottom: none; }
+        .enfoque-table tr:nth-child(even) { background: var(--gris-fondo); }
+        .enfoque-table tr:hover { background: var(--verde-fondo); transition: var(--transicion); }
 
         /* OBJETIVOS */
         .objetivo-item {
@@ -212,6 +319,9 @@
             .nav-cta { margin-left: 0 !important; text-align: center; }
             section { padding: 50px 0; }
             .page-header { padding: 100px 0 40px; }
+            .enfoque-table { font-size: 0.85rem; }
+            .enfoque-table th, .enfoque-table td { padding: 12px 16px; }
+            .vision-mision-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -253,9 +363,112 @@
     </header>
 
     <!-- ============================================
-         OBJETIVOS PRINCIPALES
+         ORIGEN
          ============================================ -->
     <section class="bg-white">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Nuestros inicios</span>
+                <h2 class="section-title">Origen</h2>
+            </div>
+            <div class="origen-content">
+                <p>
+                    <strong>Snapshot Perú nace en 2026</strong> como parte de la expansión de <strong>Snapshot Global</strong>, una iniciativa creada por el <strong>Smithsonian Institution</strong> en 2019 en los Estados Unidos. Snapshot Global utiliza cámaras trampa y protocolos estandarizados para monitorear comunidades de mamíferos a gran escala, generando bases de datos colaborativas, comparables y de largo plazo.
+                </p>
+                <p>
+                    Tras su éxito en Estados Unidos, el modelo se replicó en <strong>Europa (2021)</strong>, <strong>Japón (2023)</strong> y <strong>América del Sur (2025)</strong>, iniciando en Brasil, Chile y Paraguay. <strong>Perú se incorpora en 2026</strong>, articulando esfuerzos de investigación y conservación a nivel nacional bajo la coordinación del equipo del Smithsonian y colaboradores peruanos.
+                </p>
+                <div class="origen-highlight">
+                    <p>La iniciativa peruana se inspira directamente en <strong>Snapshot USA</strong>, demostrando el valor de integrar datos de múltiples instituciones para entender cómo las poblaciones de fauna responden a cambios en el uso del suelo, cobertura vegetal y clima.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         VISIÓN Y MISIÓN
+         ============================================ -->
+    <section class="bg-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Nuestra dirección</span>
+                <h2 class="section-title">Visión y Misión</h2>
+            </div>
+            <div class="vision-mision-grid">
+                <div class="vision-mision-card">
+                    <div class="card-icon">🎯</div>
+                    <h3>Visión</h3>
+                    <p>
+                        Contar con un <strong>fotomonitoreo nacional anual y colaborativo</strong> que cubra las 24 regiones del Perú y sus ecosistemas clave —Amazonía, Andes y costa—, generando información estandarizada que fortalezca el monitoreo de biodiversidad, apoye la toma de decisiones en conservación y conecte a investigadores, comunidades, áreas protegidas e instituciones en una red sostenible de conocimiento.
+                    </p>
+                </div>
+                <div class="vision-mision-card">
+                    <div class="card-icon">🚀</div>
+                    <h3>Misión</h3>
+                    <p>
+                        Integrar datos de cámaras trampa generados por instituciones públicas, ONG, universidades, áreas protegidas, comunidades e investigadores independientes en una plataforma nacional unificada, promoviendo estándares técnicos comunes, fortaleciendo capacidades locales y generando productos científicos y técnicos útiles para la gestión territorial y la conservación basada en evidencia.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ENFOQUE TÉCNICO
+         ============================================ -->
+    <section class="bg-white">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Cómo lo hacemos</span>
+                <h2 class="section-title">Enfoque Técnico</h2>
+                <p class="section-subtitle">Nuestro protocolo garantiza datos estandarizados, comparables y de alta calidad a nivel nacional.</p>
+            </div>
+            
+            <table class="enfoque-table">
+                <thead>
+                    <tr>
+                        <th>Aspecto</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Estandarización</strong></td>
+                        <td>Protocolo nacional con especificaciones mínimas para equipamiento, configuración de cámaras, esfuerzo de muestreo y registro de metadatos.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ventana de muestreo</strong></td>
+                        <td>Preferentemente época seca (<strong>1 de agosto – 30 de septiembre</strong>), con margen operativo de ±2 semanas según condiciones locales.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Esfuerzo mínimo</strong></td>
+                        <td><strong>400 trampas-noche</strong> y <strong>15 ubicaciones distintas</strong> por área de estudio.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Distribución espacial</strong></td>
+                        <td>Cámaras separadas <strong>200 m – 5 km</strong>, representando un único ecosistema y nivel de urbanización.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Gestión de datos</strong></td>
+                        <td>Plataforma <strong>Wildlife Insights</strong> para almacenamiento, clasificación con apoyo de IA y colaboración abierta.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Control de calidad</strong></td>
+                        <td>Validación de instalación/retiro, revisión taxonómica por comité científico y periodo de acceso restringido de <strong>12 meses</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ética y seguridad</strong></td>
+                        <td>Sin atrayentes, protección de datos personales, resguardo de ubicaciones de especies sensibles.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- ============================================
+         OBJETIVOS PRINCIPALES
+         ============================================ -->
+    <section class="bg-light">
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Nuestra meta</span>
@@ -300,7 +513,7 @@
     <!-- ============================================
          PRINCIPIOS DE TRABAJO
          ============================================ -->
-    <section class="bg-light">
+    <section class="bg-white">
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Nuestros valores</span>
