@@ -4,162 +4,489 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Snapshot Perú - Fotomonitoreo Nacional</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+    :root {
+        --verde-oscuro: #1a472a;
+        --verde-primario: #2d6a4f;
+        --verde-claro: #40916c;
+        --verde-pastel: #74c69d;
+        --verde-fondo: #d8f3dc;
+        --dorado: #d4a574;
+        --dorado-claro: #e9c496;
+        --texto: #1b1b1b;
+        --texto-claro: #4a4a4a;
+        --texto-muted: #6b7280;
+        --blanco: #ffffff;
+        --gris-fondo: #f8faf9;
+        --gris-suave: #e8ede9;
+        --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
+        --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
+        --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--texto);
+        background: var(--blanco);
+        line-height: 1.7;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ============================================
+       NAVEGACIÓN FIJA - CORREGIDA
+       ============================================ */
+    .nav-top {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(20px);
+        border-bottom: 1px solid rgba(26,71,42,0.08);
+        transition: var(--transicion);
+    }
+    .nav-top.scrolled { box-shadow: var(--sombra-suave); }
+    
+    .nav-container {
+        max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        display: flex; justify-content: space-between; align-items: center;
+        height: 64px;
+    }
+    
+    /* Logo - ahora en una sola línea */
+    .nav-logo {
+        display: flex; align-items: center; gap: 8px;
+        text-decoration: none; color: var(--verde-oscuro);
+        font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
+        white-space: nowrap; flex-shrink: 0;
+    }
+    .nav-logo-icon { font-size: 1.4rem; }
+    
+    /* Links de navegación */
+    .nav-links { 
+        display: flex; list-style: none; gap: 2px; 
+        align-items: center; margin-left: auto;
+    }
+    .nav-links a {
+        color: var(--texto-claro); text-decoration: none;
+        padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
+        font-weight: 500; transition: var(--transicion);
+        white-space: nowrap;
+    }
+    .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
+    .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
+    
+    /* Botón Participa - corregido */
+    .nav-cta {
+        background: var(--verde-primario) !important; 
+        color: var(--blanco) !important;
+        padding: 8px 14px !important; 
+        border-radius: 8px !important;
+        font-weight: 600 !important; 
+        font-size: 0.82rem !important;
+        margin-left: 4px;
+    }
+    .nav-cta:hover { 
+        background: var(--verde-oscuro) !important; 
+        color: var(--blanco) !important; 
+    }
+    
+    .menu-toggle { 
+        display: none; background: none; border: none; 
+        font-size: 1.4rem; cursor: pointer; 
+        color: var(--verde-oscuro); padding: 8px; 
+    }
+
+    /* HERO */
+    .hero-main {
+        min-height: 100vh; display: flex; align-items: center; justify-content: center;
+        background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-primario) 50%, var(--verde-claro) 100%);
+        position: relative; overflow: hidden;
+    }
+    .hero-main::before {
+        content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    .hero-content {
+        text-align: center; color: var(--blanco); max-width: 800px;
+        padding: 120px 24px 80px; position: relative; z-index: 1;
+    }
+    .hero-badge {
+        display: inline-block; background: rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px); padding: 8px 20px;
+        border-radius: 50px; font-size: 0.85rem; font-weight: 500;
+        margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.2);
+    }
+    .hero-title {
+        font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800;
+        margin-bottom: 20px; letter-spacing: -2px; line-height: 1.1;
+    }
+    .hero-subtitle {
+        font-size: clamp(1.1rem, 2.5vw, 1.4rem); opacity: 0.9;
+        margin-bottom: 25px; font-weight: 400; max-width: 600px;
+        margin-left: auto; margin-right: auto;
+    }
+    .hero-desc {
+        font-size: 1.05rem; opacity: 0.85; max-width: 650px;
+        margin: 0 auto 40px; line-height: 1.8;
+    }
+    .hero-buttons { 
+        display: flex; gap: 14px; justify-content: center; 
+        flex-wrap: wrap; margin-top: 10px; 
+    }
+
+    /* BOTONES */
+    .btn {
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 14px 28px; border-radius: 12px; text-decoration: none;
+        font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
+        border: 2px solid transparent; cursor: pointer; line-height: 1;
+    }
+    .btn-primary {
+        background: var(--dorado); color: var(--verde-oscuro);
+        box-shadow: 0 4px 15px rgba(212,165,116,0.4);
+    }
+    .btn-primary:hover { 
+        background: var(--dorado-claro); transform: translateY(-2px); 
+        box-shadow: 0 6px 20px rgba(212,165,116,0.5); text-decoration: none; 
+    }
+    .btn-secondary {
+        background: rgba(255,255,255,0.12); color: var(--blanco);
+        border-color: rgba(255,255,255,0.3); backdrop-filter: blur(10px);
+    }
+    .btn-secondary:hover { 
+        background: rgba(255,255,255,0.25); transform: translateY(-2px); text-decoration: none; 
+    }
+
+    /* SECCIONES */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 100px 0; }
+    .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+    .section-tag {
+        display: inline-block; color: var(--verde-primario);
+        font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 2px; margin-bottom: 12px;
+    }
+    .section-title {
+        font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--verde-oscuro);
+        margin-bottom: 16px; font-weight: 800; letter-spacing: -1px; line-height: 1.2;
+    }
+    .section-subtitle { color: var(--texto-muted); font-size: 1.1rem; line-height: 1.7; }
+
+    /* GRIDS Y TARJETAS */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .card {
+        background: var(--blanco); border-radius: 16px; padding: 32px;
+        box-shadow: var(--sombra-suave); transition: var(--transicion);
+        border: 1px solid var(--gris-suave);
+    }
+    .card:hover { 
+        transform: translateY(-4px); box-shadow: var(--sombra-media); 
+        border-color: var(--verde-pastel); 
+    }
+    .card-icon {
+        width: 56px; height: 56px; background: var(--verde-fondo);
+        border-radius: 14px; display: flex; align-items: center; justify-content: center;
+        font-size: 1.6rem; margin-bottom: 20px;
+    }
+    .card h3 { color: var(--verde-oscuro); font-size: 1.15rem; margin-bottom: 10px; font-weight: 700; }
+    .card p { color: var(--texto-muted); font-size: 0.95rem; line-height: 1.6; }
+
+    /* ESTADÍSTICAS */
+    .stats-bar {
+        background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+        padding: 60px 0;
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+    .stat-item { text-align: center; color: var(--blanco); }
+    .stat-number { font-size: 3rem; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+    .stat-label { font-size: 0.95rem; opacity: 0.85; font-weight: 500; }
+
+    /* MAPA */
+    .mapa-wrapper { border-radius: 16px; overflow: hidden; box-shadow: var(--sombra-media); border: 1px solid var(--gris-suave); }
+    .mapa-container { height: 500px; width: 100%; }
+
+    /* FOOTER */
+    .footer-main {
+        background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
+        color: var(--blanco); padding: 70px 0 30px;
+    }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 50px; }
+    .footer-col h4 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; color: var(--dorado-claro); }
+    .footer-col p { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.7; }
+    .footer-col a { 
+        color: rgba(255,255,255,0.7); text-decoration: none; display: block; 
+        padding: 6px 0; font-size: 0.92rem; transition: var(--transicion); 
+    }
+    .footer-col a:hover { color: var(--dorado-claro); padding-left: 4px; }
+    .footer-bottom { 
+        border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; 
+        text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); 
+    }
+
+    /* UTILIDADES */
+    .bg-white { background: var(--blanco); }
+    .bg-light { background: var(--gris-fondo); }
+    .text-center { text-align: center; }
+    .mt-20 { margin-top: 20px; }
+    .mt-40 { margin-top: 40px; }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+        .menu-toggle { display: block; }
+        .nav-links { 
+            display: none; position: absolute; top: 64px; left: 0; right: 0; 
+            background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
+            flex-direction: column; padding: 20px; gap: 4px; 
+            border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
+        }
+        .nav-links.active { display: flex; }
+        .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
+        .nav-cta { margin-left: 0 !important; text-align: center; }
+        .hero-buttons { flex-direction: column; align-items: center; }
+        .btn { width: 100%; justify-content: center; }
+        section { padding: 60px 0; }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .stat-number { font-size: 2.2rem; }
+        .mapa-container { height: 350px; }
+    }
+</style>
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN - COPIAR ESTO EN TODAS LAS PÁGINAS -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="logo">
-                <span class="logo-icon">📷</span>
-                <span>Snapshot Perú</span>
-            </a>
-            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="index.html">Inicio</a></li>
-                <li><a href="sobre.html">Sobre el Proyecto</a></li>
-                <li><a href="colaboradores.html">Colaboradores</a></li>
-                <li><a href="protocolo.html">Protocolo</a></li>
-                <li><a href="mapa.html">¿Quiénes se suman?</a></li>
-                <li><a href="galeria.html">Galería</a></li>
-                <li><a href="investigacion.html">Investigación</a></li>
-                <li><a href="noticias.html">Noticias</a></li>
-                <li><a href="contacto.html">Contacto</a></li>
-            </ul>
-        </div>
-    </nav>
+    <!-- ============================================
+         NAVEGACIÓN FIJA
+         ============================================ -->
+    <nav class="nav-top" id="navbar">
+    <div class="nav-container">
+        <a href="index.html" class="nav-logo">
+            <span class="nav-logo-icon">📷</span>
+            <span>Snapshot Perú</span>
+        </a>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="active">Inicio</a></li>
+            <li><a href="sobre.html">Sobre el Proyecto</a></li>
+            <li><a href="colaboradores.html">Colaboradores</a></li>
+            <li><a href="protocolo.html">Protocolo</a></li>
+            <li><a href="mapa.html">¿Quiénes se suman?</a></li>
+            <li><a href="galeria.html">Galería</a></li>
+            <li><a href="investigacion.html">Investigación</a></li>
+            <li><a href="noticias.html">Noticias</a></li>
+            <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
+        </ul>
+    </div>
+</nav>
 
-    <!-- SECCIÓN HERO - PRESENTACIÓN PRINCIPAL -->
-    <section class="hero">
-        <div class="container">
-            <h1>Snapshot Perú</h1>
-            <p class="subtitle">Fotomonitoreo nacional para conocer, conservar y conectar la biodiversidad del Perú.</p>
-            <p class="descripcion">
+    <!-- ============================================
+         HERO PRINCIPAL
+         ============================================ -->
+    <section class="hero-main">
+        <div class="hero-content">
+            <div class="hero-badge">🌿 Parte de Snapshot Global · Perú 2026</div>
+            <h1 class="hero-title">Snapshot Perú</h1>
+            <p class="hero-subtitle">Fotomonitoreo nacional para conocer, conservar y conectar la biodiversidad del Perú.</p>
+            <p class="hero-desc">
                 Snapshot Perú es una iniciativa colaborativa orientada a integrar datos de cámaras trampa 
                 a nivel nacional para fortalecer el monitoreo de mamíferos terrestres, apoyar la toma de 
                 decisiones en conservación y promover estándares comunes de fotomonitoreo en el país.
             </p>
-            <div class="mt-40">
-                <a href="sobre.html" class="btn btn-primario">Conoce el proyecto</a>
-                <a href="contacto.html" class="btn btn-secundario">Participa</a>
-                <a href="mapa.html" class="btn btn-secundario">Explora quiénes participan</a>
-                <a href="https://docs.google.com/document/d/1t6sX1TVXIEqcthvcypiBhHnVwJmLGqCp/edit?usp=drive_link" 
-                   class="btn btn-secundario" target="_blank">Descarga el protocolo</a>
+            <div class="hero-buttons">
+                <a href="#que-es" class="btn btn-primary">Conoce el proyecto</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" class="btn btn-secondary" target="_blank">📝 Participa</a>
+                <a href="#mapa" class="btn btn-secondary">🗺️ Explora quiénes participan</a>
+                <a href="https://docs.google.com/document/d/1t6sX1TVXIEqcthvcypiBhHnVwJmLGqCp/edit" class="btn btn-secondary" target="_blank">📄 Descarga el protocolo</a>
             </div>
         </div>
     </section>
 
-    <!-- ¿QUÉ ES SNAPSHOT PERÚ? -->
-    <section class="bg-white">
+    <!-- ============================================
+         ¿QUÉ ES SNAPSHOT PERÚ?
+         ============================================ -->
+    <section class="bg-white" id="que-es">
         <div class="container">
-            <h2 class="section-title">¿Qué es Snapshot Perú?</h2>
-            <p class="section-subtitle">
-                Una iniciativa que busca reunir esfuerzos de monitoreo con cámaras trampa realizados por 
-                instituciones públicas, ONG, universidades, áreas protegidas, comunidades, investigadores 
-                independientes y proyectos de conservación.
-            </p>
-            <div class="grid-3 mt-40">
+            <div class="section-header">
+                <span class="section-tag">¿Qué es?</span>
+                <h2 class="section-title">Snapshot Perú</h2>
+                <p class="section-subtitle">
+                    Una iniciativa que busca reunir esfuerzos de monitoreo con cámaras trampa realizados por 
+                    instituciones públicas, ONG, universidades, áreas protegidas, comunidades, investigadores 
+                    independientes y proyectos de conservación.
+                </p>
+            </div>
+            
+            <div class="grid-3">
                 <div class="card text-center">
                     <div class="card-icon">🤝</div>
                     <h3>Colaborativo</h3>
-                    <p>Trabajamos en red con múltiples actores del país para unificar esfuerzos de monitoreo.</p>
+                    <p>Trabajamos en red con múltiples actores del país para unificar esfuerzos de monitoreo en una base de datos nacional.</p>
                 </div>
                 <div class="card text-center">
                     <div class="card-icon">📊</div>
                     <h3>Estandarizado</h3>
-                    <p>Utilizamos protocolos técnicos comunes que permiten comparar datos a nivel nacional.</p>
+                    <p>Utilizamos protocolos técnicos comunes que permiten comparar datos a nivel nacional y con otros países Snapshot.</p>
                 </div>
                 <div class="card text-center">
                     <div class="card-icon">🌎</div>
                     <h3>Nacional</h3>
-                    <p>Cobertura en todo el territorio peruano, abarcando diversos ecosistemas y regiones.</p>
+                    <p>Cobertura en todo el territorio peruano, abarcando diversos ecosistemas: Amazonía, Andes y Costa.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ¿POR QUÉ ES IMPORTANTE? -->
+    <!-- ============================================
+         ¿POR QUÉ ES IMPORTANTE?
+         ============================================ -->
     <section class="bg-light">
         <div class="container">
-            <h2 class="section-title">¿Por qué es importante?</h2>
-            <div class="grid-2 mt-40">
+            <div class="section-header">
+                <span class="section-tag">¿Por qué?</span>
+                <h2 class="section-title">¿Por qué es importante?</h2>
+            </div>
+            
+            <div class="grid-2">
                 <div>
-                    <p style="margin-bottom: 20px;">
-                        <strong>Snapshot Perú se inspira en la experiencia de Snapshot USA</strong>, una iniciativa 
-                        de fotomonitoreo nacional lanzada en 2019 por el Smithsonian Institution y el North 
-                        Carolina Museum of Natural Sciences, que utiliza cámaras trampa y protocolos estandarizados 
+                    <p style="margin-bottom: 18px; font-size: 1.05rem; line-height: 1.8;">
+                        <strong style="color: var(--verde-oscuro);">Snapshot Perú se inspira en la experiencia de Snapshot USA</strong>, 
+                        una iniciativa de fotomonitoreo nacional lanzada en 2019 por el Smithsonian Institution y el 
+                        North Carolina Museum of Natural Sciences, que utiliza cámaras trampa y protocolos estandarizados 
                         para monitorear mamíferos a gran escala en los Estados Unidos.
                     </p>
-                    <p style="margin-bottom: 20px;">
+                    <p style="margin-bottom: 18px; font-size: 1.05rem; line-height: 1.8;">
                         Desde entonces, este modelo ha demostrado el valor de generar bases de datos colaborativas, 
                         comparables y de largo plazo para entender cómo las poblaciones de fauna responden a cambios 
                         en el uso del suelo, la cobertura vegetal y el clima.
                     </p>
-                    <p>
+                    <p style="font-size: 1.05rem; line-height: 1.8;">
                         Snapshot Perú propone desarrollar un fotomonitoreo nacional anual y colaborativo con 
                         cámaras trampa, orientado al registro de mamíferos y otra fauna terrestre en todo el país.
                     </p>
                 </div>
                 <div>
-                    <div class="card">
-                        <h3>🎯 Objetivos del fotomonitoreo</h3>
-                        <ul style="list-style: none; padding: 0; margin-top: 15px;">
-                            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">📍 Evaluar distribución y presencia de especies</li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">📈 Medir abundancia relativa</li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">🕐 Analizar patrones de actividad</li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid #eee;">🌿 Comparar entre ecosistemas</li>
-                            <li style="padding: 10px 0;">👥 Evaluar impacto de intervención humana</li>
+                    <div class="card" style="background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario)); color: white;">
+                        <h3 style="color: var(--dorado-claro); font-size: 1.2rem; margin-bottom: 18px;">🎯 Objetivos del fotomonitoreo</h3>
+                        <ul style="list-style: none; padding: 0; color: rgba(255,255,255,0.9);">
+                            <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; gap: 10px;">
+                                <span>📍</span> Evaluar distribución y presencia de especies
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; gap: 10px;">
+                                <span>📈</span> Medir abundancia relativa
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; gap: 10px;">
+                                <span>🕐</span> Analizar patrones de actividad
+                            </li>
+                            <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; gap: 10px;">
+                                <span>🌿</span> Comparar entre ecosistemas
+                            </li>
+                            <li style="padding: 10px 0; display: flex; gap: 10px;">
+                                <span>👥</span> Evaluar impacto de intervención humana
+                            </li>
                         </ul>
+                    </div>
+                    <div class="card mt-20">
+                        <p style="color: var(--texto-muted); font-style: italic; text-align: center;">
+                            "Esta información será clave para identificar vacíos de conocimiento, fortalecer el monitoreo 
+                            de biodiversidad a escala nacional y aportar datos comparables a iniciativas globales de conservación."
+                        </p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- MAPA RÁPIDO -->
-    <section class="bg-white">
+    <!-- ============================================
+         ESTADÍSTICAS EN TIEMPO REAL
+         ============================================ -->
+    <section class="stats-bar">
         <div class="container">
-            <h2 class="section-title">Mapa de Iniciativas</h2>
-            <p class="section-subtitle">Ubicación general de proyectos participantes en el fotomonitoreo</p>
-            <div id="mapa-inicio" class="mapa-container"></div>
-            <div class="text-center mt-20">
-                <a href="mapa.html" class="btn btn-primario">Ver mapa completo</a>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Organizaciones inscritas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Regiones cubiertas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">60+</div>
+                    <div class="stat-label">Cámaras comprometidas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">400+</div>
+                    <div class="stat-label">Noches-trampa meta</div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER - COPIAR EN TODAS LAS PÁGINAS -->
-    <footer class="footer">
+    <!-- ============================================
+         MAPA DE INICIATIVAS
+         ============================================ -->
+    <section class="bg-white" id="mapa">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Cobertura</span>
+                <h2 class="section-title">Mapa de Iniciativas</h2>
+                <p class="section-subtitle">Ubicación general de proyectos participantes en el fotomonitoreo</p>
+            </div>
+            
+            <div class="mapa-wrapper">
+                <div id="mapa-inicio" class="mapa-container"></div>
+            </div>
+            
+            <div class="text-center mt-40">
+                <p style="color: var(--texto-muted); margin-bottom: 20px;">
+                    Los puntos representan ubicaciones aproximadas de los sitios de monitoreo registrados.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer-main">
         <div class="container">
             <div class="footer-grid">
-                <div>
+                <div class="footer-col">
                     <h4>📷 Snapshot Perú</h4>
-                    <p style="opacity: 0.8; margin-top: 10px;">
-                        Fotomonitoreo nacional de biodiversidad mediante cámaras trampa.
-                    </p>
+                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa. Parte de la red Snapshot Global.</p>
                 </div>
-                <div>
-                    <h4>Enlaces rápidos</h4>
+                <div class="footer-col">
+                    <h4>Explorar</h4>
                     <a href="sobre.html">Sobre el Proyecto</a>
                     <a href="protocolo.html">Protocolo</a>
                     <a href="galeria.html">Galería</a>
-                    <a href="contacto.html">Contacto</a>
+                    <a href="investigacion.html">Investigación</a>
                 </div>
-                <div>
+                <div class="footer-col">
                     <h4>Participa</h4>
                     <a href="contacto.html">Únete al proyecto</a>
                     <a href="colaboradores.html">Red de colaboradores</a>
+                    <a href="noticias.html">Noticias y convocatorias</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <p>tejedagomezv@si.edu<br>linaresr@si.edu</p>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2025 Snapshot Perú. Todos los derechos reservados.</p>
+                <p>© 2026 Snapshot Perú · Parte de <a href="https://www.snapshotprogram.org/" target="_blank" style="color: var(--dorado-claro);">Snapshot Global</a></p>
             </div>
         </div>
     </footer>
 
-    <!-- SCRIPTS -->
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         // Menú móvil
@@ -167,26 +494,37 @@
             document.getElementById('navLinks').classList.toggle('active');
         }
 
-        // Mapa Leaflet
-        var mapa = L.map('mapa-inicio').setView([-9.19, -75.015], 5);
+        // Navbar scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // Mapa con datos reales del formulario (coordenadas aproximadas)
+        var mapa = L.map('mapa-inicio').setView([-10.5, -76], 5);
+        
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(mapa);
 
-        // Sitios de ejemplo (reemplaza con tus datos reales)
         var sitios = [
-            { coords: [-13.1631, -72.5450], nombre: "Machu Picchu - Cusco" },
-            { coords: [-5.1962, -80.6267], nombre: "Bosque Seco - Piura" },
-            { coords: [-12.0464, -77.0428], nombre: "Lomas de Lachay - Lima" },
-            { coords: [-3.7437, -73.2516], nombre: "Reserva Pacaya-Samiria - Loreto" },
-            { coords: [-11.5444, -75.3523], nombre: "Selva Central - Junín" },
-            { coords: [-15.8402, -70.0219], nombre: "Lago Titicaca - Puno" }
+            { coords: [-11.05, -75.32], nombre: "Atiycuy Perú", region: "Junín", tipo: "Concesión para conservación" },
+            { coords: [-10.60, -75.40], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco", tipo: "Área de Conservación Privada" },
+            { coords: [-10.58, -75.42], nombre: "El Palmeral (RIACO)", region: "Pasco", tipo: "Proyecto de conservación voluntaria" },
+            { coords: [-5.75, -77.75], nombre: "Asociación ADECARAM", region: "San Martín", tipo: "Concesión para conservación" },
+            { coords: [-10.55, -75.35], nombre: "CEARE", region: "Pasco", tipo: "Área de Conservación Privada" },
+            { coords: [-10.50, -75.30], nombre: "CDS EIRL (Los nogales)", region: "Pasco", tipo: "Área de conservación voluntaria" },
+            { coords: [-13.52, -71.57], nombre: "HERPIRO SAC BIC", region: "Cusco", tipo: "Concesión para conservación" },
+            { coords: [-10.57, -75.38], nombre: "Ulcumano Ecolodge", region: "Pasco", tipo: "Concesión para conservación" }
         ];
 
         sitios.forEach(function(sitio) {
             L.marker(sitio.coords)
                 .addTo(mapa)
-                .bindPopup('<strong>' + sitio.nombre + '</strong><br>Zona de monitoreo');
+                .bindPopup('<strong>' + sitio.nombre + '</strong><br>' + 
+                          '📍 ' + sitio.region + '<br>' +
+                          '🏷️ ' + sitio.tipo);
         });
     </script>
 

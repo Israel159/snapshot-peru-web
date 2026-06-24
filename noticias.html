@@ -4,48 +4,353 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noticias - Snapshot Perú</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-oscuro: #1a472a;
+            --verde-primario: #2d6a4f;
+            --verde-claro: #40916c;
+            --verde-pastel: #74c69d;
+            --verde-fondo: #d8f3dc;
+            --dorado: #d4a574;
+            --dorado-claro: #e9c496;
+            --texto: #1b1b1b;
+            --texto-claro: #4a4a4a;
+            --texto-muted: #6b7280;
+            --blanco: #ffffff;
+            --gris-fondo: #f8faf9;
+            --gris-suave: #e8ede9;
+            --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
+            --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
+            --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--texto);
+            background: var(--blanco);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAVEGACIÓN */
+        .nav-top {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26,71,42,0.08);
+            transition: var(--transicion);
+        }
+        .nav-top.scrolled { box-shadow: var(--sombra-suave); }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 64px;
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 8px;
+            text-decoration: none; color: var(--verde-oscuro);
+            font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .nav-logo-icon { font-size: 1.4rem; }
+        .nav-links { 
+            display: flex; list-style: none; gap: 2px; 
+            align-items: center; margin-left: auto;
+        }
+        .nav-links a {
+            color: var(--texto-claro); text-decoration: none;
+            padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
+            font-weight: 500; transition: var(--transicion);
+            white-space: nowrap;
+        }
+        .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
+        .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
+        .nav-cta {
+            background: var(--verde-primario) !important; 
+            color: var(--blanco) !important;
+            padding: 8px 14px !important; 
+            border-radius: 8px !important;
+            font-weight: 600 !important; 
+            font-size: 0.82rem !important;
+            margin-left: 4px;
+        }
+        .nav-cta:hover { background: var(--verde-oscuro) !important; color: var(--blanco) !important; }
+        .menu-toggle { 
+            display: none; background: none; border: none; 
+            font-size: 1.4rem; cursor: pointer; 
+            color: var(--verde-oscuro); padding: 8px; 
+        }
+
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            color: var(--blanco);
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .page-header-content {
+            max-width: 1100px; margin: 0 auto; padding: 0 24px;
+            position: relative; z-index: 1;
+        }
+        .btn-volver {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: rgba(255,255,255,0.85); text-decoration: none;
+            font-size: 0.9rem; font-weight: 500;
+            padding: 8px 16px; border-radius: 8px;
+            transition: var(--transicion); margin-bottom: 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-volver:hover {
+            background: rgba(255,255,255,0.2);
+            color: var(--blanco); text-decoration: none;
+        }
+        .page-header h1 {
+            font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+            margin-bottom: 10px; letter-spacing: -1px;
+        }
+        .page-header p {
+            font-size: 1.1rem; opacity: 0.85; max-width: 600px;
+        }
+
+        /* SECCIONES */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        section { padding: 80px 0; }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 50px; }
+        .section-tag {
+            display: inline-block; color: var(--verde-primario);
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--verde-oscuro);
+            margin-bottom: 14px; font-weight: 800; letter-spacing: -1px;
+        }
+        .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
+
+        /* NOTICIAS */
+        .noticia-card {
+            background: var(--blanco); border-radius: 16px; padding: 28px;
+            box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
+            margin-bottom: 20px; transition: var(--transicion);
+        }
+        .noticia-card:hover { box-shadow: var(--sombra-media); }
+        .noticia-fecha {
+            color: var(--verde-primario); font-size: 0.8rem;
+            font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; margin-bottom: 10px;
+        }
+        .noticia-card h3 {
+            color: var(--verde-oscuro); font-size: 1.15rem;
+            margin-bottom: 10px; font-weight: 700;
+        }
+        .noticia-card p { color: var(--texto-claro); font-size: 0.95rem; line-height: 1.7; }
+
+        /* HISTORIAS */
+        .historia-card {
+            background: var(--blanco); border-radius: 16px; padding: 32px;
+            box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
+            margin-bottom: 20px; transition: var(--transicion);
+        }
+        .historia-card:hover { box-shadow: var(--sombra-media); border-color: var(--verde-pastel); }
+        .historia-card h3 {
+            color: var(--verde-oscuro); font-size: 1.15rem;
+            margin-bottom: 10px; font-weight: 700;
+        }
+        .historia-card .meta {
+            color: var(--verde-primario); font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 12px;
+        }
+        .historia-card p { color: var(--texto-claro); font-size: 0.95rem; line-height: 1.7; }
+
+        /* CONVOCATORIA */
+        .convocatoria {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            border-radius: 20px; padding: 40px;
+            color: var(--blanco);
+        }
+        .convocatoria h3 {
+            color: var(--dorado-claro); font-size: 1.3rem;
+            margin-bottom: 12px; font-weight: 700;
+        }
+        .convocatoria p {
+            color: rgba(255,255,255,0.9); margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* BOLETÍN */
+        .boletin-card {
+            background: var(--blanco); border-radius: 16px; padding: 40px;
+            box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
+            max-width: 600px; margin: 0 auto;
+        }
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block; margin-bottom: 8px;
+            font-weight: 600; color: var(--verde-oscuro);
+            font-size: 0.95rem;
+        }
+        .form-group input {
+            width: 100%; padding: 14px 18px;
+            border: 2px solid var(--gris-suave); border-radius: 12px;
+            font-size: 1rem; font-family: inherit;
+            transition: var(--transicion);
+        }
+        .form-group input:focus {
+            outline: none; border-color: var(--verde-pastel);
+            box-shadow: 0 0 0 4px rgba(116, 198, 157, 0.15);
+        }
+        .btn-submit {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 12px;
+            font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
+            background: var(--verde-primario); color: var(--blanco);
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
+            border: none; cursor: pointer; width: 100%; justify-content: center;
+        }
+        .btn-submit:hover {
+            background: var(--verde-oscuro); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
+        }
+
+        /* BOTÓN CTA */
+        .btn-cta {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 12px; text-decoration: none;
+            font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
+            background: var(--dorado); color: var(--verde-oscuro);
+            box-shadow: 0 4px 15px rgba(212, 165, 116, 0.4);
+        }
+        .btn-cta:hover {
+            background: var(--dorado-claro); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.5);
+            text-decoration: none;
+        }
+
+        /* FOOTER */
+        .footer-main {
+            background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
+            color: var(--blanco); padding: 70px 0 30px;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 50px; }
+        .footer-col h4 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; color: var(--dorado-claro); }
+        .footer-col p { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.7; }
+        .footer-col a { 
+            color: rgba(255,255,255,0.7); text-decoration: none; display: block; 
+            padding: 6px 0; font-size: 0.92rem; transition: var(--transicion); 
+        }
+        .footer-col a:hover { color: var(--dorado-claro); padding-left: 4px; }
+        .footer-bottom { 
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; 
+            text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); 
+        }
+
+        .bg-white { background: var(--blanco); }
+        .bg-light { background: var(--gris-fondo); }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mt-40 { margin-top: 40px; }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links { 
+                display: none; position: absolute; top: 64px; left: 0; right: 0; 
+                background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
+                flex-direction: column; padding: 20px; gap: 4px; 
+                border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
+            }
+            .nav-links.active { display: flex; }
+            .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
+            .nav-cta { margin-left: 0 !important; text-align: center; }
+            section { padding: 50px 0; }
+            .page-header { padding: 100px 0 40px; }
+            .convocatoria { padding: 24px; }
+            .boletin-card { padding: 24px; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN (copiar de index.html) -->
-    
-    <section class="hero" style="padding: 60px 0;">
-        <div class="container">
-            <h1>Noticias y Actualizaciones</h1>
-            <p class="subtitle">Mantente informado sobre los avances del proyecto</p>
+    <!-- NAVEGACIÓN -->
+    <nav class="nav-top" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📷</span>
+                <span>Snapshot Perú</span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="sobre.html">Sobre el Proyecto</a></li>
+                <li><a href="colaboradores.html">Colaboradores</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
+                <li><a href="mapa.html">¿Quiénes se suman?</a></li>
+                <li><a href="galeria.html">Galería</a></li>
+                <li><a href="investigacion.html">Investigación</a></li>
+                <li><a href="noticias.html" class="active">Noticias</a></li>
+                <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
+            </ul>
         </div>
-    </section>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <a href="index.html" class="btn-volver">← Volver al inicio</a>
+            <h1>Noticias y Actualizaciones</h1>
+            <p>Mantente informado sobre los avances del proyecto</p>
+        </div>
+    </header>
 
     <!-- NOTICIAS RECIENTES -->
     <section class="bg-white">
         <div class="container">
-            <h2 class="section-title">Noticias Recientes</h2>
+            <div class="section-header">
+                <span class="section-tag">Últimas</span>
+                <h2 class="section-title">Noticias Recientes</h2>
+            </div>
             
-            <div class="grid-2">
-                <div class="card">
-                    <div style="font-size: 0.85rem; color: var(--color-acento); margin-bottom: 10px;">
-                        📅 [Fecha actual]
-                    </div>
-                    <h3 style="color: var(--color-primario); margin-bottom: 10px;">
-                        Lanzamiento de Snapshot Perú
-                    </h3>
-                    <p style="color: var(--color-gris);">
-                        Iniciamos oficialmente el proyecto de fotomonitoreo nacional. Invitamos a todas las 
-                        instituciones y personas interesadas a unirse a esta red colaborativa.
-                    </p>
-                </div>
-                <div class="card">
-                    <div style="font-size: 0.85rem; color: var(--color-acento); margin-bottom: 10px;">
-                        📅 [Fecha]
-                    </div>
-                    <h3 style="color: var(--color-primario); margin-bottom: 10px;">
-                        Nueva aliada: [Nombre de institución]
-                    </h3>
-                    <p style="color: var(--color-gris);">
-                        [Nombre] se une a la red de colaboradores, aportando monitoreo en la región [nombre].
-                    </p>
-                </div>
+            <div class="noticia-card">
+                <div class="noticia-fecha">📅 Junio 2026</div>
+                <h3>🚀 Lanzamiento oficial de Snapshot Perú</h3>
+                <p>
+                    Snapshot Perú inicia oficialmente sus actividades como parte de la red Snapshot Global. 
+                    El proyecto busca cubrir las 24 regiones del país, articulando esfuerzos de investigación 
+                    y conservación a nivel nacional. La convocatoria para participantes está abierta hasta 
+                    julio de 2026.
+                </p>
+            </div>
+
+            <div class="noticia-card">
+                <div class="noticia-fecha">📅 Mayo 2026</div>
+                <h3>🤝 8 organizaciones se unen a la red</h3>
+                <p>
+                    Durante el primer mes de convocatoria, 8 organizaciones de las regiones Junín, Pasco, 
+                    San Martín y Cusco se han inscrito en el proyecto. Entre ellas destacan áreas de 
+                    conservación privada, concesiones para conservación y proyectos comunitarios.
+                </p>
+            </div>
+
+            <div class="noticia-card">
+                <div class="noticia-fecha">📅 Mayo 2026</div>
+                <h3>🎓 Primera capacitación virtual programada</h3>
+                <p>
+                    Se anuncia la primera capacitación obligatoria para todos los participantes: 
+                    "Instalación correcta de cámaras trampa". Se ofrecerán fechas y horarios flexibles 
+                    para facilitar la participación de todos los colaboradores.
+                </p>
             </div>
         </div>
     </section>
@@ -53,71 +358,121 @@
     <!-- HISTORIAS DESDE EL CAMPO -->
     <section class="bg-light">
         <div class="container">
-            <h2 class="section-title">Historias desde el Campo</h2>
+            <div class="section-header">
+                <span class="section-tag">Relatos</span>
+                <h2 class="section-title">Historias desde el Campo</h2>
+            </div>
             
-            <div class="card" style="margin-bottom: 20px;">
-                <h3 style="color: var(--color-primario); margin-bottom: 10px;">
-                    🌿 [Título de la historia]
-                </h3>
-                <p style="color: var(--color-gris); margin-bottom: 10px;">
-                    Por: [Nombre del colaborador] | [Región]
-                </p>
+            <div class="historia-card">
+                <h3>🌿 Los nogales: un oasis de conservación en Pasco</h3>
+                <div class="meta">📍 Pasco · CDS EIRL (Los Nogales) · Florencia Trama y Federico Rizo Patrón</div>
                 <p>
-                    Relato breve sobre la experiencia de monitoreo, hallazgos interesantes o desafíos en el campo.
+                    En la zona de Los Nogales, el equipo de CDS EIRL ha instalado 10 cámaras trampa 
+                    para documentar la fauna del área de conservación voluntaria. El sitio, ubicado en 
+                    la provincia de Oxapampa, representa un corredor biológico importante entre bosques 
+                    montanos y tierras bajas de la Amazonía.
+                </p>
+            </div>
+
+            <div class="historia-card">
+                <h3>🐾 CEARE y la comunidad de Palcazú</h3>
+                <div class="meta">📍 Pasco · CEARE · Rodrigo Carbajal, Carolina Llerena, Ronal Raya</div>
+                <p>
+                    A pesar de contar solo con 5 cámaras operativas, el equipo de CEARE planea extender 
+                    el tiempo de muestreo para cumplir con la meta de 480 esfuerzos de monitoreo. 
+                    Su trabajo en la provincia de Palcazú contribuye al conocimiento de la biodiversidad 
+                    de la Reserva Comunal Yanesha.
                 </p>
             </div>
         </div>
     </section>
 
-    <!-- CONVOCATORIAS -->
+    <!-- CONVOCATORIA -->
     <section class="bg-white">
         <div class="container">
-            <h2 class="section-title">Convocatorias</h2>
+            <div class="section-header">
+                <span class="section-tag">Abierta</span>
+                <h2 class="section-title">Convocatorias</h2>
+            </div>
             
-            <div class="card" style="border-left: 4px solid var(--color-acento);">
-                <h3 style="color: var(--color-primario); margin-bottom: 10px;">
-                    📢 Llamado a participar en Snapshot Perú 2025
-                </h3>
-                <p style="margin-bottom: 15px;">
+            <div class="convocatoria">
+                <h3>📢 Llamado a participar en Snapshot Perú 2026</h3>
+                <p>
                     Estamos buscando colaboradores en todas las regiones del país. Si tienes cámaras trampa 
-                    y experiencia en monitoreo, únete a la red.
+                    y experiencia en monitoreo, únete a la red. Requisitos: mínimo 8 cámaras, disponibilidad 
+                    para 60 días de muestreo, y asistencia a capacitaciones virtuales.
                 </p>
-                <a href="contacto.html" class="btn btn-primario">Más información</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" 
+                   class="btn-cta" target="_blank">📝 Inscribirme ahora</a>
             </div>
         </div>
     </section>
 
-    <!-- BOLETÍN -->
+        <!-- BOLETÍN -->
     <section class="bg-light">
         <div class="container">
-            <h2 class="section-title">Suscríbete al Boletín</h2>
-            <p class="section-subtitle">Recibe actualizaciones mensuales del proyecto</p>
+            <div class="section-header">
+                <span class="section-tag">Suscríbete</span>
+                <h2 class="section-title">Boletín de Actualizaciones</h2>
+                <p class="section-subtitle">Recibe noticias mensuales sobre el avance del proyecto</p>
+            </div>
             
-            <div class="card" style="max-width: 600px; margin: 0 auto;">
-                <form action="#" method="POST">
+            <div class="boletin-card">
+                <form action="https://formspree.io/f/YOUR_ID" method="POST">
                     <div class="form-group">
-                        <label for="email-boletin">Correo electrónico</label>
-                        <input type="email" id="email-boletin" name="email" placeholder="tu@correo.com" required>
+                        <label for="nombre">Nombre completo</label>
+                        <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
                     </div>
                     <div class="form-group">
-                        <label for="nombre-boletin">Nombre</label>
-                        <input type="text" id="nombre-boletin" name="nombre" placeholder="Tu nombre" required>
+                        <label for="email">Correo electrónico</label>
+                        <input type="email" id="email" name="email" placeholder="tu@correo.com" required>
                     </div>
-                    <button type="submit" class="btn btn-primario" style="width: 100%;">Suscribirse</button>
+                    <button type="submit" class="btn-submit">Suscribirse al boletín</button>
                 </form>
-                <p style="font-size: 0.85rem; color: var(--color-gris); margin-top: 15px; text-align: center;">
-                    Nota: Para integrar esto con tu base de datos, necesitarás un servicio como Formspree o Google Forms.
-                </p>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER (copiar de index.html) -->
-    
+    <!-- FOOTER -->
+    <footer class="footer-main">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>📷 Snapshot Perú</h4>
+                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Explorar</h4>
+                    <a href="index.html">Inicio</a>
+                    <a href="sobre.html">Sobre el Proyecto</a>
+                    <a href="protocolo.html">Protocolo</a>
+                    <a href="galeria.html">Galería</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Participa</h4>
+                    <a href="contacto.html">Únete al proyecto</a>
+                    <a href="mapa.html">Ver mapa de participantes</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <p>tejedagomezv@si.edu<br>linaresr@si.edu</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Snapshot Perú</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
     </script>
 
 </body>

@@ -4,96 +4,455 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¿Quiénes se suman? - Snapshot Perú</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --verde-oscuro: #1a472a;
+            --verde-primario: #2d6a4f;
+            --verde-claro: #40916c;
+            --verde-pastel: #74c69d;
+            --verde-fondo: #d8f3dc;
+            --dorado: #d4a574;
+            --dorado-claro: #e9c496;
+            --texto: #1b1b1b;
+            --texto-claro: #4a4a4a;
+            --texto-muted: #6b7280;
+            --blanco: #ffffff;
+            --gris-fondo: #f8faf9;
+            --gris-suave: #e8ede9;
+            --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
+            --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
+            --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--texto);
+            background: var(--blanco);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAVEGACIÓN */
+        .nav-top {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26,71,42,0.08);
+            transition: var(--transicion);
+        }
+        .nav-top.scrolled { box-shadow: var(--sombra-suave); }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 64px;
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 8px;
+            text-decoration: none; color: var(--verde-oscuro);
+            font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .nav-logo-icon { font-size: 1.4rem; }
+        .nav-links { 
+            display: flex; list-style: none; gap: 2px; 
+            align-items: center; margin-left: auto;
+        }
+        .nav-links a {
+            color: var(--texto-claro); text-decoration: none;
+            padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
+            font-weight: 500; transition: var(--transicion);
+            white-space: nowrap;
+        }
+        .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
+        .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
+        .nav-cta {
+            background: var(--verde-primario) !important; 
+            color: var(--blanco) !important;
+            padding: 8px 14px !important; 
+            border-radius: 8px !important;
+            font-weight: 600 !important; 
+            font-size: 0.82rem !important;
+            margin-left: 4px;
+        }
+        .nav-cta:hover { background: var(--verde-oscuro) !important; color: var(--blanco) !important; }
+        .menu-toggle { 
+            display: none; background: none; border: none; 
+            font-size: 1.4rem; cursor: pointer; 
+            color: var(--verde-oscuro); padding: 8px; 
+        }
+
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            color: var(--blanco);
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .page-header-content {
+            max-width: 1100px; margin: 0 auto; padding: 0 24px;
+            position: relative; z-index: 1;
+        }
+        .btn-volver {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: rgba(255,255,255,0.85); text-decoration: none;
+            font-size: 0.9rem; font-weight: 500;
+            padding: 8px 16px; border-radius: 8px;
+            transition: var(--transicion); margin-bottom: 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-volver:hover {
+            background: rgba(255,255,255,0.2);
+            color: var(--blanco); text-decoration: none;
+        }
+        .page-header h1 {
+            font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+            margin-bottom: 10px; letter-spacing: -1px;
+        }
+        .page-header p {
+            font-size: 1.1rem; opacity: 0.85; max-width: 600px;
+        }
+
+        /* SECCIONES */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        section { padding: 80px 0; }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 50px; }
+        .section-tag {
+            display: inline-block; color: var(--verde-primario);
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--verde-oscuro);
+            margin-bottom: 14px; font-weight: 800; letter-spacing: -1px;
+        }
+        .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
+
+        /* ESTADÍSTICAS */
+        .stats-bar {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            padding: 60px 0;
+        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+        .stat-item { text-align: center; color: var(--blanco); }
+        .stat-number { font-size: 3rem; font-weight: 800; line-height: 1; margin-bottom: 8px; }
+        .stat-label { font-size: 0.95rem; opacity: 0.85; font-weight: 500; }
+
+        /* MAPA */
+        .mapa-wrapper {
+            border-radius: 16px; overflow: hidden;
+            box-shadow: var(--sombra-media); border: 1px solid var(--gris-suave);
+        }
+        .mapa-container { height: 600px; width: 100%; }
+
+        /* TABLA DE PARTICIPANTES */
+        .tabla-container {
+            background: var(--blanco); border-radius: 16px;
+            box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
+            overflow: hidden;
+        }
+        .tabla-header {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            color: var(--blanco); padding: 20px 24px;
+            font-weight: 700; font-size: 1rem;
+        }
+        .tabla-row {
+            display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr;
+            gap: 16px; padding: 16px 24px;
+            border-bottom: 1px solid var(--gris-suave);
+            align-items: center;
+        }
+        .tabla-row:last-child { border-bottom: none; }
+        .tabla-row:hover { background: var(--gris-fondo); }
+        .tabla-row .org { font-weight: 600; color: var(--verde-oscuro); }
+        .tabla-row .region { color: var(--texto-claro); font-size: 0.9rem; }
+        .tabla-row .tipo { color: var(--texto-muted); font-size: 0.9rem; }
+        .tabla-row .camaras { 
+            color: var(--verde-primario); font-weight: 700; 
+            font-size: 0.95rem; text-align: center;
+        }
+
+        /* BOTÓN CTA */
+        .btn-cta {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 12px; text-decoration: none;
+            font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
+            background: var(--verde-primario); color: var(--blanco);
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
+        }
+        .btn-cta:hover {
+            background: var(--verde-oscuro); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
+            text-decoration: none; color: var(--blanco);
+        }
+
+        /* FOOTER */
+        .footer-main {
+            background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
+            color: var(--blanco); padding: 70px 0 30px;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 50px; }
+        .footer-col h4 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; color: var(--dorado-claro); }
+        .footer-col p { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.7; }
+        .footer-col a { 
+            color: rgba(255,255,255,0.7); text-decoration: none; display: block; 
+            padding: 6px 0; font-size: 0.92rem; transition: var(--transicion); 
+        }
+        .footer-col a:hover { color: var(--dorado-claro); padding-left: 4px; }
+        .footer-bottom { 
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; 
+            text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); 
+        }
+
+        .bg-white { background: var(--blanco); }
+        .bg-light { background: var(--gris-fondo); }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mt-40 { margin-top: 40px; }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links { 
+                display: none; position: absolute; top: 64px; left: 0; right: 0; 
+                background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
+                flex-direction: column; padding: 20px; gap: 4px; 
+                border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
+            }
+            .nav-links.active { display: flex; }
+            .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
+            .nav-cta { margin-left: 0 !important; text-align: center; }
+            section { padding: 50px 0; }
+            .page-header { padding: 100px 0 40px; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .stat-number { font-size: 2.2rem; }
+            .mapa-container { height: 400px; }
+            .tabla-row { grid-template-columns: 1fr; gap: 4px; padding: 12px 16px; }
+            .tabla-row .camaras { text-align: left; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN (copiar de index.html) -->
-    
-    <section class="hero" style="padding: 60px 0;">
-        <div class="container">
-            <h1>¿Quiénes se suman?</h1>
-            <p class="subtitle">Cobertura nacional del fotomonitoreo</p>
+    <!-- NAVEGACIÓN -->
+    <nav class="nav-top" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📷</span>
+                <span>Snapshot Perú</span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="sobre.html">Sobre el Proyecto</a></li>
+                <li><a href="colaboradores.html">Colaboradores</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
+                <li><a href="mapa.html" class="active">¿Quiénes se suman?</a></li>
+                <li><a href="galeria.html">Galería</a></li>
+                <li><a href="investigacion.html">Investigación</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
+            </ul>
         </div>
-    </section>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <a href="index.html" class="btn-volver">← Volver al inicio</a>
+            <h1>¿Quiénes se suman?</h1>
+            <p>Cobertura nacional del fotomonitoreo en Snapshot Perú 2026</p>
+        </div>
+    </header>
 
     <!-- ESTADÍSTICAS -->
-    <section class="bg-white">
+    <section class="stats-bar">
         <div class="container">
-            <h2 class="section-title">Resumen de Participación</h2>
-            
-            <div class="stats-container">
-                <div class="stat-box">
-                    <div class="stat-numero">0</div>
-                    <div class="stat-label">Cámaras por arreglo</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-numero">0</div>
-                    <div class="stat-label">Regiones inscritas</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-numero">0</div>
-                    <div class="stat-label">Ecosistemas cubiertos</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-numero">0</div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">8</div>
                     <div class="stat-label">Organizaciones inscritas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">3</div>
+                    <div class="stat-label">Regiones cubiertas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">60+</div>
+                    <div class="stat-label">Cámaras comprometidas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">400+</div>
+                    <div class="stat-label">Noches-trampa meta</div>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- MAPA INTERACTIVO -->
-    <section class="bg-light">
+    <section class="bg-white">
         <div class="container">
-            <h2 class="section-title">Mapa de Iniciativas</h2>
-            <p class="section-subtitle">
-                Ubicación general de proyectos participantes. 
-                <strong>Nota:</strong> Las coordenadas están generalizadas para proteger especies sensibles.
-            </p>
+            <div class="section-header">
+                <span class="section-tag">Cobertura</span>
+                <h2 class="section-title">Mapa de Iniciativas</h2>
+                <p class="section-subtitle">
+                    Ubicación general de proyectos participantes. 
+                    <strong>Nota:</strong> Las coordenadas están generalizadas para proteger especies sensibles.
+                </p>
+            </div>
             
-            <div id="mapa-completo" class="mapa-container" style="height: 600px;"></div>
-            
-            <div class="text-center mt-20">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" 
-                   class="btn btn-primario" target="_blank">📍 Registra tu sitio de monitoreo</a>
+            <div class="mapa-wrapper">
+                <div id="mapa-completo" class="mapa-container"></div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER (copiar de index.html) -->
-    
+    <!-- TABLA DE PARTICIPANTES -->
+    <section class="bg-light">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Detalle</span>
+                <h2 class="section-title">Organizaciones Inscritas</h2>
+            </div>
+            
+            <div class="tabla-container">
+                <div class="tabla-header">Organización / Región / Tipo de área / Cámaras</div>
+                
+                <div class="tabla-row">
+                    <div class="org">Atiycuy Perú</div>
+                    <div class="region">Junín</div>
+                    <div class="tipo">Concesión para conservación</div>
+                    <div class="camaras">9</div>
+                </div>
+                <div class="tabla-row">
+                    <div class="org">ACP Bosque de Churumazú (RIACO)</div>
+                    <div class="region">Pasco</div>
+                    <div class="tipo">Área de Conservación Privada</div>
+                    <div class="camaras">8</div>
+                </div>
+                <div class="tabla-row">
+                    <div class="org">El Palmeral (RIACO)</div>
+                    <div class="region">Pasco</div>
+                    <div class="tipo">Conservación voluntaria</div>
+                    <div class="camaras">8</div>
+                </div>
+                <div class="tabla-row">
+                    <div class="org">ADECARAM</div>
+                    <div class="region">San Martín</div>
+                    <div class="tipo">Concesión para conservación</div>
+                    <div class="camaras">—</div>
+                </div>
+                <div class="tabla-row">
+                    <div class="org">CEARE</div>
+                    <div class="region">Pasco</div>
+                    <div class="tipo">Área de Conservación Privada</div>
+                    <div class="camaras">5</div>
+                </div>
+                <div class="tabla-row">
+                    <div class="org">CDS EIRL (Los Nogales)</div>
+                    <div class="region">Pasco</div>
+                    <div class="tipo">Conservación voluntaria</div>
+                    <div class="camaras">10</div>
+                </div>
+                <div class="tabla-row">
+                    <div class="org">HERPIRO SAC BIC</div>
+                    <div class="region">Cusco</div>
+                    <div class="tipo">Concesión para conservación</div>
+                    <div class="camaras">5</div>
+                </div>
+                <div class="tabla-row">
+                    <div class="org">Ulcumano Ecolodge</div>
+                    <div class="region">Pasco</div>
+                    <div class="tipo">Concesión para conservación</div>
+                    <div class="camaras">8</div>
+                </div>
+            </div>
+
+            <div class="text-center mt-40">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" 
+                   class="btn-cta" target="_blank">📍 Registra tu sitio de monitoreo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-main">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>📷 Snapshot Perú</h4>
+                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Explorar</h4>
+                    <a href="index.html">Inicio</a>
+                    <a href="sobre.html">Sobre el Proyecto</a>
+                    <a href="protocolo.html">Protocolo</a>
+                    <a href="galeria.html">Galería</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Participa</h4>
+                    <a href="contacto.html">Únete al proyecto</a>
+                    <a href="colaboradores.html">Red de colaboradores</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <p>tejedagomezv@si.edu<br>linaresr@si.edu</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Snapshot Perú</p>
+            </div>
+        </div>
+    </footer>
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
 
-        // Mapa completo con más detalle
-        var mapa = L.map('mapa-completo').setView([-9.19, -75.015], 5);
+        // Mapa completo con datos reales
+        var mapa = L.map('mapa-completo').setView([-10.5, -76], 6);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(mapa);
 
-        // Aquí puedes agregar los marcadores reales desde tu Google Forms
-        // Por ahora, ejemplos de sitios
         var sitios = [
-            { coords: [-13.1631, -72.5450], nombre: "Machu Picchu", tipo: "Santuario Histórico" },
-            { coords: [-5.1962, -80.6267], nombre: "Bosque Seco - Piura", tipo: "Área de monitoreo" },
-            { coords: [-12.0464, -77.0428], nombre: "Lomas de Lachay", tipo: "Reserva Nacional" },
-            { coords: [-3.7437, -73.2516], nombre: "Pacaya-Samiria", tipo: "Reserva Nacional" },
-            { coords: [-11.5444, -75.3523], nombre: "Selva Central", tipo: "Zona de monitoreo" },
-            { coords: [-15.8402, -70.0219], nombre: "Lago Titicaca", tipo: "Reserva Nacional" },
-            { coords: [-6.2309, -77.8712], nombre: "Cordillera Escalera", tipo: "Área de conservación" },
-            { coords: [-16.3988, -71.5369], nombre: "Valle del Colca", tipo: "Reserva Paisajística" }
+            { coords: [-11.05, -75.32], nombre: "Atiycuy Perú", region: "Junín", tipo: "Concesión para conservación" },
+            { coords: [-10.60, -75.40], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco", tipo: "Área de Conservación Privada" },
+            { coords: [-10.58, -75.42], nombre: "El Palmeral (RIACO)", region: "Pasco", tipo: "Conservación voluntaria" },
+            { coords: [-5.75, -77.75], nombre: "ADECARAM", region: "San Martín", tipo: "Concesión para conservación" },
+            { coords: [-10.55, -75.35], nombre: "CEARE", region: "Pasco", tipo: "Área de Conservación Privada" },
+            { coords: [-10.50, -75.30], nombre: "CDS EIRL (Los Nogales)", region: "Pasco", tipo: "Conservación voluntaria" },
+            { coords: [-13.52, -71.57], nombre: "HERPIRO SAC BIC", region: "Cusco", tipo: "Concesión para conservación" },
+            { coords: [-10.57, -75.38], nombre: "Ulcumano Ecolodge", region: "Pasco", tipo: "Concesión para conservación" }
         ];
 
         sitios.forEach(function(sitio) {
             L.marker(sitio.coords)
                 .addTo(mapa)
-                .bindPopup('<strong>' + sitio.nombre + '</strong><br>' + sitio.tipo);
+                .bindPopup('<strong>' + sitio.nombre + '</strong><br>' + 
+                          '📍 ' + sitio.region + '<br>' +
+                          '🏷️ ' + sitio.tipo);
         });
     </script>
 

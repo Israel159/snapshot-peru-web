@@ -4,55 +4,364 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Galería - Snapshot Perú</title>
-    <link rel="stylesheet" href="estilos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --verde-oscuro: #1a472a;
+            --verde-primario: #2d6a4f;
+            --verde-claro: #40916c;
+            --verde-pastel: #74c69d;
+            --verde-fondo: #d8f3dc;
+            --dorado: #d4a574;
+            --dorado-claro: #e9c496;
+            --texto: #1b1b1b;
+            --texto-claro: #4a4a4a;
+            --texto-muted: #6b7280;
+            --blanco: #ffffff;
+            --gris-fondo: #f8faf9;
+            --gris-suave: #e8ede9;
+            --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
+            --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
+            --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--texto);
+            background: var(--blanco);
+            line-height: 1.7;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* NAVEGACIÓN */
+        .nav-top {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(26,71,42,0.08);
+            transition: var(--transicion);
+        }
+        .nav-top.scrolled { box-shadow: var(--sombra-suave); }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            height: 64px;
+        }
+        .nav-logo {
+            display: flex; align-items: center; gap: 8px;
+            text-decoration: none; color: var(--verde-oscuro);
+            font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
+            white-space: nowrap; flex-shrink: 0;
+        }
+        .nav-logo-icon { font-size: 1.4rem; }
+        .nav-links { 
+            display: flex; list-style: none; gap: 2px; 
+            align-items: center; margin-left: auto;
+        }
+        .nav-links a {
+            color: var(--texto-claro); text-decoration: none;
+            padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
+            font-weight: 500; transition: var(--transicion);
+            white-space: nowrap;
+        }
+        .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
+        .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
+        .nav-cta {
+            background: var(--verde-primario) !important; 
+            color: var(--blanco) !important;
+            padding: 8px 14px !important; 
+            border-radius: 8px !important;
+            font-weight: 600 !important; 
+            font-size: 0.82rem !important;
+            margin-left: 4px;
+        }
+        .nav-cta:hover { background: var(--verde-oscuro) !important; color: var(--blanco) !important; }
+        .menu-toggle { 
+            display: none; background: none; border: none; 
+            font-size: 1.4rem; cursor: pointer; 
+            color: var(--verde-oscuro); padding: 8px; 
+        }
+
+        /* HEADER */
+        .page-header {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            color: var(--blanco);
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .page-header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        .page-header-content {
+            max-width: 1100px; margin: 0 auto; padding: 0 24px;
+            position: relative; z-index: 1;
+        }
+        .btn-volver {
+            display: inline-flex; align-items: center; gap: 6px;
+            color: rgba(255,255,255,0.85); text-decoration: none;
+            font-size: 0.9rem; font-weight: 500;
+            padding: 8px 16px; border-radius: 8px;
+            transition: var(--transicion); margin-bottom: 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .btn-volver:hover {
+            background: rgba(255,255,255,0.2);
+            color: var(--blanco); text-decoration: none;
+        }
+        .page-header h1 {
+            font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
+            margin-bottom: 10px; letter-spacing: -1px;
+        }
+        .page-header p {
+            font-size: 1.1rem; opacity: 0.85; max-width: 600px;
+        }
+
+        /* SECCIONES */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        section { padding: 80px 0; }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 50px; }
+        .section-tag {
+            display: inline-block; color: var(--verde-primario);
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 2px; margin-bottom: 12px;
+        }
+        .section-title {
+            font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--verde-oscuro);
+            margin-bottom: 14px; font-weight: 800; letter-spacing: -1px;
+        }
+        .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
+
+        /* GALERÍA */
+        .galeria-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .galeria-item {
+            position: relative; border-radius: 16px; overflow: hidden;
+            aspect-ratio: 4/3; cursor: pointer;
+            box-shadow: var(--sombra-suave);
+        }
+        .galeria-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .galeria-item:hover img { transform: scale(1.08); }
+        .galeria-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent, rgba(26, 71, 42, 0.85));
+            color: var(--blanco); padding: 50px 20px 20px;
+            font-size: 0.95rem; font-weight: 600;
+        }
+        .galeria-overlay span {
+            display: block; font-size: 0.8rem; font-weight: 400;
+            opacity: 0.85; margin-top: 4px;
+        }
+
+        /* REGISTRO DEL MES */
+        .registro-mes {
+            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+            border-radius: 20px; padding: 40px;
+            color: var(--blanco); display: flex; gap: 40px;
+            align-items: center;
+        }
+        .registro-mes-img {
+            width: 300px; height: 220px; border-radius: 16px;
+            object-fit: cover; flex-shrink: 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .registro-mes-content h3 {
+            color: var(--dorado-claro); font-size: 1.3rem;
+            margin-bottom: 12px; font-weight: 700;
+        }
+        .registro-mes-content p {
+            color: rgba(255,255,255,0.9); margin-bottom: 10px;
+            line-height: 1.7;
+        }
+        .registro-mes-meta {
+            display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px;
+        }
+        .registro-mes-meta span {
+            background: rgba(255,255,255,0.15); padding: 6px 14px;
+            border-radius: 8px; font-size: 0.85rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* HISTORIAS */
+        .historia-card {
+            background: var(--blanco); border-radius: 16px; padding: 32px;
+            box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
+            margin-bottom: 20px; transition: var(--transicion);
+        }
+        .historia-card:hover { box-shadow: var(--sombra-media); border-color: var(--verde-pastel); }
+        .historia-card h3 {
+            color: var(--verde-oscuro); font-size: 1.15rem;
+            margin-bottom: 10px; font-weight: 700;
+        }
+        .historia-card .meta {
+            color: var(--verde-primario); font-size: 0.85rem;
+            font-weight: 600; margin-bottom: 12px;
+        }
+        .historia-card p { color: var(--texto-claro); font-size: 0.95rem; line-height: 1.7; }
+
+        /* BOTÓN CTA */
+        .btn-cta {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 12px; text-decoration: none;
+            font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
+            background: var(--verde-primario); color: var(--blanco);
+            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
+        }
+        .btn-cta:hover {
+            background: var(--verde-oscuro); transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
+            text-decoration: none; color: var(--blanco);
+        }
+
+        /* FOOTER */
+        .footer-main {
+            background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
+            color: var(--blanco); padding: 70px 0 30px;
+        }
+        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 50px; }
+        .footer-col h4 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; color: var(--dorado-claro); }
+        .footer-col p { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.7; }
+        .footer-col a { 
+            color: rgba(255,255,255,0.7); text-decoration: none; display: block; 
+            padding: 6px 0; font-size: 0.92rem; transition: var(--transicion); 
+        }
+        .footer-col a:hover { color: var(--dorado-claro); padding-left: 4px; }
+        .footer-bottom { 
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; 
+            text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); 
+        }
+
+        .bg-white { background: var(--blanco); }
+        .bg-light { background: var(--gris-fondo); }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mt-40 { margin-top: 40px; }
+
+        @media (max-width: 768px) {
+            .menu-toggle { display: block; }
+            .nav-links { 
+                display: none; position: absolute; top: 64px; left: 0; right: 0; 
+                background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
+                flex-direction: column; padding: 20px; gap: 4px; 
+                border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
+            }
+            .nav-links.active { display: flex; }
+            .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
+            .nav-cta { margin-left: 0 !important; text-align: center; }
+            section { padding: 50px 0; }
+            .page-header { padding: 100px 0 40px; }
+            .galeria-grid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+            .registro-mes { flex-direction: column; padding: 24px; }
+            .registro-mes-img { width: 100%; height: 200px; }
+        }
+    </style>
 </head>
 <body>
 
-    <!-- BARRA DE NAVEGACIÓN (copiar de index.html) -->
-    
-    <section class="hero" style="padding: 60px 0;">
-        <div class="container">
-            <h1>Galería de Biodiversidad</h1>
-            <p class="subtitle">Imágenes captadas por nuestra red de cámaras trampa</p>
+    <!-- NAVEGACIÓN -->
+    <nav class="nav-top" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📷</span>
+                <span>Snapshot Perú</span>
+            </a>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="sobre.html">Sobre el Proyecto</a></li>
+                <li><a href="colaboradores.html">Colaboradores</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
+                <li><a href="mapa.html">¿Quiénes se suman?</a></li>
+                <li><a href="galeria.html" class="active">Galería</a></li>
+                <li><a href="investigacion.html">Investigación</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
+            </ul>
         </div>
-    </section>
+    </nav>
+
+    <!-- HEADER -->
+    <header class="page-header">
+        <div class="page-header-content">
+            <a href="index.html" class="btn-volver">← Volver al inicio</a>
+            <h1>Galería de Biodiversidad</h1>
+            <p>Imágenes captadas por nuestra red de cámaras trampa en todo el Perú</p>
+        </div>
+    </header>
 
     <!-- FOTOS DESTACADAS -->
     <section class="bg-white">
         <div class="container">
-            <h2 class="section-title">Fotos Destacadas</h2>
-            
-            <div class="galeria-grid">
-                <!-- Aquí agregas tus fotos. Por ahora, placeholders -->
-                <div class="galeria-item">
-                    <img src="https://via.placeholder.com/400x300/1a5f2a/ffffff?text=Oso+de+Anteojos" alt="Oso de anteojos">
-                    <div class="galeria-overlay">Oso de anteojos - Amazonas</div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://via.placeholder.com/400x300/2d7a3e/ffffff?text=Puma" alt="Puma">
-                    <div class="galeria-overlay">Puma - Cusco</div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://via.placeholder.com/400x300/c9a227/ffffff?text=Tapir" alt="Tapir">
-                    <div class="galeria-overlay">Tapir andino - Junín</div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://via.placeholder.com/400x300/1a5f2a/ffffff?text=Jaguar" alt="Jaguar">
-                    <div class="galeria-overlay">Jaguar - Madre de Dios</div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://via.placeholder.com/400x300/2d7a3e/ffffff?text=Huemul" alt="Huemul">
-                    <div class="galeria-overlay">Venado cola blanca - Piura</div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://via.placeholder.com/400x300/c9a227/ffffff?text=Zorro" alt="Zorro">
-                    <div class="galeria-overlay">Zorro andino - Puno</div>
-                </div>
+            <div class="section-header">
+                <span class="section-tag">Imágenes</span>
+                <h2 class="section-title">Fotos Destacadas</h2>
+                <p class="section-subtitle">
+                    Registros de fauna obtenidos mediante cámaras trampa en las áreas de monitoreo participantes.
+                </p>
             </div>
             
+            <div class="galeria-grid">
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400&h=300&fit=crop" alt="Oso de anteojos">
+                    <div class="galeria-overlay">
+                        Oso de anteojos
+                        <span>📍 Amazonas · Atiycuy Perú</span>
+                    </div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1615266895738-11f1371cd7e5?w=400&h=300&fit=crop" alt="Puma">
+                    <div class="galeria-overlay">
+                        Puma
+                        <span>📍 Pasco · ACP Bosque de Churumazú</span>
+                    </div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=400&h=300&fit=crop" alt="Tapir">
+                    <div class="galeria-overlay">
+                        Tapir andino
+                        <span>📍 Junín · Atiycuy Perú</span>
+                    </div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1549480017-d76466a4b7e8?w=400&h=300&fit=crop" alt="Jaguar">
+                    <div class="galeria-overlay">
+                        Jaguar
+                        <span>📍 Cusco · HERPIRO SAC BIC</span>
+                    </div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1484406566174-9da000fda645?w=400&h=300&fit=crop" alt="Venado">
+                    <div class="galeria-overlay">
+                        Venado cola blanca
+                        <span>📍 San Martín · ADECARAM</span>
+                    </div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://images.unsplash.com/photo-1474511320723-9a56873571b7?w=400&h=300&fit=crop" alt="Zorro">
+                    <div class="galeria-overlay">
+                        Zorro andino
+                        <span>📍 Pasco · Ulcumano Ecolodge</span>
+                    </div>
+                </div>
+            </div>
+
             <div class="text-center mt-40">
                 <a href="https://drive.google.com/drive/folders/14biRLvgZKeDUrZeQrxk7FxUgwMnkRYbH" 
-                   class="btn btn-primario" target="_blank">📁 Ver más fotos en Drive</a>
+                   class="btn-cta" target="_blank">📁 Ver más fotos en Google Drive</a>
             </div>
         </div>
     </section>
@@ -60,37 +369,106 @@
     <!-- REGISTRO DEL MES -->
     <section class="bg-light">
         <div class="container">
-            <h2 class="section-title">Registro del Mes</h2>
-            <div class="card" style="max-width: 800px; margin: 0 auto;">
-                <div class="grid-2" style="align-items: center;">
-                    <div>
-                        <img src="https://via.placeholder.com/400x300/1a5f2a/ffffff?text=Especie+del+Mes" 
-                             alt="Especie del mes" style="width: 100%; border-radius: 8px;">
-                    </div>
-                    <div>
-                        <h3 style="color: var(--color-primario); margin-bottom: 15px;">
-                            🏆 Especie destacada: [Nombre de la especie]
-                        </h3>
-                        <p style="margin-bottom: 15px;">
-                            Descripción breve del hallazgo, por qué es importante y en qué zona fue captada.
-                        </p>
-                        <p style="color: var(--color-gris); font-size: 0.9rem;">
-                            <strong>Ubicación:</strong> [Región]<br>
-                            <strong>Fecha:</strong> [Mes, Año]<br>
-                            <strong>Fotógrafo:</strong> [Nombre del colaborador]
-                        </p>
+            <div class="section-header">
+                <span class="section-tag">Destacado</span>
+                <h2 class="section-title">Registro del Mes</h2>
+            </div>
+            
+            <div class="registro-mes">
+                <img src="https://images.unsplash.com/photo-1549480017-d76466a4b7e8?w=400&h=300&fit=crop" 
+                     alt="Especie del mes" class="registro-mes-img">
+                <div class="registro-mes-content">
+                    <h3>🏆 Jaguar (Panthera onca)</h3>
+                    <p>
+                        <strong>Especie destacada de junio 2026.</strong> Este ejemplar fue captado por las cámaras 
+                        trampa de HERPIRO SAC BIC en la región de Cusco, dentro de la concesión para conservación 
+                        de Camanti. El registro confirma la presencia de esta especie emblemática en el área, 
+                        reafirmando la importancia del monitoreo continuo para la conservación de grandes felinos 
+                        en el Perú.
+                    </p>
+                    <div class="registro-mes-meta">
+                        <span>📍 Cusco, Quispicanchi</span>
+                        <span>📅 Junio 2026</span>
+                        <span>📷 HERPIRO SAC BIC</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER (copiar de index.html) -->
-    
+    <!-- HISTORIAS DETRÁS DE LAS CÁMARAS -->
+    <section class="bg-white">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Relatos</span>
+                <h2 class="section-title">Historias detrás de las cámaras</h2>
+                <p class="section-subtitle">Relatos breves sobre hallazgos importantes, registros raros o monitoreos comunitarios.</p>
+            </div>
+            
+            <div class="historia-card">
+                <h3>🌿 Primer registro de oso de anteojos en la concesión Atiycuy</h3>
+                <div class="meta">📍 Junín, Chanchamayo · Coordinadora: Carmen Tucto</div>
+                <p>
+                    Durante la primera revisión de cámaras en la concesión Atiycuy, el equipo se encontró con una 
+                    sorpresa inesperada: un oso de anteojos adulto transitando por el sendero principal. Este 
+                    registro representa la primera confirmación fotográfica de la especie en el área y destaca 
+                    la importancia de las concesiones de conservación como corredores biológicos en la selva central.
+                </p>
+            </div>
+
+            <div class="historia-card">
+                <h3>🐾 Monitoreo comunitario en el Bosque de Churumazú</h3>
+                <div class="meta">📍 Pasco, Oxapampa · Coordinador: Eduardo Jackson</div>
+                <p>
+                    La comunidad local de Chontabamba se ha involucrado activamente en el monitoreo, participando 
+                    en la instalación y revisión de cámaras. Los registros incluyen pumas, ocelotes y una 
+                    diversidad de especies de medianos y pequeños mamíferos que evidencian la salud del bosque 
+                    montano de la Reserva de Biósfera Oxapampa-Ashaninka-Yánesha.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer-main">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>📷 Snapshot Perú</h4>
+                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Explorar</h4>
+                    <a href="index.html">Inicio</a>
+                    <a href="sobre.html">Sobre el Proyecto</a>
+                    <a href="protocolo.html">Protocolo</a>
+                    <a href="investigacion.html">Investigación</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Participa</h4>
+                    <a href="contacto.html">Únete al proyecto</a>
+                    <a href="mapa.html">Ver mapa de participantes</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Contacto</h4>
+                    <p>tejedagomezv@si.edu<br>linaresr@si.edu</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Snapshot Perú</p>
+            </div>
+        </div>
+    </footer>
+
     <script>
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+        window.addEventListener('scroll', function() {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
     </script>
 
 </body>

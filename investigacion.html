@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Protocolo - Snapshot Perú</title>
+    <title>Investigación - Snapshot Perú</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -140,53 +140,49 @@
         }
         .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
 
-        /* PROTOCOLO RESUMIDO */
-        .protocolo-card {
-            background: var(--blanco); border-radius: 16px; padding: 32px;
+        /* PUBLICACIONES */
+        .pub-card {
+            background: var(--blanco); border-radius: 16px; padding: 28px 32px;
             box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
-            margin-bottom: 20px; transition: var(--transicion);
+            margin-bottom: 16px; transition: var(--transicion);
+            border-left: 4px solid var(--verde-primario);
         }
-        .protocolo-card:hover { box-shadow: var(--sombra-media); border-color: var(--verde-pastel); }
-        .protocolo-card h3 {
-            color: var(--verde-oscuro); font-size: 1.15rem; margin-bottom: 14px;
-            font-weight: 700; display: flex; align-items: center; gap: 10px;
+        .pub-card:hover { box-shadow: var(--sombra-media); transform: translateX(4px); }
+        .pub-card h3 {
+            color: var(--verde-oscuro); font-size: 1.05rem;
+            margin-bottom: 10px; font-weight: 600;
         }
-        .protocolo-card ul {
-            margin-left: 20px; color: var(--texto-claro);
+        .pub-card p {
+            color: var(--texto-muted); font-size: 0.92rem;
+            margin-bottom: 12px; line-height: 1.6;
         }
-        .protocolo-card ul li {
-            margin-bottom: 10px; padding-left: 8px;
+        .pub-card .meta {
+            display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px;
         }
-        .protocolo-card p {
-            color: var(--texto-claro); margin-bottom: 10px;
+        .pub-card .meta span {
+            font-size: 0.8rem; color: var(--verde-primario);
+            font-weight: 600; background: var(--verde-fondo);
+            padding: 4px 10px; border-radius: 6px;
         }
+        .pub-card a {
+            color: var(--verde-primario); font-weight: 600;
+            font-size: 0.9rem; text-decoration: none;
+        }
+        .pub-card a:hover { text-decoration: underline; }
 
-        /* PUNTOS CLAVE */
-        .punto-clave {
+        /* DATOS ABIERTOS */
+        .datos-card {
             background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
-            color: var(--blanco); border-radius: 16px; padding: 32px;
-            margin-bottom: 16px;
+            border-radius: 20px; padding: 48px;
+            color: var(--blanco); text-align: center;
         }
-        .punto-clave h4 {
-            color: var(--dorado-claro); font-size: 1.1rem; margin-bottom: 12px;
-            font-weight: 700;
+        .datos-card h3 {
+            color: var(--dorado-claro); font-size: 1.4rem;
+            margin-bottom: 16px; font-weight: 700;
         }
-        .punto-clave p {
-            color: rgba(255,255,255,0.9); font-size: 0.95rem;
-        }
-
-        /* BOTÓN DESCARGA */
-        .btn-descarga {
-            display: inline-flex; align-items: center; gap: 10px;
-            padding: 16px 32px; border-radius: 12px; text-decoration: none;
-            font-weight: 600; font-size: 1rem; transition: var(--transicion);
-            background: var(--verde-primario); color: var(--blanco);
-            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
-        }
-        .btn-descarga:hover {
-            background: var(--verde-oscuro); transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
-            text-decoration: none; color: var(--blanco);
+        .datos-card p {
+            color: rgba(255,255,255,0.9); max-width: 600px;
+            margin: 0 auto 24px; line-height: 1.7;
         }
 
         /* FOOTER */
@@ -243,10 +239,10 @@
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="sobre.html">Sobre el Proyecto</a></li>
                 <li><a href="colaboradores.html">Colaboradores</a></li>
-                <li><a href="protocolo.html" class="active">Protocolo</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
                 <li><a href="mapa.html">¿Quiénes se suman?</a></li>
                 <li><a href="galeria.html">Galería</a></li>
-                <li><a href="investigacion.html">Investigación</a></li>
+                <li><a href="investigacion.html" class="active">Investigación</a></li>
                 <li><a href="noticias.html">Noticias</a></li>
                 <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
             </ul>
@@ -257,110 +253,91 @@
     <header class="page-header">
         <div class="page-header-content">
             <a href="index.html" class="btn-volver">← Volver al inicio</a>
-            <h1>Protocolo Nacional</h1>
-            <p>Estándares técnicos para el fotomonitoreo de biodiversidad</p>
+            <h1>Investigación y Publicaciones</h1>
+            <p>Ciencia generada a partir del fotomonitoreo colaborativo</p>
         </div>
     </header>
 
-    <!-- PROTOCOLO RESUMIDO -->
+    <!-- PUBLICACIONES GLOBALES -->
     <section class="bg-white">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Documento técnico</span>
-                <h2 class="section-title">Protocolo de Fotomonitoreo</h2>
-                <p class="section-subtitle">Estándares mínimos para la instalación y manejo de cámaras trampa en Snapshot Perú</p>
+                <span class="section-tag">Ciencia</span>
+                <h2 class="section-title">Publicaciones Científicas</h2>
+                <p class="section-subtitle">Investigaciones asociadas a iniciativas Snapshot a nivel global</p>
             </div>
             
-            <div class="protocolo-card">
-                <h3>📋 Contenido del Protocolo</h3>
-                <ul>
-                    <li>Diseño de muestreo y selección de sitios</li>
-                    <li>Instalación de cámaras trampa</li>
-                    <li>Configuración y calibración de equipos</li>
-                    <li>Períodos de monitoreo recomendados</li>
-                    <li>Manejo de datos y metadatos</li>
-                    <li>Identificación de especies</li>
-                    <li>Análisis de datos estandarizados</li>
-                    <li>Compartir resultados</li>
-                </ul>
+            <div class="pub-card">
+                <div class="meta">
+                    <span>Snapshot USA</span>
+                    <span>2019</span>
+                </div>
+                <h3>SNAPSHOT USA 2019: A coordinated national camera trap survey of the United States</h3>
+                <p>
+                    Primera publicación del proyecto Snapshot USA que estableció el modelo de fotomonitoreo 
+                    nacional coordinado usando cámaras trampa en todo Estados Unidos. El estudio demostró 
+                    la viabilidad de monitorear comunidades de mamíferos a escala continental mediante 
+                    protocolos estandarizados y colaboración entre múltiples instituciones.
+                </p>
+                <a href="https://www.researchgate.net/publication/350570790_SNAPSHOT_USA_2019_a_coordinated_national_camera_trap_survey_of_the_United_States" target="_blank">
+                    🔗 Ver en ResearchGate →
+                </a>
             </div>
 
-            <div class="text-center mt-40">
-                <a href="https://docs.google.com/document/d/1t6sX1TVXIEqcthvcypiBhHnVwJmLGqCp/edit?usp=drive_link&ouid=110345891361649735878&rtpof=true&sd=true" 
-                   class="btn-descarga" target="_blank">
-                    📥 Descargar Protocolo Completo
+            <div class="pub-card">
+                <div class="meta">
+                    <span>Snapshot USA</span>
+                    <span>2021-2023</span>
+                </div>
+                <h3>SNAPSHOT USA: The First Five Years of Data</h3>
+                <p>
+                    Análisis de los primeros cinco años de datos del proyecto Snapshot USA, publicado en 
+                    Global Ecology and Biogeography. El estudio presenta tendencias poblacionales de 
+                    mamíferos a nivel nacional y evalúa el impacto de factores ambientales y antropogénicos 
+                    en la distribución de especies.
+                </p>
+                <a href="https://research.fs.usda.gov/download/treesearch/69050.pdf" target="_blank">
+                    🔗 Descargar PDF →
+                </a>
+            </div>
+
+            <div class="pub-card">
+                <div class="meta">
+                    <span>Global Ecology</span>
+                    <span>2024</span>
+                </div>
+                <h3>Global patterns in mammal communities from coordinated camera trap networks</h3>
+                <p>
+                    Artículo reciente sobre los resultados globales del proyecto Snapshot, integrando 
+                    datos de múltiples países para identificar patrones continentales en comunidades de 
+                    mamíferos y sus respuestas al cambio climático y al uso del suelo.
+                </p>
+                <a href="https://onlinelibrary.wiley.com/doi/10.1111/geb.70229" target="_blank">
+                    🔗 Ver en Wiley Online Library →
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- PUNTOS CLAVE -->
+    <!-- DATOS DE SNAPSHOT PERÚ -->
     <section class="bg-light">
         <div class="container">
             <div class="section-header">
-                <span class="section-tag">Resumen</span>
-                <h2 class="section-title">Puntos Clave del Protocolo</h2>
+                <span class="section-tag">Próximamente</span>
+                <h2 class="section-title">Datos de Snapshot Perú</h2>
             </div>
             
-            <div style="max-width: 800px; margin: 0 auto;">
-                <div class="punto-clave">
-                    <h4>📍 Arreglo de Cámaras</h4>
-                    <p>Número recomendado de cámaras por sitio de muestreo y distancias entre puntos. Se recomienda un mínimo de <strong>8 cámaras</strong> por área de estudio, con una distancia mínima de <strong>200 metros</strong> y máxima de <strong>5 km</strong> entre ellas.</p>
-                </div>
-                
-                <div class="punto-clave">
-                    <h4>📅 Tiempo de Muestreo</h4>
-                    <p>Duración mínima de monitoreo por sitio para obtener datos representativos. El período estándar es de <strong>60 días continuos</strong> de monitoreo, con un mínimo de <strong>400 noches-trampa</strong> por área de estudio.</p>
-                </div>
-                
-                <div class="punto-clave">
-                    <h4>📝 Registro de Metadatos</h4>
-                    <p>Información obligatoria que debe acompañar cada foto: fecha, hora, coordenadas, hábitat, condiciones del sitio y cualquier observación relevante durante la instalación o revisión.</p>
-                </div>
-                
-                <div class="punto-clave">
-                    <h4>🔒 Privacidad de Datos</h4>
-                    <p>Manejo de coordenadas exactas de especies sensibles y datos de comunidades. Las coordenadas precisas de especies en riesgo o de alto valor comercial se manejan con restricciones de acceso.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CONDICIONES DE PARTICIPACIÓN -->
-    <section class="bg-white">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Requisitos</span>
-                <h2 class="section-title">Condiciones de Participación</h2>
-            </div>
-            
-            <div class="protocolo-card">
-                <h3>✅ Requisitos obligatorios</h3>
-                <ul>
-                    <li><strong>Participación voluntaria</strong></li>
-                    <li><strong>Logística, materiales y equipos</strong> a cargo de cada participante o institución responsable</li>
-                    <li>Contar con al menos <strong>8 cámaras trampa</strong> disponibles para muestrear durante 60 días (pueden reubicarse o alternarse entre colaboradores, cumpliendo el mínimo de 400 noches-trampa)</li>
-                    <li><strong>Seguir rigurosamente el protocolo</strong> del proyecto</li>
-                    <li>Tener disponibilidad para realizar un <strong>muestreo al año durante 60 días continuos</strong></li>
-                    <li><strong>Participar en las capacitaciones</strong> del proyecto (asistencia obligatoria)</li>
-                    <li>Realizar la <strong>carga de fotos en Wildlife Insights</strong> y proporcionar información sobre los puntos de muestreo y la identificación de especies</li>
-                </ul>
-            </div>
-
-            <div class="protocolo-card">
-                <h3>📅 Plazos Importantes</h3>
-                <p>La carga de fotos en la plataforma <strong>Wildlife Insights</strong> debe realizarse en un plazo de <strong>30 días</strong> tras la finalización del período de muestreo de 60 días.</p>
-                <p>La identificación de especies debe completarse en un plazo de <strong>dos meses</strong> tras la finalización del muestreo. Se recibirá asistencia para este proceso.</p>
-            </div>
-
-            <div class="protocolo-card">
-                <h3>🎓 Capacitaciones</h3>
-                <p>Asistencia obligatoria para todos los participantes:</p>
-                <ul>
-                    <li><strong>Primera capacitación:</strong> Instalación correcta de cámaras trampa</li>
-                    <li><strong>Segunda capacitación:</strong> Uso de la plataforma Wildlife Insights para el almacenamiento de fotos</li>
-                </ul>
-                <p>Se ofrecerán <strong>fechas y horarios flexibles</strong> para facilitar la participación de todos.</p>
+            <div class="datos-card">
+                <h3>📊 Datos abiertos en preparación</h3>
+                <p>
+                    Los datos de Snapshot Perú serán publicados en repositorios abiertos una vez completada 
+                    la primera temporada de muestreo (2026). La base de datos incluirá registros de 
+                    especies, abundancia relativa, patrones de actividad y metadatos asociados a cada 
+                    punto de muestreo.
+                </p>
+                <p style="font-size: 0.9rem; color: var(--dorado-claro); margin-bottom: 0;">
+                    <strong>Plataforma:</strong> Wildlife Insights · <strong>Disponibilidad:</strong> 2027
+                </p>
             </div>
         </div>
     </section>
@@ -377,7 +354,7 @@
                     <h4>Explorar</h4>
                     <a href="index.html">Inicio</a>
                     <a href="sobre.html">Sobre el Proyecto</a>
-                    <a href="colaboradores.html">Colaboradores</a>
+                    <a href="protocolo.html">Protocolo</a>
                     <a href="galeria.html">Galería</a>
                 </div>
                 <div class="footer-col">
