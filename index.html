@@ -408,15 +408,15 @@
         <div class="container">
             <div class="stats-grid">
                 <div class="stat-item">
-                    <div class="stat-number">8</div>
+                    <div class="stat-number">13</div>
                     <div class="stat-label">Organizaciones inscritas</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">3</div>
+                    <div class="stat-number">7</div>
                     <div class="stat-label">Regiones cubiertas</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">60+</div>
+                    <div class="stat-number">320</div>
                     <div class="stat-label">Cámaras comprometidas</div>
                 </div>
                 <div class="stat-item">
@@ -501,7 +501,8 @@
             else nav.classList.remove('scrolled');
         });
 
-        // Mapa con datos reales del formulario (coordenadas aproximadas)
+
+        // Mapa con datos actualizados del fotomonitoreo
         var mapa = L.map('mapa-inicio').setView([-10.5, -76], 5);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -509,14 +510,23 @@
         }).addTo(mapa);
 
         var sitios = [
-            { coords: [-11.05, -75.32], nombre: "Atiycuy Perú", region: "Junín", tipo: "Concesión para conservación" },
-            { coords: [-10.60, -75.40], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco", tipo: "Área de Conservación Privada" },
-            { coords: [-10.58, -75.42], nombre: "El Palmeral (RIACO)", region: "Pasco", tipo: "Proyecto de conservación voluntaria" },
-            { coords: [-5.75, -77.75], nombre: "Asociación ADECARAM", region: "San Martín", tipo: "Concesión para conservación" },
-            { coords: [-10.55, -75.35], nombre: "CEARE", region: "Pasco", tipo: "Área de Conservación Privada" },
-            { coords: [-10.50, -75.30], nombre: "CDS EIRL (Los nogales)", region: "Pasco", tipo: "Área de conservación voluntaria" },
-            { coords: [-13.52, -71.57], nombre: "HERPIRO SAC BIC", region: "Cusco", tipo: "Concesión para conservación" },
-            { coords: [-10.57, -75.38], nombre: "Ulcumano Ecolodge", region: "Pasco", tipo: "Concesión para conservación" }
+            // Organizaciones existentes (coordenadas corregidas)
+            { coords: [-11.054658, -75.075304], nombre: "Atiycuy Perú", region: "Junín", tipo: "Concesión para conservación" },
+            { coords: [-10.595180, -75.440491], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco", tipo: "Área de Conservación Privada" },
+            { coords: [-10.618407, -75.496698], nombre: "El Palmeral (RIACO)", region: "Pasco", tipo: "Conservación voluntaria" },
+            { coords: [-10.268379, -75.246473], nombre: "CEARE", region: "Pasco", tipo: "Área de Conservación Privada" },
+            { coords: [-10.545428, -75.371077], nombre: "CDS EIRL (Los Nogales)", region: "Pasco", tipo: "Conservación voluntaria" },
+            { coords: [-13.347269, -70.84456], nombre: "Herpiro SAC BIC - Concesión con Fines de Conservación Soqtapata", region: "Cusco", tipo: "Concesión para conservación" },
+            { coords: [-10.638520, -75.435063], nombre: "Ulcumano Ecolodge", region: "Pasco", tipo: "Concesión para conservación" },
+            
+            // Organizaciones nuevas
+            { coords: [-7.248014, -77.550973], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Amazonas", tipo: "—" },
+            { coords: [-5.918607, -77.142278], nombre: "Asociación de Conservación de Aguajales y Renacales del Alto Mayo", region: "San Martín", tipo: "—" },
+            { coords: [-7.405851, -76.861491], nombre: "Asociación de Conservación Las Hurmanas de San Juan del Abiseo - ASHUSJA", region: "San Martín", tipo: "—" },
+            { coords: [-14.116780, -75.686670], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Lima / Ica", tipo: "—" },
+            { coords: [-7.306562, -75.609534], nombre: "CIMA Cordillera Azul - Sede Contamana", region: "Loreto", tipo: "—" },
+            { coords: [-6.273754, -79.03882], nombre: "NODO CONSERVATION", region: "Loreto", tipo: "—" },
+            { coords: [-4.996093, -79.30700], nombre: "NODO CONSERVATION", region: "Loreto", tipo: "—" }
         ];
 
         sitios.forEach(function(sitio) {
