@@ -163,7 +163,51 @@
             border: 1px solid var(--gris-suave); margin-bottom: 16px;
             display: flex; align-items: flex-start; gap: 20px;
         }
-        .institucion-card:hover { box-shadow: var(--sombra-media); border-color: var(--verde-pastel); }
+        /* GRID DE LOGOS */
+        .logos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 32px;
+            align-items: stretch;
+            justify-items: center;
+        }
+        .logo-item {
+            background: var(--blanco);
+            border-radius: 16px;
+            padding: 24px 20px;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--gris-suave);
+            transition: var(--transicion);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            max-width: 240px;
+        }
+        .logo-item:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--sombra-media);
+            border-color: var(--verde-pastel);
+        }
+        .logo-item img {
+            max-width: 100%;
+            max-height: 80px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            filter: grayscale(30%);
+            transition: var(--transicion);
+        }
+        .logo-item:hover img {
+            filter: grayscale(0%);
+        }
+        .logo-name {
+            color: var(--verde-oscuro);
+            font-size: 0.85rem;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-top: auto;
+        }        .institucion-card:hover { box-shadow: var(--sombra-media); border-color: var(--verde-pastel); }
         .institucion-num {
             width: 40px; height: 40px; flex-shrink: 0;
             background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
@@ -312,6 +356,8 @@
         </div>
     </section>
 
+
+
     <!-- INSTITUCIONES PARTICIPANTES -->
     <section class="bg-light">
         <div class="container">
@@ -321,99 +367,70 @@
                 <p class="section-subtitle">Organizaciones que ya se han inscrito en Snapshot Perú 2026</p>
             </div>
             
-            <div class="institucion-card">
-                <div class="institucion-num">1</div>
-                <div class="institucion-info">
-                    <h3>Atiycuy Perú</h3>
-                    <div class="meta">
-                        <span>📍 Junín, Chanchamayo, Perené</span>
-                        <span>🏷️ Concesión para conservación</span>
-                    </div>
-                    <p>Coordinadora: Carmen Tucto · 9 cámaras trampa</p>
+            <div class="logos-grid">
+                <div class="logo-item">
+                    <img src="logos/riaco.png" alt="RIACO" loading="lazy">
+                    <span class="logo-name">RIACO</span>
                 </div>
-            </div>
-
-            <div class="institucion-card">
-                <div class="institucion-num">2</div>
-                <div class="institucion-info">
-                    <h3>ACP Bosque de Churumazú (RIACO)</h3>
-                    <div class="meta">
-                        <span>📍 Pasco, Oxapampa, Chontabamba</span>
-                        <span>🏷️ Área de Conservación Privada</span>
-                    </div>
-                    <p>Coordinador: Eduardo Jackson · 8 cámaras trampa</p>
+                <div class="logo-item">
+                    <img src="logos/abioforp.png" alt="ABIOFORP" loading="lazy">
+                    <span class="logo-name">Asociación Agro-Bio Forestal El Porvenir-Pelejo (ABIOFORP)</span>
                 </div>
-            </div>
-
-            <div class="institucion-card">
-                <div class="institucion-num">3</div>
-                <div class="institucion-info">
-                    <h3>El Palmeral (RIACO)</h3>
-                    <div class="meta">
-                        <span>📍 Pasco, Oxapampa, Chontabamba</span>
-                        <span>🏷️ Proyecto de conservación voluntaria</span>
-                    </div>
-                    <p>Coordinadora: Patricia Reyna · 8 cámaras trampa</p>
+                <div class="logo-item">
+                    <img src="logos/ampa.png" alt="AMPA" loading="lazy">
+                    <span class="logo-name">Asociación Amazónicos por la Amazonía (AMPA)</span>
                 </div>
-            </div>
-
-            <div class="institucion-card">
-                <div class="institucion-num">4</div>
-                <div class="institucion-info">
-                    <h3>Asociación de Conservación de Aguajales y Renacales del Alto Mayo (ADECARAM)</h3>
-                    <div class="meta">
-                        <span>📍 San Martín</span>
-                        <span>🏷️ Concesión para conservación</span>
-                    </div>
-                    <p>Coordinador: Gabriel García Mendoza · Pilas requeridas</p>
+                <div class="logo-item">
+                    <img src="logos/adecaram.png" alt="ADECARAM" loading="lazy">
+                    <span class="logo-name">Asociación de Conservación de Aguajales y Renacales del Alto Mayo</span>
                 </div>
-            </div>
-
-            <div class="institucion-card">
-                <div class="institucion-num">5</div>
-                <div class="institucion-info">
-                    <h3>CEARE</h3>
-                    <div class="meta">
-                        <span>📍 Pasco, Palcazú</span>
-                        <span>🏷️ Área de Conservación Privada</span>
-                    </div>
-                    <p>Coordinadores: Rodrigo Carbajal, Carolina Llerena, Ronal Raya · 5 cámaras trampa</p>
+                <div class="logo-item">
+                    <img src="logos/ashusja.png" alt="ASHUSJA" loading="lazy">
+                    <span class="logo-name">Asociación de Conservación Las Hurmanas de San Juan del Abiseo (ASHUSJA)</span>
                 </div>
-            </div>
-
-            <div class="institucion-card">
-                <div class="institucion-num">6</div>
-                <div class="institucion-info">
-                    <h3>CDS EIRL (Los Nogales)</h3>
-                    <div class="meta">
-                        <span>📍 Pasco</span>
-                        <span>🏷️ Área de conservación voluntaria</span>
-                    </div>
-                    <p>Coordinadores: Florencia Trama, Federico Rizo Patrón · 10 cámaras trampa</p>
+                <div class="logo-item">
+                    <img src="logos/montubia.png" alt="MONTUBIA" loading="lazy">
+                    <span class="logo-name">Asociación MONTUBIA</span>
                 </div>
-            </div>
-
-            <div class="institucion-card">
-                <div class="institucion-num">7</div>
-                <div class="institucion-info">
-                    <h3>HERPIRO SAC BIC</h3>
-                    <div class="meta">
-                        <span>📍 Cusco, Quispicanchi, Camanti</span>
-                        <span>🏷️ Concesión para conservación</span>
-                    </div>
-                    <p>Coordinador: Lawrence Whittaker · 5 cámaras trampa</p>
+                <div class="logo-item">
+                    <img src="logos/pro-carnivoros.png" alt="Pro Carnívoros" loading="lazy">
+                    <span class="logo-name">Asociación para la Conservación de la Biodiversidad Pro Carnívoros</span>
                 </div>
-            </div>
-
-            <div class="institucion-card">
-                <div class="institucion-num">8</div>
-                <div class="institucion-info">
-                    <h3>Ulcumano Ecolodge</h3>
-                    <div class="meta">
-                        <span>📍 Pasco, Oxapampa, Chontabamba</span>
-                        <span>🏷️ Concesión para conservación</span>
-                    </div>
-                    <p>Coordinador: Eduardo De la Cadena · 8 cámaras trampa</p>
+                <div class="logo-item">
+                    <img src="logos/atiycuy.png" alt="Atiycuy Perú" loading="lazy">
+                    <span class="logo-name">Atiycuy Perú</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/cds-eirl.png" alt="CDS EIRL" loading="lazy">
+                    <span class="logo-name">CDS EIRL (Los Nogales)</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/ceare.png" alt="CEARE" loading="lazy">
+                    <span class="logo-name">CEARE</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/cima.png" alt="CIMA" loading="lazy">
+                    <span class="logo-name">Centro de Conservación, Investigación y Manejo de Áreas Naturales (CIMA)</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/envol-vert.png" alt="ENVOL VERT" loading="lazy">
+                    <span class="logo-name">ENVOL VERT ONG</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/gore-cajamarca.png" alt="Gobierno Regional de Cajamarca" loading="lazy">
+                    <span class="logo-name">Gobierno Regional de Cajamarca</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/herpiro.png" alt="Herpiro SAC BIC" loading="lazy">
+                    <span class="logo-name">Herpiro SAC BIC</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/nodo-conservation.png" alt="NODO CONSERVATION" loading="lazy">
+                    <span class="logo-name">NODO CONSERVATION</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/ulcumano.png" alt="Ulcumano Ecolodge" loading="lazy">
+                    <span class="logo-name">Ulcumano Ecolodge</span>
                 </div>
             </div>
 
