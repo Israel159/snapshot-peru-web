@@ -53,10 +53,13 @@
     .nav-top.scrolled { box-shadow: var(--sombra-suave); }
     
     .nav-container {
-        max-width: 1200px; margin: 0 auto; padding: 0 20px;
-        display: flex; justify-content: space-between; align-items: center;
-        height: 64px;
-    }
+    max-width: 1200px; margin: 0 auto; padding: 0 20px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    height: 64px;
+    gap: 16px;                  /* espacio mínimo entre elementos */
+}
     
     /* Logo - ahora en una sola línea */
     .nav-logo {
@@ -256,6 +259,28 @@
         .stat-number { font-size: 2.2rem; }
         .mapa-container { height: 350px; }
     }
+
+/* Logo derecho */
+.nav-logo-derecha {
+    display: flex;
+    align-items: center;
+    margin-left: 16px;          /* separación respecto a los links */
+    flex-shrink: 0;             /* no se encoge */
+    text-decoration: none;
+}
+
+.nav-logo-img {
+    height: 36px;               /* ajusta el tamaño a tu gusto */
+    width: auto;
+    object-fit: contain;
+    transition: var(--transicion);
+}
+
+.nav-logo-derecha:hover .nav-logo-img {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
 </style>
 </head>
 <body>
@@ -263,12 +288,15 @@
     <!-- ============================================
          NAVEGACIÓN FIJA
          ============================================ -->
-    <nav class="nav-top" id="navbar">
+<nav class="nav-top" id="navbar">
     <div class="nav-container">
+        <!-- Logo izquierdo -->
         <a href="index.html" class="nav-logo">
             <span class="nav-logo-icon">📷</span>
             <span>Snapshot Perú</span>
         </a>
+
+        <!-- Links + menú móvil -->
         <button class="menu-toggle" onclick="toggleMenu()">☰</button>
         <ul class="nav-links" id="navLinks">
             <li><a href="index.html" class="active">Inicio</a></li>
@@ -281,6 +309,11 @@
             <li><a href="noticias.html">Noticias</a></li>
             <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
         </ul>
+
+        <!-- Logo Smithsonian a la derecha -->
+        <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
+            <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
+        </a>
     </div>
 </nav>
 
