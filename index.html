@@ -51,17 +51,16 @@
         transition: var(--transicion);
     }
     .nav-top.scrolled { box-shadow: var(--sombra-suave); }
-    
+
     .nav-container {
-    max-width: 1200px; margin: 0 auto; padding: 0 20px;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    height: 64px;
-    gap: 16px;                  /* espacio mínimo entre elementos */
-}
-    
-    /* Logo - ahora en una sola línea */
+        max-width: 1200px; margin: 0 auto; padding: 0 20px;
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        height: 64px;
+        gap: 16px;
+    }
+
     .nav-logo {
         display: flex; align-items: center; gap: 8px;
         text-decoration: none; color: var(--verde-oscuro);
@@ -69,8 +68,7 @@
         white-space: nowrap; flex-shrink: 0;
     }
     .nav-logo-icon { font-size: 1.4rem; }
-    
-    /* Links de navegación */
+
     .nav-links { 
         display: flex; list-style: none; gap: 2px; 
         align-items: center; margin-left: auto;
@@ -83,8 +81,7 @@
     }
     .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
     .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
-    
-    /* Botón Participa - corregido */
+
     .nav-cta {
         background: var(--verde-primario) !important; 
         color: var(--blanco) !important;
@@ -98,49 +95,112 @@
         background: var(--verde-oscuro) !important; 
         color: var(--blanco) !important; 
     }
-    
+
     .menu-toggle { 
         display: none; background: none; border: none; 
         font-size: 1.4rem; cursor: pointer; 
         color: var(--verde-oscuro); padding: 8px; 
     }
 
-    /* HERO */
+    /* ============================================
+       HERO CON FONDO DE CÁMARA TRAMPA
+       ============================================ */
     .hero-main {
-        min-height: 100vh; display: flex; align-items: center; justify-content: center;
-        background: linear-gradient(135deg, var(--verde-oscuro) 0%, var(--verde-primario) 50%, var(--verde-claro) 100%);
-        position: relative; overflow: hidden;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
     }
+
+    /* Capa 1: La foto de cámara trampa */
     .hero-main::before {
-        content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url("imagenes/fondo_1.png") center/cover no-repeat;
+        z-index: 0;
+    }
+
+    /* Capa 2: Overlay verde semi-transparente */
+    .hero-main::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(
+            135deg,
+            rgba(26, 71, 42, 0.88) 0%,
+            rgba(45, 106, 79, 0.82) 40%,
+            rgba(64, 145, 108, 0.75) 100%
+        );
+        z-index: 1;
+    }
+
+    /* Capa 3: Patrón decorativo sutil */
+    .hero-pattern {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
         background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        z-index: 2;
+        pointer-events: none;
     }
+
     .hero-content {
-        text-align: center; color: var(--blanco); max-width: 800px;
-        padding: 120px 24px 80px; position: relative; z-index: 1;
+        text-align: center;
+        color: var(--blanco);
+        max-width: 800px;
+        padding: 120px 24px 80px;
+        position: relative;
+        z-index: 3;
     }
+
     .hero-badge {
-        display: inline-block; background: rgba(255,255,255,0.15);
-        backdrop-filter: blur(10px); padding: 8px 20px;
-        border-radius: 50px; font-size: 0.85rem; font-weight: 500;
-        margin-bottom: 30px; border: 1px solid rgba(255,255,255,0.2);
+        display: inline-block;
+        background: rgba(255,255,255,0.12);
+        backdrop-filter: blur(10px);
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 30px;
+        border: 1px solid rgba(255,255,255,0.2);
     }
+
     .hero-title {
-        font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800;
-        margin-bottom: 20px; letter-spacing: -2px; line-height: 1.1;
+        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-weight: 800;
+        margin-bottom: 20px;
+        letter-spacing: -2px;
+        line-height: 1.1;
+        text-shadow: 0 2px 20px rgba(0,0,0,0.2);
     }
+
     .hero-subtitle {
-        font-size: clamp(1.1rem, 2.5vw, 1.4rem); opacity: 0.9;
-        margin-bottom: 25px; font-weight: 400; max-width: 600px;
-        margin-left: auto; margin-right: auto;
+        font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+        opacity: 0.95;
+        margin-bottom: 25px;
+        font-weight: 400;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        text-shadow: 0 1px 10px rgba(0,0,0,0.15);
     }
+
     .hero-desc {
-        font-size: 1.05rem; opacity: 0.85; max-width: 650px;
-        margin: 0 auto 40px; line-height: 1.8;
+        font-size: 1.05rem;
+        opacity: 0.9;
+        max-width: 650px;
+        margin: 0 auto 40px;
+        line-height: 1.8;
     }
+
     .hero-buttons { 
-        display: flex; gap: 14px; justify-content: center; 
-        flex-wrap: wrap; margin-top: 10px; 
+        display: flex;
+        gap: 14px;
+        justify-content: center; 
+        flex-wrap: wrap;
+        margin-top: 10px; 
     }
 
     /* BOTONES */
@@ -260,67 +320,66 @@
         .mapa-container { height: 350px; }
     }
 
-/* Logo derecho */
-.nav-logo-derecha {
-    display: flex;
-    align-items: center;
-    margin-left: 16px;          /* separación respecto a los links */
-    flex-shrink: 0;             /* no se encoge */
-    text-decoration: none;
-}
+    .nav-logo-derecha {
+        display: flex;
+        align-items: center;
+        margin-left: 16px;
+        flex-shrink: 0;
+        text-decoration: none;
+    }
 
-.nav-logo-img {
-    height: 36px;               /* ajusta el tamaño a tu gusto */
-    width: auto;
-    object-fit: contain;
-    transition: var(--transicion);
-}
+    .nav-logo-img {
+        height: 36px;
+        width: auto;
+        object-fit: contain;
+        transition: var(--transicion);
+    }
 
-.nav-logo-derecha:hover .nav-logo-img {
-    transform: scale(1.05);
-    opacity: 0.9;
-}
+    .nav-logo-derecha:hover .nav-logo-img {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
 
-</style>
+    </style>
 </head>
 <body>
 
     <!-- ============================================
          NAVEGACIÓN FIJA
          ============================================ -->
-<nav class="nav-top" id="navbar">
-    <div class="nav-container">
-        <!-- Logo izquierdo -->
-        <a href="index.html" class="nav-logo">
-            <span class="nav-logo-icon">📷</span>
-            <span>Snapshot Perú</span>
-        </a>
+    <nav class="nav-top" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📷</span>
+                <span>Snapshot Perú</span>
+            </a>
 
-        <!-- Links + menú móvil -->
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html" class="active">Inicio</a></li>
-            <li><a href="sobre.html">Sobre el Proyecto</a></li>
-            <li><a href="colaboradores.html">Colaboradores</a></li>
-            <li><a href="protocolo.html">Protocolo</a></li>
-            <li><a href="mapa.html">¿Quiénes se suman?</a></li>
-            <li><a href="galeria.html">Galería</a></li>
-            <li><a href="investigacion.html">Investigación</a></li>
-            <li><a href="noticias.html">Noticias</a></li>
-            <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
-        </ul>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Inicio</a></li>
+                <li><a href="sobre.html">Sobre el Proyecto</a></li>
+                <li><a href="colaboradores.html">Colaboradores</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
+                <li><a href="mapa.html">¿Quiénes se suman?</a></li>
+                <li><a href="galeria.html">Galería</a></li>
+                <li><a href="investigacion.html">Investigación</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
+            </ul>
 
-        <!-- Logo Smithsonian a la derecha -->
-        <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
-            <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
-        </a>
-    </div>
-</nav>
+            <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
+                <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
+            </a>
+        </div>
+    </nav>
 
     <!-- ============================================
-         HERO PRINCIPAL
+         HERO PRINCIPAL CON FONDO DE CÁMARA TRAMPA
          ============================================ -->
     <section class="hero-main">
+        <!-- Patrón decorativo sobre la foto -->
+        <div class="hero-pattern"></div>
+
         <div class="hero-content">
             <div class="hero-badge">🌿 Parte de Snapshot Global · Perú 2026</div>
             <h1 class="hero-title">Snapshot Perú</h1>
@@ -353,7 +412,7 @@
                     independientes y proyectos de conservación.
                 </p>
             </div>
-            
+
             <div class="grid-3">
                 <div class="card text-center">
                     <div class="card-icon">🤝</div>
@@ -383,7 +442,7 @@
                 <span class="section-tag">¿Por qué?</span>
                 <h2 class="section-title">¿Por qué es importante?</h2>
             </div>
-            
+
             <div class="grid-2">
                 <div>
                     <p style="margin-bottom: 18px; font-size: 1.05rem; line-height: 1.8;">
@@ -470,11 +529,11 @@
                 <h2 class="section-title">Mapa de Iniciativas</h2>
                 <p class="section-subtitle">Ubicación general de proyectos participantes en el fotomonitoreo</p>
             </div>
-            
+
             <div class="mapa-wrapper">
                 <div id="mapa-inicio" class="mapa-container"></div>
             </div>
-            
+
             <div class="text-center mt-40">
                 <p style="color: var(--texto-muted); margin-bottom: 20px;">
                     Los puntos representan ubicaciones aproximadas de los sitios de monitoreo registrados.
@@ -522,28 +581,23 @@
          ============================================ -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
-        // Menú móvil
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
 
-        // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
         });
 
-
-        // Mapa con datos actualizados del fotomonitoreo
         var mapa = L.map('mapa-inicio').setView([-10.5, -76], 5);
-        
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(mapa);
 
         var sitios = [
-            // Organizaciones existentes (coordenadas corregidas)
             { coords: [-11.054658, -75.075304], nombre: "Atiycuy Perú", region: "Junín", tipo: "Concesión para conservación" },
             { coords: [-10.595180, -75.440491], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco", tipo: "Área de Conservación Privada" },
             { coords: [-10.618407, -75.496698], nombre: "El Palmeral (RIACO)", region: "Pasco", tipo: "Conservación voluntaria" },
@@ -551,8 +605,6 @@
             { coords: [-10.545428, -75.371077], nombre: "CDS EIRL (Los Nogales)", region: "Pasco", tipo: "Conservación voluntaria" },
             { coords: [-13.347269, -70.84456], nombre: "Herpiro SAC BIC - Concesión con Fines de Conservación Soqtapata", region: "Cusco", tipo: "Concesión para conservación" },
             { coords: [-10.638520, -75.435063], nombre: "Ulcumano Ecolodge", region: "Pasco", tipo: "Concesión para conservación" },
-            
-            // Organizaciones nuevas
             { coords: [-7.248014, -77.550973], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Amazonas", tipo: "—" },
             { coords: [-5.918607, -77.142278], nombre: "Asociación de Conservación de Aguajales y Renacales del Alto Mayo", region: "San Martín", tipo: "—" },
             { coords: [-7.405851, -76.861491], nombre: "Asociación de Conservación Las Hurmanas de San Juan del Abiseo - ASHUSJA", region: "San Martín", tipo: "—" },
