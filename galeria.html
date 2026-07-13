@@ -143,32 +143,6 @@
         }
         .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
 
-        /* GALERÍA */
-        .galeria-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .galeria-item {
-            position: relative; border-radius: 16px; overflow: hidden;
-            aspect-ratio: 4/3; cursor: pointer;
-            box-shadow: var(--sombra-suave);
-        }
-        .galeria-item img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        .galeria-item:hover img { transform: scale(1.08); }
-        .galeria-overlay {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: linear-gradient(transparent, rgba(26, 71, 42, 0.85));
-            color: var(--blanco); padding: 50px 20px 20px;
-            font-size: 0.95rem; font-weight: 600;
-        }
-        .galeria-overlay span {
-            display: block; font-size: 0.8rem; font-weight: 400;
-            opacity: 0.85; margin-top: 4px;
-        }
 
         /* REGISTRO DEL MES */
         .registro-mes {
@@ -290,6 +264,199 @@
     transform: scale(1.05);
     opacity: 0.9;
 }
+
+        /* ========== CARRUSEL GALERÍA ========== */
+        .carrusel-section { position: relative; padding: 0 20px; }
+        
+        .carrusel-wrapper {
+            position: relative;
+            overflow: hidden;
+            border-radius: 20px;
+            padding: 10px 0;
+        }
+        
+        .carrusel-track {
+            display: flex;
+            gap: 20px;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+        
+        .carrusel-slide {
+            flex: 0 0 calc(33.333% - 14px);
+            min-width: 0;
+        }
+        
+        .galeria-item {
+            position: relative;
+            border-radius: 16px;
+            overflow: hidden;
+            aspect-ratio: 4/3;
+            cursor: pointer;
+            box-shadow: var(--sombra-suave);
+            transition: var(--transicion);
+        }
+        
+        .galeria-item:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--sombra-media);
+        }
+        
+        .galeria-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .galeria-item:hover img { transform: scale(1.1); }
+        
+        .galeria-overlay {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(transparent 10%, rgba(26, 71, 42, 0.9) 70%);
+            color: var(--blanco);
+            padding: 60px 20px 20px;
+            font-size: 1rem;
+            font-weight: 700;
+            transition: var(--transicion);
+        }
+        
+        .galeria-item:hover .galeria-overlay {
+            padding-bottom: 28px;
+            background: linear-gradient(transparent 5%, rgba(26, 71, 42, 0.95) 60%);
+        }
+        
+        .galeria-overlay span {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 400;
+            opacity: 0.85;
+            margin-top: 6px;
+        }
+        
+        /* Flechas de navegación */
+        .carrusel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            background: var(--blanco);
+            border: 2px solid var(--gris-suave);
+            color: var(--verde-oscuro);
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(26, 71, 42, 0.15);
+            transition: var(--transicion);
+            z-index: 10;
+            user-select: none;
+        }
+        
+        .carrusel-btn:hover {
+            background: var(--verde-primario);
+            color: var(--blanco);
+            border-color: var(--verde-primario);
+            transform: translateY(-50%) scale(1.08);
+            box-shadow: 0 6px 25px rgba(45, 106, 79, 0.35);
+        }
+        
+        .carrusel-btn:active { transform: translateY(-50%) scale(0.95); }
+        .carrusel-btn.prev { left: -10px; }
+        .carrusel-btn.next { right: -10px; }
+        .carrusel-btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: translateY(-50%);
+        }
+        .carrusel-btn:disabled:hover {
+            background: var(--blanco);
+            color: var(--verde-oscuro);
+            border-color: var(--gris-suave);
+            transform: translateY(-50%);
+            box-shadow: 0 4px 20px rgba(26, 71, 42, 0.15);
+        }
+        
+        /* Indicadores (dots) */
+        .carrusel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 28px;
+        }
+        
+        .carrusel-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--gris-suave);
+            border: none;
+            cursor: pointer;
+            transition: var(--transicion);
+            position: relative;
+        }
+        
+        .carrusel-dot::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: rgba(45, 106, 79, 0.15);
+            transition: var(--transicion);
+        }
+        
+        .carrusel-dot:hover { background: var(--verde-pastel); }
+        
+        .carrusel-dot.active {
+            background: var(--verde-primario);
+            transform: scale(1.2);
+        }
+        
+        .carrusel-dot.active::after {
+            transform: translate(-50%, -50%) scale(1);
+        }
+        
+        /* Contador de fotos */
+        .carrusel-counter {
+            text-align: center;
+            margin-top: 16px;
+            font-size: 0.88rem;
+            color: var(--texto-muted);
+            font-weight: 500;
+        }
+        .carrusel-counter span {
+            color: var(--verde-primario);
+            font-weight: 700;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .carrusel-slide { flex: 0 0 calc(50% - 10px); }
+            .carrusel-btn { width: 44px; height: 44px; font-size: 1.2rem; }
+            .carrusel-btn.prev { left: -5px; }
+            .carrusel-btn.next { right: -5px; }
+        }
+        
+        @media (max-width: 768px) {
+            .carrusel-section { padding: 0 10px; }
+            .carrusel-slide { flex: 0 0 100%; }
+            .carrusel-btn.prev { left: 5px; }
+            .carrusel-btn.next { right: 5px; }
+            .carrusel-btn {
+                width: 40px; height: 40px;
+                background: rgba(255,255,255,0.95);
+                backdrop-filter: blur(10px);
+            }
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -344,51 +511,20 @@
                 </p>
             </div>
             
-            <div class="galeria-grid">
-                <div class="galeria-item">
-                    <img src="https://images.unsplash.com/photo-1534567153574-2b12153a87f0?w=400&h=300&fit=crop" alt="Oso de anteojos">
-                    <div class="galeria-overlay">
-                        Oso de anteojos
-                        <span>📍 Amazonas · Atiycuy Perú</span>
+            <div class="carrusel-section">
+                <div class="carrusel-wrapper">
+                    <button class="carrusel-btn prev" onclick="moverCarrusel(-1)" aria-label="Anterior">‹</button>
+                    
+                    <div class="carrusel-track" id="carruselTrack">
+                        <!-- Las 15 fotos se generan con JS -->
                     </div>
+                    
+                    <button class="carrusel-btn next" onclick="moverCarrusel(1)" aria-label="Siguiente">›</button>
                 </div>
-                <div class="galeria-item">
-                    <img src="https://images.unsplash.com/photo-1615266895738-11f1371cd7e5?w=400&h=300&fit=crop" alt="Puma">
-                    <div class="galeria-overlay">
-                        Puma
-                        <span>📍 Pasco · ACP Bosque de Churumazú</span>
-                    </div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://images.unsplash.com/photo-1564349683136-77e08dba1ef7?w=400&h=300&fit=crop" alt="Tapir">
-                    <div class="galeria-overlay">
-                        Tapir andino
-                        <span>📍 Junín · Atiycuy Perú</span>
-                    </div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://images.unsplash.com/photo-1549480017-d76466a4b7e8?w=400&h=300&fit=crop" alt="Jaguar">
-                    <div class="galeria-overlay">
-                        Jaguar
-                        <span>📍 Cusco · HERPIRO SAC BIC</span>
-                    </div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://images.unsplash.com/photo-1484406566174-9da000fda645?w=400&h=300&fit=crop" alt="Venado">
-                    <div class="galeria-overlay">
-                        Venado cola blanca
-                        <span>📍 San Martín · ADECARAM</span>
-                    </div>
-                </div>
-                <div class="galeria-item">
-                    <img src="https://images.unsplash.com/photo-1474511320723-9a56873571b7?w=400&h=300&fit=crop" alt="Zorro">
-                    <div class="galeria-overlay">
-                        Zorro andino
-                        <span>📍 Pasco · Ulcumano Ecolodge</span>
-                    </div>
-                </div>
+                
+                <div class="carrusel-dots" id="carruselDots"></div>
+                <div class="carrusel-counter" id="carruselCounter"></div>
             </div>
-
         </div>
     </section>
 
@@ -487,14 +623,133 @@
     </footer>
 
     <script>
+        // ========== MENÚ MÓVIL ==========
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+        
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
         });
+
+        // ========== CARRUSEL GALERÍA ==========
+        const fotos = [
+            { src: 'imagenes/destacadas/1.JPG',  nombre: 'Oso de anteojos',  ubicacion: 'Amazonas · Atiycuy Perú' },
+            { src: 'imagenes/destacadas/2.JPG',  nombre: 'Registro 2',  ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/3.JPG',  nombre: 'Registro 3',  ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/4.JPG',  nombre: 'Registro 4',  ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/5.JPG',  nombre: 'Registro 5',  ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/6.JPG',  nombre: 'Registro 6',  ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/7.JPG',  nombre: 'Registro 7',  ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/8.JPG',  nombre: 'Registro 8',  ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/9.JPG',  nombre: 'Registro 9',  ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/10.JPG', nombre: 'Registro 10', ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/11.JPG', nombre: 'Registro 11', ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/12.JPG', nombre: 'Registro 12', ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/13.JPG', nombre: 'Registro 13', ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/14.JPG', nombre: 'Registro 14', ubicacion: 'Perú' },
+            { src: 'imagenes/destacadas/15.JPG', nombre: 'Registro 15', ubicacion: 'Perú' },
+        ];
+
+        let slideActual = 0;
+        let slidesVisibles = 3;
+        const track = document.getElementById('carruselTrack');
+        const dotsContainer = document.getElementById('carruselDots');
+        const counter = document.getElementById('carruselCounter');
+
+        function calcularSlidesVisibles() {
+            if (window.innerWidth <= 768) return 1;
+            if (window.innerWidth <= 992) return 2;
+            return 3;
+        }
+
+        function renderizarSlides() {
+            track.innerHTML = fotos.map((foto, i) => `
+                <div class="carrusel-slide">
+                    <div class="galeria-item" onclick="abrirLightbox(${i})">
+                        <img src="${foto.src}" alt="${foto.nombre}" loading="lazy">
+                        <div class="galeria-overlay">
+                            ${foto.nombre}
+                            <span>📍 ${foto.ubicacion}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderizarDots() {
+            const totalDots = fotos.length - slidesVisibles + 1;
+            dotsContainer.innerHTML = Array.from({length: totalDots}, (_, i) => `
+                <button class="carrusel-dot ${i === slideActual ? 'active' : ''}" 
+                        onclick="irASlide(${i})" 
+                        aria-label="Ir a foto ${i + 1}"></button>
+            `).join('');
+        }
+
+        function actualizarCounter() {
+            const inicio = slideActual + 1;
+            const fin = Math.min(slideActual + slidesVisibles, fotos.length);
+            counter.innerHTML = `Mostrando <span>${inicio}–${fin}</span> de <span>${fotos.length}</span> fotos`;
+        }
+
+        function actualizarCarrusel() {
+            const anchoSlide = track.children[0]?.offsetWidth + 20 || 0; // + gap
+            track.style.transform = `translateX(-${slideActual * anchoSlide}px)`;
+            
+            // Actualizar botones
+            document.querySelector('.carrusel-btn.prev').disabled = slideActual === 0;
+            document.querySelector('.carrusel-btn.next').disabled = slideActual >= fotos.length - slidesVisibles;
+            
+            renderizarDots();
+            actualizarCounter();
+        }
+
+        function moverCarrusel(direccion) {
+            const maxSlide = fotos.length - slidesVisibles;
+            slideActual = Math.max(0, Math.min(maxSlide, slideActual + direccion));
+            actualizarCarrusel();
+        }
+
+        function irASlide(index) {
+            const maxSlide = fotos.length - slidesVisibles;
+            slideActual = Math.max(0, Math.min(maxSlide, index));
+            actualizarCarrusel();
+        }
+
+        function abrirLightbox(index) {
+            // Placeholder para futura implementación de lightbox
+            console.log('Abrir lightbox:', fotos[index].src);
+        }
+
+        // Touch/swipe support
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        track.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].screenX; });
+        track.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            const diff = touchStartX - touchEndX;
+            if (Math.abs(diff) > 50) {
+                moverCarrusel(diff > 0 ? 1 : -1);
+            }
+        });
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            const nuevo = calcularSlidesVisibles();
+            if (nuevo !== slidesVisibles) {
+                slidesVisibles = nuevo;
+                slideActual = Math.min(slideActual, fotos.length - slidesVisibles);
+                actualizarCarrusel();
+            }
+        });
+
+        // Inicializar
+        slidesVisibles = calcularSlidesVisibles();
+        renderizarSlides();
+        actualizarCarrusel();
     </script>
 
 </body>
