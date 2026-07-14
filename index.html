@@ -7,7 +7,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
     :root {
         --verde-oscuro: #1a472a;
@@ -493,54 +492,6 @@
         </div>
     </section>
 
-    <!-- ============================================
-         ESTADÍSTICAS EN TIEMPO REAL
-         ============================================ -->
-    <section class="stats-bar">
-        <div class="container">
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">13</div>
-                    <div class="stat-label">Organizaciones inscritas</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Regiones cubiertas</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">320</div>
-                    <div class="stat-label">Cámaras comprometidas</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">400+</div>
-                    <div class="stat-label">Noches-trampa meta</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================
-         MAPA DE INICIATIVAS
-         ============================================ -->
-    <section class="bg-white" id="mapa">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Cobertura</span>
-                <h2 class="section-title">Mapa de Iniciativas</h2>
-                <p class="section-subtitle">Ubicación general de proyectos participantes en el fotomonitoreo</p>
-            </div>
-
-            <div class="mapa-wrapper">
-                <div id="mapa-inicio" class="mapa-container"></div>
-            </div>
-
-            <div class="text-center mt-40">
-                <p style="color: var(--texto-muted); margin-bottom: 20px;">
-                    Los puntos representan ubicaciones aproximadas de los sitios de monitoreo registrados.
-                </p>
-            </div>
-        </div>
-    </section>
 
     <!-- ============================================
          FOOTER
@@ -579,7 +530,6 @@
     <!-- ============================================
          SCRIPTS
          ============================================ -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
@@ -591,36 +541,7 @@
             else nav.classList.remove('scrolled');
         });
 
-        var mapa = L.map('mapa-inicio').setView([-10.5, -76], 5);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(mapa);
-
-        var sitios = [
-            { coords: [-11.054658, -75.075304], nombre: "Atiycuy Perú", region: "Junín", tipo: "Concesión para conservación" },
-            { coords: [-10.595180, -75.440491], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco", tipo: "Área de Conservación Privada" },
-            { coords: [-10.618407, -75.496698], nombre: "El Palmeral (RIACO)", region: "Pasco", tipo: "Conservación voluntaria" },
-            { coords: [-10.268379, -75.246473], nombre: "CEARE", region: "Pasco", tipo: "Área de Conservación Privada" },
-            { coords: [-10.545428, -75.371077], nombre: "CDS EIRL (Los Nogales)", region: "Pasco", tipo: "Conservación voluntaria" },
-            { coords: [-13.347269, -70.84456], nombre: "Herpiro SAC BIC - Concesión con Fines de Conservación Soqtapata", region: "Cusco", tipo: "Concesión para conservación" },
-            { coords: [-10.638520, -75.435063], nombre: "Ulcumano Ecolodge", region: "Pasco", tipo: "Concesión para conservación" },
-            { coords: [-7.248014, -77.550973], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Amazonas", tipo: "—" },
-            { coords: [-5.918607, -77.142278], nombre: "Asociación de Conservación de Aguajales y Renacales del Alto Mayo", region: "San Martín", tipo: "—" },
-            { coords: [-7.405851, -76.861491], nombre: "Asociación de Conservación Las Hurmanas de San Juan del Abiseo - ASHUSJA", region: "San Martín", tipo: "—" },
-            { coords: [-14.116780, -75.686670], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Lima / Ica", tipo: "—" },
-            { coords: [-7.306562, -75.609534], nombre: "CIMA Cordillera Azul - Sede Contamana", region: "Loreto", tipo: "—" },
-            { coords: [-6.273754, -79.03882], nombre: "NODO CONSERVATION", region: "Loreto", tipo: "—" },
-            { coords: [-4.996093, -79.30700], nombre: "NODO CONSERVATION", region: "Loreto", tipo: "—" }
-        ];
-
-        sitios.forEach(function(sitio) {
-            L.marker(sitio.coords)
-                .addTo(mapa)
-                .bindPopup('<strong>' + sitio.nombre + '</strong><br>' + 
-                          '📍 ' + sitio.region + '<br>' +
-                          '🏷️ ' + sitio.tipo);
-        });
     </script>
 
 </body>
