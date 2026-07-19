@@ -49,14 +49,14 @@
             transition: var(--transicion);
         }
         .nav-top.scrolled { box-shadow: var(--sombra-suave); }
-.nav-container {
-    max-width: 1200px; margin: 0 auto; padding: 0 20px;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    height: 64px;
-    gap: 16px;  /* ← esta línea */
-}
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            height: 64px;
+            gap: 16px;
+        }
         .nav-logo {
             display: flex; align-items: center; gap: 8px;
             text-decoration: none; color: var(--verde-oscuro);
@@ -161,6 +161,88 @@
         }
         .mapa-container { height: 600px; width: 100%; }
 
+        /* CÁMARA PULSANTE - CSS PARA EL ICONO PERSONALIZADO */
+        .camara-marker {
+            position: relative;
+            width: 36px;
+            height: 36px;
+        }
+        .camara-icono {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(26, 71, 42, 0.4);
+            border: 2px solid var(--blanco);
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+        .camara-icono svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+        .camara-marker:hover .camara-icono {
+            transform: scale(1.15);
+        }
+        .camara-pulso {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 2px solid var(--dorado);
+            opacity: 0;
+            z-index: 1;
+            animation: pulso-camara 2.5s ease-out infinite;
+        }
+        .camara-pulso:nth-child(2) {
+            animation-delay: 0.8s;
+        }
+        .camara-pulso:nth-child(3) {
+            animation-delay: 1.6s;
+        }
+        @keyframes pulso-camara {
+            0% {
+                width: 36px;
+                height: 36px;
+                opacity: 0.7;
+            }
+            100% {
+                width: 80px;
+                height: 80px;
+                opacity: 0;
+            }
+        }
+
+        /* POPUP PERSONALIZADO DEL MAPA */
+        .leaflet-popup-content-wrapper {
+            border-radius: 14px !important;
+            box-shadow: 0 8px 30px rgba(26, 71, 42, 0.2) !important;
+            border: 1px solid var(--gris-suave);
+        }
+        .leaflet-popup-content {
+            margin: 16px 20px !important;
+            font-family: 'Inter', sans-serif !important;
+            color: var(--texto) !important;
+            line-height: 1.6 !important;
+        }
+        .leaflet-popup-content strong {
+            color: var(--verde-oscuro);
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .leaflet-popup-tip {
+            background: var(--blanco) !important;
+        }
+
         /* TABLA DE PARTICIPANTES */
         .tabla-container {
             background: var(--blanco); border-radius: 16px;
@@ -177,6 +259,7 @@
             gap: 16px; padding: 16px 24px;
             border-bottom: 1px solid var(--gris-suave);
             align-items: center;
+            transition: var(--transicion);
         }
         .tabla-row:last-child { border-bottom: none; }
         .tabla-row:hover { background: var(--gris-fondo); }
@@ -246,59 +329,53 @@
             .tabla-row .camaras { text-align: left; }
         }
 
-.nav-logo-derecha {
-    display: flex;
-    align-items: center;
-    margin-left: 16px;
-    flex-shrink: 0;
-    text-decoration: none;
-}
-
-.nav-logo-img {
-    height: 36px;
-    width: auto;
-    object-fit: contain;
-    transition: var(--transicion);
-}
-
-.nav-logo-derecha:hover .nav-logo-img {
-    transform: scale(1.05);
-    opacity: 0.9;
-}
-
+        .nav-logo-derecha {
+            display: flex;
+            align-items: center;
+            margin-left: 16px;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+        .nav-logo-img {
+            height: 36px;
+            width: auto;
+            object-fit: contain;
+            transition: var(--transicion);
+        }
+        .nav-logo-derecha:hover .nav-logo-img {
+            transform: scale(1.05);
+            opacity: 0.9;
+        }
     </style>
 </head>
 <body>
 
     <!-- NAVEGACIÓN -->
-<nav class="nav-top" id="navbar">
-    <div class="nav-container">
-        <!-- Logo izquierdo -->
-        <a href="index.html" class="nav-logo">
-            <span class="nav-logo-icon">📷</span>
-            <span>Snapshot Perú</span>
-        </a>
+    <nav class="nav-top" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📷</span>
+                <span>Snapshot Perú</span>
+            </a>
 
-        <!-- Links + menú móvil -->
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="sobre.html">Sobre el Proyecto</a></li>
-            <li><a href="colaboradores.html">Colaboradores</a></li>
-            <li><a href="protocolo.html">Protocolo</a></li>
-            <li><a href="mapa.html" class="active">¿Quiénes se suman?</a></li>
-            <li><a href="galeria.html">Galería</a></li>
-            <li><a href="investigacion.html">Investigación</a></li>
-            <li><a href="noticias.html">Noticias</a></li>
-            <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
-        </ul>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="sobre.html">Sobre el Proyecto</a></li>
+                <li><a href="colaboradores.html">Colaboradores</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
+                <li><a href="mapa.html" class="active">¿Quiénes se suman?</a></li>
+                <li><a href="galeria.html">Galería</a></li>
+                <li><a href="investigacion.html">Investigación</a></li>
+                <li><a href="noticias.html">Noticias</a></li>
+                <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
+            </ul>
 
-        <!-- Logo Smithsonian a la derecha -->
-        <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
-            <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
-        </a>
-    </div>
-</nav>
+            <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
+                <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
+            </a>
+        </div>
+    </nav>
 
     <!-- HEADER -->
     <header class="page-header">
@@ -460,8 +537,26 @@
             else nav.classList.remove('scrolled');
         });
 
+        // SVG de cámara trampa
+        const camaraSVG = `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 3L7 5H4C2.9 5 2 5.9 2 7v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2h-3l-2-2H9zM12 17c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm0-2c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2z"/>
+        </svg>`;
 
-        // Mapa completo con datos actualizados
+        // Crear el HTML del marcador de cámara pulsante
+        function crearCamaraPulsante() {
+            return `
+                <div class="camara-marker">
+                    <div class="camara-pulso"></div>
+                    <div class="camara-pulso"></div>
+                    <div class="camara-pulso"></div>
+                    <div class="camara-icono">
+                        ${camaraSVG}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Mapa completo con cámaras pulsantes
         var mapa = L.map('mapa-completo').setView([-10.5, -76], 6);
         
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -469,32 +564,36 @@
         }).addTo(mapa);
 
         var sitios = [
-            // Organizaciones existentes (coordenadas corregidas)
-            { coords: [-11.054658, -75.075304], nombre: "Atiycuy Perú", region: "Junín", tipo: "Concesión para conservación" },
-            { coords: [-10.595180, -75.440491], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco", tipo: "Área de Conservación Privada" },
-            { coords: [-10.618407, -75.496698], nombre: "El Palmeral (RIACO)", region: "Pasco", tipo: "Conservación voluntaria" },
-            { coords: [-10.268379, -75.246473], nombre: "CEARE", region: "Pasco", tipo: "Área de Conservación Privada" },
-            { coords: [-10.545428, -75.371077], nombre: "CDS EIRL (Los Nogales)", region: "Pasco", tipo: "Conservación voluntaria" },
-            { coords: [-13.347269, -70.84456], nombre: "Herpiro SAC BIC - Concesión con Fines de Conservación Soqtapata", region: "Cusco", tipo: "Concesión para conservación" },
-            { coords: [-10.638520, -75.435063], nombre: "Ulcumano Ecolodge", region: "Pasco", tipo: "Concesión para conservación" },
-            
-            // Organizaciones nuevas
-            { coords: [-7.248014, -77.550973], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Amazonas", tipo: "—" },
-            { coords: [-5.918607, -77.142278], nombre: "Asociación de Conservación de Aguajales y Renacales del Alto Mayo", region: "San Martín", tipo: "—" },
-            { coords: [-7.405851, -76.861491], nombre: "Asociación de Conservación Las Hurmanas de San Juan del Abiseo - ASHUSJA", region: "San Martín", tipo: "—" },
-            { coords: [-14.116780, -69.68667], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Puno", tipo: "—" },
-            { coords: [-7.306562, -75.609534], nombre: "CIMA Cordillera Azul - Sede Contamana", region: "Loreto", tipo: "—" },
-            { coords: [-6.273754, -79.03882], nombre: "NODO CONSERVATION", region: "Lambayeque", tipo: "—" },
-            { coords: [-4.996093, -79.30700], nombre: "NODO CONSERVATION", region: "Piura", tipo: "—" },
-            { coords: [-16.2353118, -71.3393831], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Arequipa", tipo: "—" }
+            { coords: [-11.054658, -75.075304], nombre: "Atiycuy Perú", region: "Junín" },
+            { coords: [-10.595180, -75.440491], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco"},
+            { coords: [-10.618407, -75.496698], nombre: "El Palmeral (RIACO)", region: "Pasco"},
+            { coords: [-10.268379, -75.246473], nombre: "CEARE", region: "Pasco" },
+            { coords: [-10.545428, -75.371077], nombre: "CDS EIRL (Los Nogales)", region: "Pasco"},
+            { coords: [-13.347269, -70.84456], nombre: "Herpiro SAC BIC - Concesión con Fines de Conservación Soqtapata", region: "Cusco"},
+            { coords: [-10.638520, -75.435063], nombre: "Ulcumano Ecolodge", region: "Pasco"},
+            { coords: [-7.248014, -77.550973], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Amazonas"},
+            { coords: [-5.918607, -77.142278], nombre: "Asociación de Conservación de Aguajales y Renacales del Alto Mayo", region: "San Martín"},
+            { coords: [-7.405851, -76.861491], nombre: "Asociación de Conservación Las Hurmanas de San Juan del Abiseo - ASHUSJA", region: "San Martín"},
+            { coords: [-14.116780, -69.68667], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Puno" },
+            { coords: [-7.306562, -75.609534], nombre: "CIMA Cordillera Azul - Sede Contamana", region: "Loreto"},
+            { coords: [-6.273754, -79.03882], nombre: "NODO CONSERVATION", region: "Lambayeque" },
+            { coords: [-4.996093, -79.30700], nombre: "NODO CONSERVATION", region: "Piura"},
+            { coords: [-16.2353118, -71.3393831], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Arequipa"}
         ];
 
         sitios.forEach(function(sitio) {
-            L.marker(sitio.coords)
+            var iconoCamara = L.divIcon({
+                className: 'camara-div-icon',
+                html: crearCamaraPulsante(),
+                iconSize: [36, 36],
+                iconAnchor: [18, 18],
+                popupAnchor: [0, -20]
+            });
+
+            L.marker(sitio.coords, { icon: iconoCamara })
                 .addTo(mapa)
                 .bindPopup('<strong>' + sitio.nombre + '</strong><br>' + 
-                          '📍 ' + sitio.region + '<br>' +
-                          '🏷️ ' + sitio.tipo);
+                          '📍 ' + sitio.region + '<br>');
         });
     </script>
 
