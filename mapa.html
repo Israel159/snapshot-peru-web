@@ -6,438 +6,1143 @@
     <title>¿Quiénes se suman? - Snapshot Perú</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        :root {
-            --verde-oscuro: #1a472a;
-            --verde-primario: #2d6a4f;
-            --verde-claro: #40916c;
-            --verde-pastel: #74c69d;
-            --verde-fondo: #d8f3dc;
-            --dorado: #d4a574;
-            --dorado-claro: #e9c496;
-            --texto: #1b1b1b;
-            --texto-claro: #4a4a4a;
-            --texto-muted: #6b7280;
-            --blanco: #ffffff;
-            --gris-fondo: #f8faf9;
-            --gris-suave: #e8ede9;
-            --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
-            --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
-            --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    :root {
+        --verde-oscuro: #1a472a;
+        --verde-primario: #2d6a4f;
+        --verde-claro: #40916c;
+        --verde-pastel: #74c69d;
+        --verde-fondo: #d8f3dc;
+        --dorado: #d4a574;
+        --dorado-claro: #e9c496;
+        --texto: #1b1b1b;
+        --texto-claro: #4a4a4a;
+        --texto-muted: #6b7280;
+        --blanco: #ffffff;
+        --gris-fondo: #f8faf9;
+        --gris-suave: #e8ede9;
+        --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
+        --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
+        --sombra-fuerte: 0 20px 60px rgba(26, 71, 42, 0.2);
+        --transicion: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        --transicion-lenta: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            color: var(--texto);
-            background: var(--blanco);
-            line-height: 1.7;
-            font-size: 16px;
-            -webkit-font-smoothing: antialiased;
-        }
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--texto);
+        background: var(--blanco);
+        line-height: 1.7;
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
+    }
 
-        /* NAVEGACIÓN */
-        .nav-top {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(26,71,42,0.08);
-            transition: var(--transicion);
-        }
-        .nav-top.scrolled { box-shadow: var(--sombra-suave); }
+    /* ============================================
+       NAVEGACIÓN FIJA - PREMIUM
+       ============================================ */
+    .nav-top {
+        position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(20px) saturate(180%);
+        border-bottom: 1px solid rgba(26,71,42,0.06);
+        transition: var(--transicion);
+    }
+    .nav-top.scrolled { 
+        box-shadow: var(--sombra-suave); 
+        background: rgba(255,255,255,0.97);
+    }
+
+    .nav-container {
+        max-width: 1200px; 
+        margin: 0 auto; 
+        padding: 0 8px 0 24px;
+        display: flex; 
+        justify-content: space-between; 
+        align-items: center;
+        height: 68px;
+        gap: 16px;
+    }
+
+    .nav-logo {
+        display: flex; align-items: center; gap: 10px;
+        text-decoration: none; color: var(--verde-oscuro);
+        font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
+        white-space: nowrap; flex-shrink: 0;
+        transition: var(--transicion)
+    }
+    .nav-logo:hover { transform: scale(1.02); }
+    .nav-logo-icon { 
+        font-size: 1.5rem; 
+        filter: drop-shadow(0 2px 4px rgba(26,71,42,0.2));
+        animation: logoFloat 3s ease-in-out infinite;
+    }
+    @keyframes logoFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+    }
+
+    .nav-links { 
+        display: flex; 
+        list-style: none; 
+        gap: 2px; 
+        align-items: center; 
+        margin-left: auto;
+    }
+    .nav-links a {
+        color: var(--texto-claro); text-decoration: none;
+        padding: 7px 12px; border-radius: 8px; font-size: 0.82rem;
+        font-weight: 500; transition: var(--transicion);
+        white-space: nowrap;
+        position: relative;
+    }
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 2px; left: 50%;
+        width: 0; height: 2px;
+        background: var(--verde-primario);
+        transition: var(--transicion);
+        transform: translateX(-50%);
+        border-radius: 1px;
+    }
+    .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
+    .nav-links a:hover::after { width: 60%; }
+    .nav-links a.active { 
+        color: var(--verde-oscuro); 
+        background: var(--verde-fondo); 
+        font-weight: 600; 
+    }
+    .nav-links a.active::after { width: 60%; }
+
+    .nav-cta {
+        background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro)) !important; 
+        color: var(--blanco) !important;
+        padding: 9px 18px !important; 
+        border-radius: 10px !important;
+        font-weight: 600 !important; 
+        font-size: 0.82rem !important;
+        margin-left: 6px;
+        box-shadow: 0 4px 15px rgba(26,71,42,0.3);
+        transition: var(--transicion) !important;
+        position: relative;
+        overflow: hidden;
+    }
+    .nav-cta::after { display: none !important; }
+    .nav-cta::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s ease;
+    }
+    .nav-cta:hover::before { left: 100%; }
+    .nav-cta:hover { 
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(26,71,42,0.4) !important;
+    }
+
+    .menu-toggle { 
+        display: none; background: none; border: none; 
+        font-size: 1.4rem; cursor: pointer; 
+        color: var(--verde-oscuro); padding: 8px; 
+    }
+
+    .nav-logo-derecha {
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+        text-decoration: none;
+        margin-right: -4px;
+    }
+    .nav-logo-img {
+        height: 38px;
+        width: auto;
+        object-fit: contain;
+        transition: var(--transicion);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        margin-right: 4px; 
+    }
+    .nav-logo-derecha:hover .nav-logo-img {
+        transform: scale(1.08);
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    }
+
+    .nav-right-group {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-shrink: 0;
+    }
+
+    /* Centrado perfecto del menú en desktop */
+    @media (min-width: 769px) {
         .nav-container {
-            max-width: 1200px; margin: 0 auto; padding: 0 20px;
-            display: flex; 
-            justify-content: space-between; 
+            display: grid;
+            grid-template-columns: auto 1fr auto;
             align-items: center;
-            height: 64px;
-            gap: 16px;
         }
-        .nav-logo {
-            display: flex; align-items: center; gap: 8px;
-            text-decoration: none; color: var(--verde-oscuro);
-            font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
-            white-space: nowrap; flex-shrink: 0;
-        }
-        .nav-logo-icon { font-size: 1.4rem; }
+        .nav-logo { justify-self: start; }
+        .nav-links { margin-left: 0; justify-self: center; }
+        .nav-right-group { justify-self: end; }
+    }
+
+    /* ============================================
+       HERO CON EFECTO 3D PARALLAX - MAPA
+       ============================================ */
+    .hero-main {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+        perspective: 1000px;
+    }
+
+    .hero-main::before {
+        content: '';
+        position: absolute;
+        top: -10%; left: -10%; right: -10%; bottom: -10%;
+        background: url("imagenes/fondo_suman.JPG") center/cover no-repeat;
+        z-index: 0;
+        transform: translateZ(-1px) scale(1.2);
+        animation: heroZoom 20s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom {
+        0% { transform: translateZ(-1px) scale(1.2); }
+        100% { transform: translateZ(-1px) scale(1.3); }
+    }
+
+    .hero-main::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(
+            135deg,
+            rgba(26, 71, 42, 0.92) 0%,
+            rgba(45, 106, 79, 0.85) 35%,
+            rgba(64, 145, 108, 0.78) 70%,
+            rgba(26, 71, 42, 0.88) 100%
+        );
+        z-index: 1;
+    }
+
+    .particles-container {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: 2;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    .particle {
+        position: absolute;
+        width: 4px; height: 4px;
+        background: rgba(212, 165, 116, 0.6);
+        border-radius: 50%;
+        animation: particleFloat linear infinite;
+    }
+    @keyframes particleFloat {
+        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+    }
+
+    .hero-pattern {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .hero-vignette {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        box-shadow: inset 0 0 150px rgba(0,0,0,0.4);
+        z-index: 2;
+        pointer-events: none;
+    }
+
+    .hero-content {
+        text-align: center;
+        color: var(--blanco);
+        max-width: 850px;
+        padding: 140px 24px 80px;
+        position: relative;
+        z-index: 3;
+        animation: heroFadeIn 1.2s ease-out;
+    }
+    @keyframes heroFadeIn {
+        0% { opacity: 0; transform: translateY(40px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(15px);
+        padding: 10px 24px;
+        border-radius: 50px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        margin-bottom: 35px;
+        border: 1px solid rgba(255,255,255,0.15);
+        animation: badgePulse 3s ease-in-out infinite;
+        cursor: default;
+    }
+    @keyframes badgePulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(212, 165, 116, 0.3); }
+        50% { box-shadow: 0 0 20px 5px rgba(212, 165, 116, 0.15); }
+    }
+
+    .hero-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.8rem, 7vw, 5rem);
+        font-weight: 800;
+        margin-bottom: 20px;
+        letter-spacing: -2px;
+        line-height: 1.05;
+        text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        position: relative;
+    }
+    .hero-title .title-accent {
+        color: var(--dorado);
+        position: relative;
+        display: inline-block;
+    }
+    .hero-title .title-accent::after {
+        content: '';
+        position: absolute;
+        bottom: 5px; left: 0; right: 0;
+        height: 8px;
+        background: linear-gradient(90deg, var(--dorado), transparent);
+        opacity: 0.4;
+        border-radius: 4px;
+        z-index: -1;
+    }
+
+    .hero-subtitle {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+        opacity: 0.95;
+        margin-bottom: 25px;
+        font-weight: 400;
+        font-style: italic;
+        max-width: 650px;
+        margin-left: auto;
+        margin-right: auto;
+        text-shadow: 0 2px 15px rgba(0,0,0,0.2);
+        letter-spacing: 0.5px;
+    }
+
+    .hero-desc {
+        font-size: 1.05rem;
+        opacity: 0.88;
+        max-width: 680px;
+        margin: 0 auto 35px;
+        line-height: 1.9;
+        font-weight: 300;
+    }
+
+    .scroll-indicator {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        animation: scrollBounce 2s ease-in-out infinite;
+        cursor: pointer;
+    }
+    .scroll-indicator span {
+        color: rgba(255,255,255,0.6);
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    .scroll-indicator .scroll-line {
+        width: 1px;
+        height: 40px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+        position: relative;
+    }
+    .scroll-indicator .scroll-line::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -2px;
+        width: 5px; height: 5px;
+        background: var(--dorado);
+        border-radius: 50%;
+        animation: scrollDot 2s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+        0%, 100% { transform: translateX(-50%) translateY(0); }
+        50% { transform: translateX(-50%) translateY(8px); }
+    }
+    @keyframes scrollDot {
+        0% { top: 0; opacity: 1; }
+        100% { top: 40px; opacity: 0; }
+    }
+
+    /* ============================================
+       SECCIONES GENERALES
+       ============================================ */
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+    section { padding: 100px 0; position: relative; }
+    .section-header { text-align: center; max-width: 700px; margin: 0 auto 70px; }
+    .section-tag {
+        display: inline-flex; align-items: center; gap: 8px;
+        color: var(--verde-primario);
+        font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 3px; margin-bottom: 16px;
+        padding: 6px 16px;
+        background: var(--verde-fondo);
+        border-radius: 50px;
+    }
+    .section-title {
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2rem, 4.5vw, 2.8rem); 
+        color: var(--verde-oscuro);
+        margin-bottom: 18px; 
+        font-weight: 700; 
+        letter-spacing: -1px; 
+        line-height: 1.15;
+    }
+    .section-subtitle { 
+        color: var(--texto-muted); 
+        font-size: 1.1rem; 
+        line-height: 1.8;
+        font-weight: 400;
+    }
+
+    /* ============================================
+       ESTADISTICAS ANIMADAS
+       ============================================ */
+    .stats-bar {
+        background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .stats-bar::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        opacity: 0.5;
+    }
+    .stats-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+        gap: 40px; 
+        position: relative;
+        z-index: 1;
+    }
+    .stat-item { 
+        text-align: center; 
+        color: var(--blanco); 
+        position: relative;
+    }
+    .stat-item::after {
+        content: '';
+        position: absolute;
+        right: -20px; top: 50%;
+        transform: translateY(-50%);
+        width: 1px; height: 60%;
+        background: rgba(255,255,255,0.15);
+    }
+    .stat-item:last-child::after { display: none; }
+    .stat-number { 
+        font-size: 3.5rem; 
+        font-weight: 800; 
+        line-height: 1; 
+        margin-bottom: 10px;
+        font-family: 'Playfair Display', serif;
+        background: linear-gradient(135deg, var(--blanco), var(--dorado-claro));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .stat-label { 
+        font-size: 0.95rem; 
+        opacity: 0.8; 
+        font-weight: 500;
+        letter-spacing: 1px;
+    }
+
+    /* ============================================
+       MAPA CON EFECTO 3D
+       ============================================ */
+    .mapa-wrapper { 
+        border-radius: 24px; 
+        overflow: hidden; 
+        box-shadow: var(--sombra-fuerte); 
+        border: 1px solid var(--gris-suave);
+        position: relative;
+        transform-style: preserve-3d;
+        transition: var(--transicion);
+    }
+    .mapa-wrapper:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 60px rgba(26,71,42,0.2);
+    }
+    .mapa-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--verde-primario), var(--dorado), var(--verde-claro));
+        z-index: 10;
+    }
+    .mapa-container { height: 600px; width: 100%; }
+
+    /* CÁMARA PULSANTE */
+    .camara-marker {
+        position: relative;
+        width: 36px;
+        height: 36px;
+    }
+    .camara-icono {
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 10px rgba(26, 71, 42, 0.4);
+        border: 2px solid var(--blanco);
+        position: relative;
+        z-index: 2;
+        transition: transform 0.3s ease;
+    }
+    .camara-icono svg {
+        width: 18px;
+        height: 18px;
+        fill: white;
+    }
+    .camara-marker:hover .camara-icono {
+        transform: scale(1.15);
+    }
+    .camara-pulso {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 2px solid var(--dorado);
+        opacity: 0;
+        z-index: 1;
+        animation: pulso-camara 2.5s ease-out infinite;
+    }
+    .camara-pulso:nth-child(2) { animation-delay: 0.8s; }
+    .camara-pulso:nth-child(3) { animation-delay: 1.6s; }
+    @keyframes pulso-camara {
+        0% { width: 36px; height: 36px; opacity: 0.7; }
+        100% { width: 80px; height: 80px; opacity: 0; }
+    }
+
+    .leaflet-popup-content-wrapper {
+        border-radius: 14px !important;
+        box-shadow: 0 8px 30px rgba(26, 71, 42, 0.2) !important;
+        border: 1px solid var(--gris-suave);
+    }
+    .leaflet-popup-content {
+        margin: 16px 20px !important;
+        font-family: 'Inter', sans-serif !important;
+        color: var(--texto) !important;
+        line-height: 1.6 !important;
+    }
+    .leaflet-popup-content strong {
+        color: var(--verde-oscuro);
+        font-size: 1rem;
+        display: block;
+        margin-bottom: 6px;
+    }
+    .leaflet-popup-tip {
+        background: var(--blanco) !important;
+    }
+
+    /* ============================================
+       QUIÉNES PUEDEN SUMARSE - TARJETAS 3D
+       ============================================ */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+    .card-3d {
+        background: var(--blanco); 
+        border-radius: 20px; 
+        padding: 40px 32px;
+        box-shadow: var(--sombra-suave); 
+        transition: var(--transicion);
+        border: 1px solid var(--gris-suave);
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        perspective: 1000px;
+        text-align: center;
+    }
+    .card-3d::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--verde-primario), var(--dorado));
+        transform: scaleX(0);
+        transition: transform 0.5s ease;
+        transform-origin: left;
+    }
+    .card-3d:hover::before { transform: scaleX(1); }
+    .card-3d:hover { 
+        transform: translateY(-8px) rotateX(2deg); 
+        box-shadow: var(--sombra-fuerte); 
+        border-color: var(--verde-pastel); 
+    }
+    .card-icon-3d {
+        width: 64px; height: 64px; 
+        background: linear-gradient(135deg, var(--verde-fondo), #c8e6c9);
+        border-radius: 18px; 
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.8rem; 
+        margin: 0 auto 24px;
+        box-shadow: 0 8px 20px rgba(45,106,79,0.15);
+        transition: var(--transicion);
+    }
+    .card-3d:hover .card-icon-3d {
+        transform: scale(1.1) rotate(-5deg);
+        box-shadow: 0 12px 30px rgba(45,106,79,0.25);
+    }
+    .card-3d h3 { 
+        color: var(--verde-oscuro); 
+        font-size: 1.2rem; 
+        margin-bottom: 12px; 
+        font-weight: 700; 
+    }
+    .card-3d p { 
+        color: var(--texto-muted); 
+        font-size: 0.95rem; 
+        line-height: 1.7; 
+    }
+
+    /* ============================================
+       INSTITUCIONES PARTICIPANTES - LOGOS GRID
+       ============================================ */
+    .logos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 32px;
+        align-items: stretch;
+        justify-items: center;
+    }
+    .logo-item {
+        background: var(--blanco);
+        border-radius: 20px;
+        padding: 28px 24px;
+        box-shadow: var(--sombra-suave);
+        border: 1px solid var(--gris-suave);
+        transition: var(--transicion);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        width: 100%;
+        max-width: 240px;
+        position: relative;
+        overflow: hidden;
+    }
+    .logo-item::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--verde-primario), var(--dorado));
+        transform: scaleX(0);
+        transition: transform 0.5s ease;
+        transform-origin: left;
+    }
+    .logo-item:hover::before { transform: scaleX(1); }
+    .logo-item:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--sombra-media);
+        border-color: var(--verde-pastel);
+    }
+    .logo-item img {
+        max-width: 100%;
+        max-height: 80px;
+        object-fit: contain;
+        margin-bottom: 14px;
+        filter: grayscale(30%);
+        transition: var(--transicion);
+    }
+    .logo-item:hover img {
+        filter: grayscale(0%);
+        transform: scale(1.05);
+    }
+    .logo-name {
+        color: var(--verde-oscuro);
+        font-size: 0.82rem;
+        font-weight: 600;
+        line-height: 1.4;
+        margin-top: auto;
+    }
+
+    /* ============================================
+       TABLA DE PARTICIPANTES
+       ============================================ */
+    .tabla-container {
+        background: var(--blanco); border-radius: 20px;
+        box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
+        overflow: hidden;
+    }
+    .tabla-header {
+        background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+        color: var(--blanco); padding: 20px 28px;
+        font-weight: 700; font-size: 1rem;
+        display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr;
+        gap: 16px;
+    }
+    .tabla-row {
+        display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr;
+        gap: 16px; padding: 16px 28px;
+        border-bottom: 1px solid var(--gris-suave);
+        align-items: center;
+        transition: var(--transicion);
+    }
+    .tabla-row:last-child { border-bottom: none; }
+    .tabla-row:hover { background: var(--gris-fondo); }
+    .tabla-row .org { font-weight: 600; color: var(--verde-oscuro); }
+    .tabla-row .region { color: var(--texto-claro); font-size: 0.9rem; }
+    .tabla-row .tipo { color: var(--texto-muted); font-size: 0.9rem; }
+    .tabla-row .camaras { 
+        color: var(--verde-primario); font-weight: 700; 
+        font-size: 0.95rem; text-align: center;
+    }
+
+    /* ============================================
+       BOTONES PREMIUM
+       ============================================ */
+    .btn {
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 15px 32px; border-radius: 14px; text-decoration: none;
+        font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
+        border: 2px solid transparent; cursor: pointer; line-height: 1;
+        position: relative;
+        overflow: hidden;
+    }
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        transition: left 0.6s ease;
+    }
+    .btn:hover::before { left: 100%; }
+    .btn-primary {
+        background: linear-gradient(135deg, var(--dorado), #c49464);
+        color: var(--verde-oscuro);
+        box-shadow: 0 6px 25px rgba(212,165,116,0.45), 0 2px 8px rgba(212,165,116,0.3);
+        border: none;
+    }
+    .btn-primary:hover { 
+        background: linear-gradient(135deg, var(--dorado-claro), var(--dorado));
+        transform: translateY(-3px); 
+        box-shadow: 0 10px 35px rgba(212,165,116,0.55), 0 4px 12px rgba(212,165,116,0.35);
+        text-decoration: none; 
+    }
+    .btn-secondary {
+        background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+        color: var(--blanco);
+        box-shadow: 0 4px 15px rgba(45,106,79,0.3);
+        border: none;
+    }
+    .btn-secondary:hover { 
+        background: linear-gradient(135deg, var(--verde-claro), var(--verde-primario));
+        transform: translateY(-3px); 
+        box-shadow: 0 6px 20px rgba(45,106,79,0.4);
+        text-decoration: none; 
+    }
+
+    /* ============================================
+       CTA FINAL
+       ============================================ */
+    .cta-final {
+        background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .cta-final::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle at 30% 50%, rgba(212,165,116,0.08) 0%, transparent 50%);
+    }
+    .cta-final .container {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+    .cta-final h2 {
+        font-family: 'Playfair Display', serif;
+        color: var(--blanco);
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    .cta-final p {
+        color: rgba(255,255,255,0.7);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto 40px;
+        line-height: 1.8;
+    }
+
+    /* ============================================
+       FOOTER PREMIUM
+       ============================================ */
+    .footer-main {
+        background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
+        color: var(--blanco); 
+        padding: 80px 0 30px;
+        position: relative;
+        overflow: hidden;
+    }
+    .footer-main::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+    }
+    .footer-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+        gap: 50px; 
+        margin-bottom: 60px; 
+        position: relative;
+        z-index: 1;
+    }
+    .footer-col h4 { 
+        font-size: 1rem; 
+        margin-bottom: 22px; 
+        font-weight: 700; 
+        color: var(--dorado-claro);
+        letter-spacing: 1px;
+        position: relative;
+        display: inline-block;
+    }
+    .footer-col h4::after {
+        content: '';
+        position: absolute;
+        bottom: -8px; left: 0;
+        width: 30px; height: 2px;
+        background: var(--dorado);
+        border-radius: 1px;
+    }
+    .footer-col p { 
+        color: rgba(255,255,255,0.65); 
+        font-size: 0.92rem; 
+        line-height: 1.8; 
+    }
+    .footer-col a { 
+        color: rgba(255,255,255,0.65); 
+        text-decoration: none; 
+        display: block; 
+        padding: 8px 0; 
+        font-size: 0.92rem; 
+        transition: var(--transicion); 
+        position: relative;
+        padding-left: 0;
+    }
+    .footer-col a::before {
+        content: '>';
+        position: absolute;
+        left: -15px;
+        opacity: 0;
+        transition: var(--transicion);
+        color: var(--dorado);
+    }
+    .footer-col a:hover { 
+        color: var(--dorado-claro); 
+        padding-left: 15px; 
+    }
+    .footer-col a:hover::before {
+        opacity: 1;
+        left: 0;
+    }
+    .footer-bottom { 
+        border-top: 1px solid rgba(255,255,255,0.08); 
+        padding-top: 30px; 
+        text-align: center; 
+        font-size: 0.88rem; 
+        color: rgba(255,255,255,0.4);
+        position: relative;
+        z-index: 1;
+    }
+    .footer-bottom a {
+        color: var(--dorado-claro);
+        text-decoration: none;
+        transition: var(--transicion);
+    }
+    .footer-bottom a:hover {
+        color: var(--dorado);
+    }
+
+    .social-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+    }
+    .social-links a {
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.7);
+        font-size: 1rem;
+        transition: var(--transicion);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .social-links a:hover {
+        background: var(--dorado);
+        color: var(--verde-oscuro);
+        transform: translateY(-3px);
+        border-color: var(--dorado);
+    }
+
+    /* ============================================
+       ANIMACIONES DE ENTRADA
+       ============================================ */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+
+    .lens-flare {
+        position: absolute;
+        width: 200px; height: 200px;
+        background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 2;
+        animation: lensFloat 10s ease-in-out infinite;
+    }
+    @keyframes lensFloat {
+        0%, 100% { transform: translate(0, 0); }
+        25% { transform: translate(30px, -20px); }
+        50% { transform: translate(-20px, 30px); }
+        75% { transform: translate(20px, 20px); }
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 768px) {
+        .menu-toggle { display: block; }
         .nav-links { 
-            display: flex; list-style: none; gap: 2px; 
-            align-items: center; margin-left: auto;
+            display: none; position: absolute; top: 68px; left: 0; right: 0; 
+            background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
+            flex-direction: column; padding: 20px; gap: 4px; 
+            border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
         }
-        .nav-links a {
-            color: var(--texto-claro); text-decoration: none;
-            padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
-            font-weight: 500; transition: var(--transicion);
-            white-space: nowrap;
-        }
-        .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
-        .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
-        .nav-cta {
-            background: var(--verde-primario) !important; 
-            color: var(--blanco) !important;
-            padding: 8px 14px !important; 
-            border-radius: 8px !important;
-            font-weight: 600 !important; 
-            font-size: 0.82rem !important;
-            margin-left: 4px;
-        }
-        .nav-cta:hover { background: var(--verde-oscuro) !important; color: var(--blanco) !important; }
-        .menu-toggle { 
-            display: none; background: none; border: none; 
-            font-size: 1.4rem; cursor: pointer; 
-            color: var(--verde-oscuro); padding: 8px; 
-        }
-
-        /* HEADER */
-        .page-header {
-            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
-            color: var(--blanco);
-            padding: 120px 0 60px;
-            position: relative;
-            overflow: hidden;
-        }
-        .page-header::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .page-header-content {
-            max-width: 1100px; margin: 0 auto; padding: 0 24px;
-            position: relative; z-index: 1;
-        }
-        .btn-volver {
-            display: inline-flex; align-items: center; gap: 6px;
-            color: rgba(255,255,255,0.85); text-decoration: none;
-            font-size: 0.9rem; font-weight: 500;
-            padding: 8px 16px; border-radius: 8px;
-            transition: var(--transicion); margin-bottom: 20px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .btn-volver:hover {
-            background: rgba(255,255,255,0.2);
-            color: var(--blanco); text-decoration: none;
-        }
-        .page-header h1 {
-            font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
-            margin-bottom: 10px; letter-spacing: -1px;
-        }
-        .page-header p {
-            font-size: 1.1rem; opacity: 0.85; max-width: 600px;
-        }
-
-        /* SECCIONES */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-        section { padding: 80px 0; }
-        .section-header { text-align: center; max-width: 700px; margin: 0 auto 50px; }
-        .section-tag {
-            display: inline-block; color: var(--verde-primario);
-            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 12px;
-        }
-        .section-title {
-            font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--verde-oscuro);
-            margin-bottom: 14px; font-weight: 800; letter-spacing: -1px;
-        }
-        .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
-
-        /* ESTADÍSTICAS */
-        .stats-bar {
-            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
-            padding: 60px 0;
-        }
-        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
-        .stat-item { text-align: center; color: var(--blanco); }
-        .stat-number { font-size: 3rem; font-weight: 800; line-height: 1; margin-bottom: 8px; }
-        .stat-label { font-size: 0.95rem; opacity: 0.85; font-weight: 500; }
-
-        /* MAPA */
-        .mapa-wrapper {
-            border-radius: 16px; overflow: hidden;
-            box-shadow: var(--sombra-media); border: 1px solid var(--gris-suave);
-        }
-        .mapa-container { height: 600px; width: 100%; }
-
-        /* CÁMARA PULSANTE - CSS PARA EL ICONO PERSONALIZADO */
-        .camara-marker {
-            position: relative;
-            width: 36px;
-            height: 36px;
-        }
-        .camara-icono {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(26, 71, 42, 0.4);
-            border: 2px solid var(--blanco);
-            position: relative;
-            z-index: 2;
-            transition: transform 0.3s ease;
-        }
-        .camara-icono svg {
-            width: 18px;
-            height: 18px;
-            fill: white;
-        }
-        .camara-marker:hover .camara-icono {
-            transform: scale(1.15);
-        }
-        .camara-pulso {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: 2px solid var(--dorado);
-            opacity: 0;
-            z-index: 1;
-            animation: pulso-camara 2.5s ease-out infinite;
-        }
-        .camara-pulso:nth-child(2) {
-            animation-delay: 0.8s;
-        }
-        .camara-pulso:nth-child(3) {
-            animation-delay: 1.6s;
-        }
-        @keyframes pulso-camara {
-            0% {
-                width: 36px;
-                height: 36px;
-                opacity: 0.7;
-            }
-            100% {
-                width: 80px;
-                height: 80px;
-                opacity: 0;
-            }
-        }
-
-        /* POPUP PERSONALIZADO DEL MAPA */
-        .leaflet-popup-content-wrapper {
-            border-radius: 14px !important;
-            box-shadow: 0 8px 30px rgba(26, 71, 42, 0.2) !important;
-            border: 1px solid var(--gris-suave);
-        }
-        .leaflet-popup-content {
-            margin: 16px 20px !important;
-            font-family: 'Inter', sans-serif !important;
-            color: var(--texto) !important;
-            line-height: 1.6 !important;
-        }
-        .leaflet-popup-content strong {
-            color: var(--verde-oscuro);
-            font-size: 1rem;
+        .nav-links.active { display: flex; }
+        .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
+        .nav-links a::after { display: none; }
+        .nav-right-group { display: none; }
+        .nav-links .nav-cta-mobile {
             display: block;
-            margin-bottom: 6px;
+            background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+            color: var(--blanco) !important;
+            text-align: center;
+            border-radius: 10px;
+            margin-top: 8px;
         }
-        .leaflet-popup-tip {
-            background: var(--blanco) !important;
-        }
-
-        /* TABLA DE PARTICIPANTES */
-        .tabla-container {
-            background: var(--blanco); border-radius: 16px;
-            box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
-            overflow: hidden;
-        }
-        .tabla-header {
-            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
-            color: var(--blanco); padding: 20px 24px;
-            font-weight: 700; font-size: 1rem;
-        }
-        .tabla-row {
-            display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr;
-            gap: 16px; padding: 16px 24px;
+        .hero-main { min-height: 60vh; }
+        .hero-content { padding: 120px 24px 60px; }
+        section { padding: 60px 0; }
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+        .stat-number { font-size: 2.5rem; }
+        .stat-item::after { display: none; }
+        .mapa-container { height: 400px; }
+        .grid-3 { grid-template-columns: 1fr; }
+        .logos-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .tabla-header { display: none; }
+        .tabla-row { 
+            grid-template-columns: 1fr; 
+            gap: 4px; 
+            padding: 16px 20px; 
             border-bottom: 1px solid var(--gris-suave);
-            align-items: center;
-            transition: var(--transicion);
         }
-        .tabla-row:last-child { border-bottom: none; }
-        .tabla-row:hover { background: var(--gris-fondo); }
-        .tabla-row .org { font-weight: 600; color: var(--verde-oscuro); }
-        .tabla-row .region { color: var(--texto-claro); font-size: 0.9rem; }
-        .tabla-row .tipo { color: var(--texto-muted); font-size: 0.9rem; }
-        .tabla-row .camaras { 
-            color: var(--verde-primario); font-weight: 700; 
-            font-size: 0.95rem; text-align: center;
-        }
+        .tabla-row .camaras { text-align: left; }
+        .tabla-row .org::before { content: 'Organización: '; font-weight: 400; color: var(--texto-muted); }
+        .tabla-row .region::before { content: 'Región: '; font-weight: 400; color: var(--texto-muted); }
+        .tabla-row .tipo::before { content: 'Tipo: '; font-weight: 400; color: var(--texto-muted); }
+        .tabla-row .camaras::before { content: 'Cámaras: '; font-weight: 400; color: var(--texto-muted); }
+    }
 
-        /* BOTÓN CTA */
-        .btn-cta {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 14px 28px; border-radius: 12px; text-decoration: none;
-            font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
-            background: var(--verde-primario); color: var(--blanco);
-            box-shadow: 0 4px 15px rgba(45, 106, 79, 0.3);
-        }
-        .btn-cta:hover {
-            background: var(--verde-oscuro); transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(45, 106, 79, 0.4);
-            text-decoration: none; color: var(--blanco);
-        }
+    @media (max-width: 480px) {
+        .logos-grid { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: 1fr; }
+    }
 
-        /* FOOTER */
-        .footer-main {
-            background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
-            color: var(--blanco); padding: 70px 0 30px;
-        }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 50px; }
-        .footer-col h4 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; color: var(--dorado-claro); }
-        .footer-col p { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.7; }
-        .footer-col a { 
-            color: rgba(255,255,255,0.7); text-decoration: none; display: block; 
-            padding: 6px 0; font-size: 0.92rem; transition: var(--transicion); 
-        }
-        .footer-col a:hover { color: var(--dorado-claro); padding-left: 4px; }
-        .footer-bottom { 
-            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; 
-            text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); 
-        }
-
-        .bg-white { background: var(--blanco); }
-        .bg-light { background: var(--gris-fondo); }
-        .text-center { text-align: center; }
-        .mt-20 { margin-top: 20px; }
-        .mt-40 { margin-top: 40px; }
-
-        @media (max-width: 768px) {
-            .menu-toggle { display: block; }
-            .nav-links { 
-                display: none; position: absolute; top: 64px; left: 0; right: 0; 
-                background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
-                flex-direction: column; padding: 20px; gap: 4px; 
-                border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
-            }
-            .nav-links.active { display: flex; }
-            .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
-            .nav-cta { margin-left: 0 !important; text-align: center; }
-            section { padding: 50px 0; }
-            .page-header { padding: 100px 0 40px; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .stat-number { font-size: 2.2rem; }
-            .mapa-container { height: 400px; }
-            .tabla-row { grid-template-columns: 1fr; gap: 4px; padding: 12px 16px; }
-            .tabla-row .camaras { text-align: left; }
-        }
-
-        .nav-logo-derecha {
-            display: flex;
-            align-items: center;
-            margin-left: 16px;
-            flex-shrink: 0;
-            text-decoration: none;
-        }
-        .nav-logo-img {
-            height: 36px;
-            width: auto;
-            object-fit: contain;
-            transition: var(--transicion);
-        }
-        .nav-logo-derecha:hover .nav-logo-img {
-            transform: scale(1.05);
-            opacity: 0.9;
-        }
+    @media (min-width: 769px) {
+        .nav-links .nav-cta-mobile { display: none; }
+    }
     </style>
 </head>
 <body>
 
-    <!-- NAVEGACIÓN -->
+    <!-- ============================================
+         NAVEGACION FIJA
+         ============================================ -->
     <nav class="nav-top" id="navbar">
         <div class="nav-container">
+            <!-- Logo izquierdo -->
             <a href="index.html" class="nav-logo">
                 <span class="nav-logo-icon">📷</span>
                 <span>Snapshot Perú</span>
             </a>
 
             <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+            <!-- Menú principal -->
             <ul class="nav-links" id="navLinks">
                 <li><a href="index.html">Inicio</a></li>
                 <li><a href="sobre.html">Sobre el Proyecto</a></li>
-                <li><a href="colaboradores.html">Colaboradores</a></li>
                 <li><a href="protocolo.html">Protocolo</a></li>
-                <li><a href="mapa.html" class="active">¿Quiénes se suman?</a></li>
-                <li><a href="galeria.html">Galería</a></li>
-                <li><a href="investigacion.html">Investigación</a></li>
-                <li><a href="noticias.html">Noticias</a></li>
-                <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
+                <li><a href="mapa.html" class="active">¿Quiénes Participan?</a></li>
+                <li><a href="investigacion.html">Publicaciones Científicas</a></li>
+                <li class="nav-cta-mobile"><a href="contacto.html">Participa →</a></li>
             </ul>
 
-            <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
-                <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
-            </a>
+            <!-- Grupo derecha: Participa + Smithsonian -->
+            <div class="nav-right-group">
+                <a href="contacto.html" class="nav-cta">Participa →</a>
+                <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
+                    <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
+                </a>
+            </div>
         </div>
     </nav>
 
-    <!-- HEADER -->
-    <header class="page-header">
-        <div class="page-header-content">
-            <a href="index.html" class="btn-volver">← Volver al inicio</a>
-            <h1>¿Quiénes se suman?</h1>
-            <p>Cobertura nacional del fotomonitoreo en Snapshot Perú 2026</p>
-        </div>
-    </header>
+    <!-- ============================================
+         HERO CON EFECTO 3D PARALLAX Y BURBUJAS
+         ============================================ -->
+    <section class="hero-main">
+        <div class="lens-flare" style="top: 20%; left: 10%;"></div>
+        <div class="lens-flare" style="bottom: 30%; right: 15%; animation-delay: -5s;"></div>
 
-    <!-- ESTADÍSTICAS -->
-    <section class="stats-bar">
+        <div class="particles-container" id="particles"></div>
+        <div class="hero-pattern"></div>
+        <div class="hero-vignette"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-map-marked-alt"></i>
+                Cobertura Nacional · Snapshot Perú 2026
+            </div>
+            <h1 class="hero-title">
+                <span class="title-accent">¿Quiénes</span> se suman?
+            </h1>
+            <p class="hero-subtitle">Red de colaboradores y cobertura del fotomonitoreo en todo el Perú.</p>
+            <p class="hero-desc">
+                Descubre quiénes ya forman parte de Snapshot Perú, dónde están ubicados sus sitios de monitoreo 
+                y cómo tú también puedes unirte a esta red nacional de cámaras trampa.
+            </p>
+        </div>
+
+        <div class="scroll-indicator" onclick="document.getElementById('estadisticas').scrollIntoView({behavior:'smooth'})">
+            <span>Explora</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ESTADISTICAS ANIMADAS
+         ============================================ -->
+    <section class="stats-bar" id="estadisticas">
         <div class="container">
             <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-number">13</div>
-                    <div class="stat-label">Organizaciones inscritas</div>
+                <div class="stat-item fade-in">
+                    <div class="stat-number" data-target="490">0</div>
+                    <div class="stat-label">Cámaras Trampa</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Regiones cubiertas</div>
+                <div class="stat-item fade-in fade-in-delay-2">
+                    <div class="stat-number" data-target="17">0</div>
+                    <div class="stat-label">Regiones Cubiertas</div>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-number">320+</div>
-                    <div class="stat-label">Cámaras comprometidas</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">400+</div>
-                    <div class="stat-label">Noches-trampa meta</div>
+                <div class="stat-item fade-in fade-in-delay-3">
+                    <div class="stat-number" data-target="15">0</div>
+                    <div class="stat-label">Colaboradores</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- MAPA INTERACTIVO -->
-    <section class="bg-white">
+    <!-- ============================================
+         MAPA INTERACTIVO
+         ============================================ -->
+    <section class="bg-white" id="mapa">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Cobertura</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-map-marker-alt"></i> Cobertura</span>
                 <h2 class="section-title">Mapa de Iniciativas</h2>
                 <p class="section-subtitle">
-                    Ubicación general de proyectos participantes. 
+                    Ubicación general de proyectos participantes en Snapshot Perú 2026.
                 </p>
             </div>
-            
-            <div class="mapa-wrapper">
+
+            <div class="mapa-wrapper fade-in">
                 <div id="mapa-completo" class="mapa-container"></div>
             </div>
         </div>
     </section>
 
-    <!-- TABLA DE PARTICIPANTES -->
-    <section class="bg-light">
+    <!-- ============================================
+         TABLA DE PARTICIPANTES
+         ============================================ -->
+    <section class="bg-light" id="tabla">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Detalle</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-list"></i> Detalle</span>
                 <h2 class="section-title">Organizaciones Inscritas</h2>
             </div>
-            
-            <div class="tabla-container">
-                <div class="tabla-header">Organización / Región / Tipo de área / Cámaras</div>
-                
+
+            <div class="tabla-container fade-in">
+                <div class="tabla-header">
+                    <div>Organización</div>
+                    <div>Región</div>
+                    <div>Tipo de área</div>
+                    <div>Cámaras</div>
+                </div>
+
                 <div class="tabla-row">
                     <div class="org">Atiycuy Perú</div>
                     <div class="region">Junín</div>
@@ -487,33 +1192,210 @@
                     <div class="camaras">8</div>
                 </div>
             </div>
+        </div>
+    </section>
 
-            <div class="text-center mt-40">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" 
-                   class="btn-cta" target="_blank">📍 Registra tu sitio de monitoreo</a>
+    <!-- ============================================
+         ¿QUIÉNES PUEDEN SUMARSE? - TARJETAS 3D
+         ============================================ -->
+    <section class="bg-white" id="participantes">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-users"></i> Únete</span>
+                <h2 class="section-title">¿Quiénes pueden sumarse?</h2>
+            </div>
+
+            <div class="grid-3">
+                <div class="card-3d fade-in fade-in-delay-1">
+                    <div class="card-icon-3d">🏞️</div>
+                    <h3>Áreas Naturales Protegidas</h3>
+                    <p>Nacionales, regionales, comunales y privadas que realizan monitoreo con cámaras trampa.</p>
+                </div>
+                <div class="card-3d fade-in fade-in-delay-2">
+                    <div class="card-icon-3d">👥</div>
+                    <h3>Comunidades</h3>
+                    <p>Campesinas, nativas y organizaciones locales comprometidas con la conservación.</p>
+                </div>
+                <div class="card-3d fade-in fade-in-delay-3">
+                    <div class="card-icon-3d">🎓</div>
+                    <h3>Universidades e Investigadores</h3>
+                    <p>Investigadores independientes, estudiantes y equipos académicos.</p>
+                </div>
+                <div class="card-3d fade-in fade-in-delay-1">
+                    <div class="card-icon-3d">💚</div>
+                    <h3>ONG de Conservación</h3>
+                    <p>Organizaciones dedicadas a la protección de la naturaleza y la biodiversidad.</p>
+                </div>
+                <div class="card-3d fade-in fade-in-delay-2">
+                    <div class="card-icon-3d">🏛️</div>
+                    <h3>Instituciones Públicas</h3>
+                    <p>Servicios y programas gubernamentales de gestión ambiental.</p>
+                </div>
+                <div class="card-3d fade-in fade-in-delay-3">
+                    <div class="card-icon-3d">📊</div>
+                    <h3>Proyectos de Monitoreo</h3>
+                    <p>Consultoras y equipos técnicos con datos de cámaras trampa.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
+    <!-- ============================================
+         INSTITUCIONES PARTICIPANTES - LOGOS
+         ============================================ -->
+    <section class="bg-light" id="instituciones">
+        <div class="container">
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-handshake"></i> Ya forman parte</span>
+                <h2 class="section-title">Instituciones Participantes</h2>
+                <p class="section-subtitle">Organizaciones que ya se han inscrito en Snapshot Perú 2026</p>
+            </div>
+
+            <div class="logos-grid fade-in">
+                <div class="logo-item">
+                    <img src="logos/riaco.jpeg" alt="RIACO" loading="lazy">
+                    <span class="logo-name">RIACO</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/abioforp.png" alt="ABIOFORP" loading="lazy">
+                    <span class="logo-name">Asociación Agro-Bio Forestal El Porvenir-Pelejo (ABIOFORP)</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/ampa.png" alt="AMPA" loading="lazy">
+                    <span class="logo-name">Asociación Amazónicos por la Amazonía (AMPA)</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/adecaram.png" alt="ADECARAM" loading="lazy">
+                    <span class="logo-name">Asociación de Conservación de Aguajales y Renacales del Alto Mayo</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/ashusja.png" alt="ASHUSJA" loading="lazy">
+                    <span class="logo-name">Asociación de Conservación Las Hurmanas de San Juan del Abiseo (ASHUSJA)</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/montubia.png" alt="MONTUBIA" loading="lazy">
+                    <span class="logo-name">Asociación MONTUBIA</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/pro-carnivoros.png" alt="Pro Carnívoros" loading="lazy">
+                    <span class="logo-name">Asociación para la Conservación de la Biodiversidad Pro Carnívoros</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/atiycuy.png" alt="Atiycuy Perú" loading="lazy">
+                    <span class="logo-name">Atiycuy Perú</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/cds-eirl.png" alt="CDS EIRL" loading="lazy">
+                    <span class="logo-name">CDS EIRL (Los Nogales)</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/ceare.png" alt="CEARE" loading="lazy">
+                    <span class="logo-name">CEARE</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/cima.png" alt="CIMA" loading="lazy">
+                    <span class="logo-name">Centro de Conservación, Investigación y Manejo de Áreas Naturales (CIMA)</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/envol-vert.png" alt="ENVOL VERT" loading="lazy">
+                    <span class="logo-name">ENVOL VERT ONG</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/gore-cajamarca.png" alt="Gobierno Regional de Cajamarca" loading="lazy">
+                    <span class="logo-name">Gobierno Regional de Cajamarca</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/herpiro.png" alt="Herpiro SAC BIC" loading="lazy">
+                    <span class="logo-name">Soqtapata</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/nodo-conservation.png" alt="NODO CONSERVATION" loading="lazy">
+                    <span class="logo-name">NODO CONSERVATION</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/Ulcumano.png" alt="Ulcumano Ecolodge" loading="lazy">
+                    <span class="logo-name">Ulcumano Ecolodge</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/wcs.png" alt="WCS" loading="lazy">
+                    <span class="logo-name">WCS</span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/naturaleza-cultura.png" alt="Naturaleza y Cultura Internacional" loading="lazy">
+                    <span class="logo-name">Naturaleza y Cultura Internacional </span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/arbio.png" alt="Arbio" loading="lazy">
+                    <span class="logo-name">Arbio </span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/acochoba.png" alt="ACOCHOBA" loading="lazy">
+                    <span class="logo-name">ACOCHOBA </span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/mosaicc.png" alt="ACOCHOBA" loading="lazy">
+                    <span class="logo-name">Mosaico de Conservación Cordillera de Colán </span>
+                </div>
+                <div class="logo-item">
+                    <img src="logos/sant.png" alt="santuario" loading="lazy">
+                    <span class="logo-name">Santuario Nacional Cordillera de Colán </span>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:50px;">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" class="btn btn-secondary" target="_blank">
+                    <i class="fas fa-edit"></i> Únete como colaborador
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         CTA FINAL
+         ============================================ -->
+    <section class="cta-final">
+        <div class="container">
+            <div class="fade-in">
+                <h2>Sé parte del cambio</h2>
+                <p>
+                    Cada cámara trampa cuenta una historia. Cada foto es un paso hacia la conservación. 
+                    Únete a la red de fotomonitoreo más grande del Perú.
+                </p>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-camera-retro"></i> Participa ahora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER PREMIUM
+         ============================================ -->
     <footer class="footer-main">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>📷 Snapshot Perú</h4>
-                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa.</p>
+                    <h4><i class="fas fa-camera"></i> Snapshot Perú</h4>
+                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa. Parte de la red Snapshot Global.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
                 <div class="footer-col">
                     <h4>Explorar</h4>
-                    <a href="index.html">Inicio</a>
                     <a href="sobre.html">Sobre el Proyecto</a>
                     <a href="protocolo.html">Protocolo</a>
                     <a href="galeria.html">Galería</a>
+                    <a href="investigacion.html">Investigación</a>
                 </div>
                 <div class="footer-col">
                     <h4>Participa</h4>
                     <a href="contacto.html">Únete al proyecto</a>
                     <a href="colaboradores.html">Red de colaboradores</a>
+                    <a href="noticias.html">Noticias y convocatorias</a>
                 </div>
                 <div class="footer-col">
                     <h4>Contacto</h4>
@@ -521,20 +1403,110 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Snapshot Perú</p>
+                <p>&copy; 2026 Snapshot Perú &middot; Parte de <a href="https://www.snapshot-global.org/" target="_blank">Snapshot Global</a></p>
             </div>
         </div>
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script>
+        // Menu toggle
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+
+        // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
+        });
+
+        // Particulas flotantes
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Animacion de entrada al scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Contador animado para estadisticas
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    element.textContent = target + '+';
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const numbers = entry.target.querySelectorAll('.stat-number');
+                    numbers.forEach(num => {
+                        if (!num.classList.contains('counted')) {
+                            num.classList.add('counted');
+                            animateCounter(num);
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.stats-bar').forEach(bar => {
+            statsObserver.observe(bar);
+        });
+
+        // Efecto 3D en tarjetas con mouse
+        document.querySelectorAll('.card-3d').forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+            });
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = '';
+            });
         });
 
         // SVG de cámara trampa
@@ -558,7 +1530,7 @@
 
         // Mapa completo con cámaras pulsantes
         var mapa = L.map('mapa-completo').setView([-10.5, -76], 6);
-        
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(mapa);
@@ -567,18 +1539,41 @@
             { coords: [-11.054658, -75.075304], nombre: "Atiycuy Perú", region: "Junín" },
             { coords: [-10.595180, -75.440491], nombre: "ACP Bosque de Churumazú (RIACO)", region: "Pasco"},
             { coords: [-10.618407, -75.496698], nombre: "El Palmeral (RIACO)", region: "Pasco"},
+            { coords: [-5.918607, -77.142278], nombre: "Asociación de Conservación de Aguajales y Renacales del Alto Mayo", region: "San Martín"},
             { coords: [-10.268379, -75.246473], nombre: "CEARE", region: "Pasco" },
             { coords: [-10.545428, -75.371077], nombre: "CDS EIRL (Los Nogales)", region: "Pasco"},
-            { coords: [-13.347269, -70.84456], nombre: "Herpiro SAC BIC - Concesión con Fines de Conservación Soqtapata", region: "Cusco"},
+            { coords: [-13.347269, -70.84456], nombre: "Concesión con Fines de Conservación Soqtapata", region: "Cusco"},
             { coords: [-10.638520, -75.435063], nombre: "Ulcumano Ecolodge", region: "Pasco"},
-            { coords: [-7.248014, -77.550973], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Amazonas"},
-            { coords: [-5.918607, -77.142278], nombre: "Asociación de Conservación de Aguajales y Renacales del Alto Mayo", region: "San Martín"},
-            { coords: [-7.405851, -76.861491], nombre: "Asociación de Conservación Las Hurmanas de San Juan del Abiseo - ASHUSJA", region: "San Martín"},
-            { coords: [-14.116780, -69.68667], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Puno" },
-            { coords: [-7.306562, -75.609534], nombre: "CIMA Cordillera Azul - Sede Contamana", region: "Loreto"},
-            { coords: [-6.273754, -79.03882], nombre: "NODO CONSERVATION", region: "Lambayeque" },
+            { coords: [-10.92385497792537, -74.87671479994205], nombre: "ENVOL VERT ONG", region: "Pichanaki"},
+            { coords: [-9.296773556099268, -76.00039901677778], nombre: "ENVOL VERT ONG", region: "Tingo Maria"},
+            { coords: [-9.303845663784161, -74.43898683070091], nombre: "ENVOL VERT ONG", region: "Iparia"},
+            { coords: [-6.578721771908998, -76.26393097068646], nombre: "Asociación MONTUBIA ", region: "Shapaja"},
+            { coords: [-5.13835277777778, -79.2196083333333], nombre: "Gobierno Regional de Cajamarca ", region: "Cajamarca"},
             { coords: [-4.996093, -79.30700], nombre: "NODO CONSERVATION", region: "Piura"},
-            { coords: [-16.2353118, -71.3393831], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Arequipa"}
+            { coords: [-16.2353118, -71.3393831], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Arequipa"},
+            { coords: [-14.116780, -69.68667], nombre: "Asociación para la conservación de la Biodiversidad Pro Carnívoros", region: "Puno" },
+            { coords: [-6.294892129238057, -75.86900050683391], nombre: "Asociación Agro-Bio Forestal El Porvenir-Pelejo (ABIOFORP)", region: "San Martín" },
+            { coords: [-10.59765523319288, -75.52025738415709], nombre: "Fundo La Gorda (Riaco)", region: "Chontabamba" },
+            { coords: [-7.248014, -77.550973], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Amazonas"},
+            { coords: [-6.93245225144991, -76.77100310857865], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Saposoa"},
+            { coords: [-7.321520547842244, -76.77653804313707], nombre: "Asociación Amazónicos por la Amazonía (AMPA)", region: "Huicungo"},
+            { coords: [-7.262219597542005, -77.13360949070388], nombre: "CIMA Cordillera Azul", region: "San Martín"},
+            { coords: [-7.306562, -75.609534], nombre: "CIMA Cordillera Azul - Sede Contamana", region: "Loreto"},
+            { coords: [-9.648808286763598, -73.96186546664735], nombre: "CIMA Cordillera Azul - Sede Contamana", region: "Ucayali"},
+            { coords: [-9.883497822645463, -76.30391124123484], nombre: "CIMA Cordillera Azul - Sede Contamana", region: "Huanuco"},
+            { coords: [-7.405851, -76.861491], nombre: "Asociación de Conservación Las Hurmanas de San Juan del Abiseo - ASHUSJA", region: "San Martín"},
+            { coords: [-12.63558, -74.03604], nombre: "Asociación Pro Fauna Silvestre Ayacucho", region: "Ayacucho"},
+            { coords: [-12.63558, -74.03604], nombre: "SERFOR (ATFFS-Sierra Central)", region: "Huancavelica"},
+            { coords: [-12.113492772190181, -75.8542858663066], nombre: "SERNANP - RESERVA PAISAJÍSTICA NOR YAUYOS COCHAS", region: "Lima"},
+            { coords: [-5.361840597589529, -78.48823827674899], nombre: "Santuario Nacional Cordillera de Colán - SERNANP", region: "Aramango"},
+            { coords: [-5.46437808385769, -78.38867467699639], nombre: "Asolciación para Conservación Chorrera Blanca", region: "Aramango"},
+            { coords: [-12.933255715668816, -71.63723424859859], nombre: "Conservaión Amazónica ACCA", region: "Cusco"},
+            { coords: [-5.167436394913532, -80.68466452316818], nombre: "Naturaleza y Cultura Internacional ", region: "Piura"},
+            { coords: [-7.153480463469202, -78.49527725133413], nombre: "Naturaleza y Cultura Internacional ", region: "Cajamarca"},
+            { coords: [-6.273754, -79.03882], nombre: "NODO CONSERVATION", region: "Lambayeque" },
+            { coords: [-3.766977963239751, -76.00353534770436], nombre: "WCS", region: "Loreto"},
+            { coords: [-15.835879729640132, -70.03645806217042], nombre: "WCS", region: "Puno"},
+            { coords: [-12.489767492775684, -69.2159760559297], nombre: "ARBIO", region: "Madre de Dios"}
         ];
 
         sitios.forEach(function(sitio) {

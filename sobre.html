@@ -6,7 +6,8 @@
     <title>Sobre el Proyecto - Snapshot Perú</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --verde-oscuro: #1a472a;
@@ -24,11 +25,13 @@
             --gris-suave: #e8ede9;
             --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
             --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
-            --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --sombra-fuerte: 0 20px 60px rgba(26, 71, 42, 0.2);
+            --transicion: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transicion-lenta: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -37,116 +40,372 @@
             line-height: 1.7;
             font-size: 16px;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* NAVEGACIÓN */
+        /* ============================================
+           NAVEGACIÓN FIJA - PREMIUM (igual que index)
+           ============================================ */
         .nav-top {
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(26,71,42,0.08);
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(26,71,42,0.06);
             transition: var(--transicion);
         }
-        .nav-top.scrolled { box-shadow: var(--sombra-suave); }
-.nav-container {
-    max-width: 1200px; margin: 0 auto; padding: 0 20px;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    height: 64px;
-    gap: 16px;
-}
+        .nav-top.scrolled { 
+            box-shadow: var(--sombra-suave); 
+            background: rgba(255,255,255,0.97);
+        }
+
+        .nav-container {
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 8px 0 24px;
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            height: 68px;
+            gap: 16px;
+        }
+
         .nav-logo {
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 10px;
             text-decoration: none; color: var(--verde-oscuro);
             font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
             white-space: nowrap; flex-shrink: 0;
+            transition: var(--transicion)
         }
-        .nav-logo-icon { font-size: 1.4rem; }
+        .nav-logo:hover { transform: scale(1.02); }
+        .nav-logo-icon { 
+            font-size: 1.5rem; 
+            filter: drop-shadow(0 2px 4px rgba(26,71,42,0.2));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
         .nav-links { 
-            display: flex; list-style: none; gap: 2px; 
-            align-items: center; margin-left: auto;
+            display: flex; 
+            list-style: none; 
+            gap: 2px; 
+            align-items: center; 
+            margin-left: auto;
         }
         .nav-links a {
             color: var(--texto-claro); text-decoration: none;
-            padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
+            padding: 7px 12px; border-radius: 8px; font-size: 0.82rem;
             font-weight: 500; transition: var(--transicion);
             white-space: nowrap;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 2px; left: 50%;
+            width: 0; height: 2px;
+            background: var(--verde-primario);
+            transition: var(--transicion);
+            transform: translateX(-50%);
+            border-radius: 1px;
         }
         .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
-        .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
+        .nav-links a:hover::after { width: 60%; }
+        .nav-links a.active { 
+            color: var(--verde-oscuro); 
+            background: var(--verde-fondo); 
+            font-weight: 600; 
+        }
+        .nav-links a.active::after { width: 60%; }
+
         .nav-cta {
-            background: var(--verde-primario) !important; 
+            background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro)) !important; 
             color: var(--blanco) !important;
-            padding: 8px 14px !important; 
-            border-radius: 8px !important;
+            padding: 9px 18px !important; 
+            border-radius: 10px !important;
             font-weight: 600 !important; 
             font-size: 0.82rem !important;
-            margin-left: 4px;
+            margin-left: 6px;
+            box-shadow: 0 4px 15px rgba(26,71,42,0.3);
+            transition: var(--transicion) !important;
+            position: relative;
+            overflow: hidden;
         }
-        .nav-cta:hover { background: var(--verde-oscuro) !important; color: var(--blanco) !important; }
+        .nav-cta::after { display: none !important; }
+        .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .nav-cta:hover::before { left: 100%; }
+        .nav-cta:hover { 
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(26,71,42,0.4) !important;
+        }
+
         .menu-toggle { 
             display: none; background: none; border: none; 
             font-size: 1.4rem; cursor: pointer; 
             color: var(--verde-oscuro); padding: 8px; 
         }
 
-        /* HEADER DE PÁGINA INTERNA */
-        .page-header {
-            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
-            color: var(--blanco);
-            padding: 120px 0 60px;
+        /* ============================================
+           HERO CON EFECTO 3D PARALLAX + FONDO3
+           ============================================ */
+        .hero-main {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             position: relative;
             overflow: hidden;
-        }
-        .page-header::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-        }
-        .page-header-content {
-            max-width: 1100px; margin: 0 auto; padding: 0 24px;
-            position: relative; z-index: 1;
-        }
-        
-        /* BOTÓN VOLVER */
-        .btn-volver {
-            display: inline-flex; align-items: center; gap: 6px;
-            color: rgba(255,255,255,0.85); text-decoration: none;
-            font-size: 0.9rem; font-weight: 500;
-            padding: 8px 16px; border-radius: 8px;
-            transition: var(--transicion); margin-bottom: 20px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .btn-volver:hover {
-            background: rgba(255,255,255,0.2);
-            color: var(--blanco); text-decoration: none;
-        }
-        
-        .page-header h1 {
-            font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
-            margin-bottom: 10px; letter-spacing: -1px;
-        }
-        .page-header p {
-            font-size: 1.1rem; opacity: 0.85; max-width: 600px;
+            perspective: 1000px;
         }
 
-        /* SECCIONES */
+        /* Capa 1: La foto de fondo_sobre.JPG con efecto parallax */
+        .hero-main::before {
+            content: '';
+            position: absolute;
+            top: -10%; left: -10%; right: -10%; bottom: -10%;
+            background: url("imagenes/fondo_sobre.JPG") center/cover no-repeat;
+            z-index: 0;
+            transform: translateZ(-1px) scale(1.2);
+            animation: heroZoom 20s ease-in-out infinite alternate;
+        }
+        @keyframes heroZoom {
+            0% { transform: translateZ(-1px) scale(1.2); }
+            100% { transform: translateZ(-1px) scale(1.3); }
+        }
+
+        /* Capa 2: Overlay con gradiente dinamico */
+        .hero-main::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(26, 71, 42, 0.92) 0%,
+                rgba(45, 106, 79, 0.85) 35%,
+                rgba(64, 145, 108, 0.78) 70%,
+                rgba(26, 71, 42, 0.88) 100%
+            );
+            z-index: 1;
+        }
+
+        /* Particulas flotantes (burbujas) */
+        .particles-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: rgba(212, 165, 116, 0.6);
+            border-radius: 50%;
+            animation: particleFloat linear infinite;
+        }
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Capa 3: Patron decorativo sutil */
+        .hero-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Efecto de vineta */
+        .hero-vignette {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.4);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: var(--blanco);
+            max-width: 850px;
+            padding: 140px 24px 80px;
+            position: relative;
+            z-index: 3;
+            animation: heroFadeIn 1.2s ease-out;
+        }
+        @keyframes heroFadeIn {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(15px);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 35px;
+            border: 1px solid rgba(255,255,255,0.15);
+            animation: badgePulse 3s ease-in-out infinite;
+            cursor: default;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 165, 116, 0.3); }
+            50% { box-shadow: 0 0 20px 5px rgba(212, 165, 116, 0.15); }
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .hero-title .title-accent {
+            color: var(--dorado);
+            position: relative;
+            display: inline-block;
+        }
+        .hero-title .title-accent::after {
+            content: '';
+            position: absolute;
+            bottom: 5px; left: 0; right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--dorado), transparent);
+            opacity: 0.4;
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        .hero-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            opacity: 0.95;
+            margin-bottom: 20px;
+            font-weight: 400;
+            font-style: italic;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: scrollBounce 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+        .scroll-indicator span {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .scroll-indicator .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+            position: relative;
+        }
+        .scroll-indicator .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -2px;
+            width: 5px; height: 5px;
+            background: var(--dorado);
+            border-radius: 50%;
+            animation: scrollDot 2s ease-in-out infinite;
+        }
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+        @keyframes scrollDot {
+            0% { top: 0; opacity: 1; }
+            100% { top: 40px; opacity: 0; }
+        }
+
+        /* Efecto de lente */
+        .lens-flare {
+            position: absolute;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            animation: lensFloat 10s ease-in-out infinite;
+        }
+        @keyframes lensFloat {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -20px); }
+            50% { transform: translate(-20px, 30px); }
+            75% { transform: translate(20px, 20px); }
+        }
+
+        /* ============================================
+           SECCIONES GENERALES
+           ============================================ */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-        section { padding: 80px 0; }
-        .section-header { text-align: center; max-width: 700px; margin: 0 auto 50px; }
+        section { padding: 100px 0; position: relative; }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 70px; }
         .section-tag {
-            display: inline-block; color: var(--verde-primario);
-            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 12px;
+            display: inline-flex; align-items: center; gap: 8px;
+            color: var(--verde-primario);
+            font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 3px; margin-bottom: 16px;
+            padding: 6px 16px;
+            background: var(--verde-fondo);
+            border-radius: 50px;
         }
         .section-title {
-            font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--verde-oscuro);
-            margin-bottom: 14px; font-weight: 800; letter-spacing: -1px;
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4.5vw, 2.8rem); 
+            color: var(--verde-oscuro);
+            margin-bottom: 18px; 
+            font-weight: 700; 
+            letter-spacing: -1px; 
+            line-height: 1.15;
         }
-        .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
+        .section-subtitle { 
+            color: var(--texto-muted); 
+            font-size: 1.1rem; 
+            line-height: 1.8;
+            font-weight: 400;
+        }
 
-        /* ORIGEN */
+        /* ============================================
+           ORIGEN - CON ESTILO PREMIUM
+           ============================================ */
         .origen-content {
             max-width: 800px;
             margin: 0 auto;
@@ -154,7 +413,7 @@
         .origen-content p {
             color: var(--texto-claro);
             font-size: 1.05rem;
-            line-height: 1.8;
+            line-height: 1.9;
             margin-bottom: 20px;
         }
         .origen-content p:last-child {
@@ -164,16 +423,30 @@
             background: linear-gradient(135deg, var(--verde-fondo), #e8f5e9);
             border-left: 4px solid var(--verde-primario);
             padding: 24px 28px;
-            border-radius: 0 12px 12px 0;
+            border-radius: 0 16px 16px 0;
             margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--sombra-suave);
+        }
+        .origen-highlight::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%232d6a4f' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
         }
         .origen-highlight p {
             margin: 0;
             color: var(--verde-oscuro);
             font-weight: 500;
+            position: relative;
+            z-index: 1;
         }
 
-        /* VISIÓN Y MISIÓN */
+        /* ============================================
+           VISIÓN Y MISIÓN - TARJETAS 3D
+           ============================================ */
         .vision-mision-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -189,38 +462,56 @@
             border: 1px solid var(--gris-suave);
             position: relative;
             overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            transition: var(--transicion);
         }
         .vision-mision-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--verde-primario), var(--verde-claro));
+            background: linear-gradient(90deg, var(--verde-primario), var(--dorado));
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+            transform-origin: left;
+        }
+        .vision-mision-card:hover::before { transform: scaleX(1); }
+        .vision-mision-card:hover { 
+            transform: translateY(-8px) rotateX(2deg); 
+            box-shadow: var(--sombra-fuerte); 
+            border-color: var(--verde-pastel); 
         }
         .vision-mision-card .card-icon {
-            width: 56px; height: 56px;
-            background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
-            border-radius: 14px;
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, var(--verde-fondo), #c8e6c9);
+            border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: 20px;
-            color: var(--blanco);
+            font-size: 1.8rem;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 20px rgba(45,106,79,0.15);
+            transition: var(--transicion);
+        }
+        .vision-mision-card:hover .card-icon {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 12px 30px rgba(45,106,79,0.25);
         }
         .vision-mision-card h3 {
             color: var(--verde-oscuro);
             font-size: 1.3rem;
             margin-bottom: 14px;
             font-weight: 700;
+            font-family: 'Playfair Display', serif;
         }
         .vision-mision-card p {
             color: var(--texto-claro);
             font-size: 1rem;
-            line-height: 1.7;
+            line-height: 1.8;
         }
 
-        /* ENFOQUE TÉCNICO */
+        /* ============================================
+           ENFOQUE TÉCNICO - TABLA PREMIUM
+           ============================================ */
         .enfoque-table {
             width: 100%;
             max-width: 900px;
@@ -228,7 +519,7 @@
             border-collapse: separate;
             border-spacing: 0;
             background: var(--blanco);
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: var(--sombra-suave);
             border: 1px solid var(--gris-suave);
@@ -236,175 +527,517 @@
         .enfoque-table th {
             background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
             color: var(--blanco);
-            padding: 18px 24px;
+            padding: 20px 28px;
             text-align: left;
             font-weight: 600;
             font-size: 0.95rem;
+            letter-spacing: 0.5px;
         }
         .enfoque-table th:first-child { width: 35%; }
         .enfoque-table td {
-            padding: 18px 24px;
+            padding: 20px 28px;
             border-bottom: 1px solid var(--gris-suave);
             color: var(--texto-claro);
             font-size: 0.95rem;
-            line-height: 1.6;
+            line-height: 1.7;
+            transition: var(--transicion);
         }
         .enfoque-table tr:last-child td { border-bottom: none; }
         .enfoque-table tr:nth-child(even) { background: var(--gris-fondo); }
-        .enfoque-table tr:hover { background: var(--verde-fondo); transition: var(--transicion); }
+        .enfoque-table tr:hover td { 
+            background: var(--verde-fondo); 
+            color: var(--verde-oscuro);
+        }
 
-        /* OBJETIVOS */
+        /* ============================================
+           OBJETIVOS - CON ESTILO PREMIUM
+           ============================================ */
         .objetivo-item {
-            display: flex; gap: 20px; padding: 24px 0;
+            display: flex; gap: 20px; padding: 28px 0;
             border-bottom: 1px solid var(--gris-suave);
+            transition: var(--transicion);
+        }
+        .objetivo-item:hover {
+            padding-left: 10px;
         }
         .objetivo-item:last-child { border-bottom: none; }
         .objetivo-num {
-            width: 44px; height: 44px; flex-shrink: 0;
+            width: 52px; height: 52px; flex-shrink: 0;
             background: linear-gradient(135deg, var(--verde-primario), var(--verde-claro));
-            color: var(--blanco); border-radius: 12px;
+            color: var(--blanco); border-radius: 16px;
             display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1.1rem;
+            font-weight: 800; font-size: 1.2rem;
+            box-shadow: 0 8px 20px rgba(45,106,79,0.2);
+            transition: var(--transicion);
+        }
+        .objetivo-item:hover .objetivo-num {
+            transform: scale(1.1) rotate(-5deg);
         }
         .objetivo-text { padding-top: 8px; }
-        .objetivo-text strong { color: var(--verde-oscuro); }
+        .objetivo-text strong { 
+            color: var(--verde-oscuro); 
+            position: relative;
+        }
+        .objetivo-text strong::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 100%; height: 3px;
+            background: linear-gradient(90deg, var(--dorado), transparent);
+            border-radius: 2px;
+            opacity: 0.5;
+        }
 
-        /* TARJETAS */
-        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-        .card {
-            background: var(--blanco); border-radius: 16px; padding: 32px;
-            box-shadow: var(--sombra-suave); transition: var(--transicion);
+        /* ============================================
+           PRINCIPIOS - TARJETAS 3D
+           ============================================ */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+        .card-3d {
+            background: var(--blanco); 
+            border-radius: 20px; 
+            padding: 40px 32px;
+            box-shadow: var(--sombra-suave); 
+            transition: var(--transicion);
             border: 1px solid var(--gris-suave);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            text-align: center;
         }
-        .card:hover { transform: translateY(-4px); box-shadow: var(--sombra-media); border-color: var(--verde-pastel); }
-        .card-icon {
-            width: 56px; height: 56px; background: var(--verde-fondo);
-            border-radius: 14px; display: flex; align-items: center; justify-content: center;
-            font-size: 1.6rem; margin-bottom: 20px;
+        .card-3d::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--verde-primario), var(--dorado));
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+            transform-origin: left;
         }
-        .card h3 { color: var(--verde-oscuro); font-size: 1.15rem; margin-bottom: 10px; font-weight: 700; }
-        .card p { color: var(--texto-muted); font-size: 0.95rem; line-height: 1.6; }
+        .card-3d:hover::before { transform: scaleX(1); }
+        .card-3d:hover { 
+            transform: translateY(-8px) rotateX(2deg); 
+            box-shadow: var(--sombra-fuerte); 
+            border-color: var(--verde-pastel); 
+        }
+        .card-icon-3d {
+            width: 64px; height: 64px; 
+            background: linear-gradient(135deg, var(--verde-fondo), #c8e6c9);
+            border-radius: 18px; 
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; 
+            margin: 0 auto 24px;
+            box-shadow: 0 8px 20px rgba(45,106,79,0.15);
+            transition: var(--transicion);
+        }
+        .card-3d:hover .card-icon-3d {
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 12px 30px rgba(45,106,79,0.25);
+        }
+        .card-3d h3 { 
+            color: var(--verde-oscuro); 
+            font-size: 1.15rem; 
+            margin-bottom: 12px; 
+            font-weight: 700; 
+        }
+        .card-3d p { 
+            color: var(--texto-muted); 
+            font-size: 0.95rem; 
+            line-height: 1.7; 
+        }
 
-        /* FOOTER */
+        /* ============================================
+           CTA FINAL
+           ============================================ */
+        .cta-final {
+            background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
+            padding: 100px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-final::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 30% 50%, rgba(212,165,116,0.08) 0%, transparent 50%);
+        }
+        .cta-final .container {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+        }
+        .cta-final h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--blanco);
+            font-size: clamp(2rem, 4vw, 3rem);
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+        .cta-final p {
+            color: rgba(255,255,255,0.7);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.8;
+        }
+        .btn {
+            display: inline-flex; align-items: center; gap: 10px;
+            padding: 15px 32px; border-radius: 14px; text-decoration: none;
+            font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
+            border: 2px solid transparent; cursor: pointer; line-height: 1;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+            transition: left 0.6s ease;
+        }
+        .btn:hover::before { left: 100%; }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--dorado), #c49464);
+            color: var(--verde-oscuro);
+            box-shadow: 0 6px 25px rgba(212,165,116,0.45), 0 2px 8px rgba(212,165,116,0.3);
+            border: none;
+        }
+        .btn-primary:hover { 
+            background: linear-gradient(135deg, var(--dorado-claro), var(--dorado));
+            transform: translateY(-3px); 
+            box-shadow: 0 10px 35px rgba(212,165,116,0.55), 0 4px 12px rgba(212,165,116,0.35);
+            text-decoration: none; 
+        }
+        .btn-secondary {
+            background: rgba(255,255,255,0.08); 
+            color: var(--blanco);
+            border-color: rgba(255,255,255,0.25); 
+            backdrop-filter: blur(15px);
+        }
+        .btn-secondary:hover { 
+            background: rgba(255,255,255,0.18); 
+            border-color: rgba(255,255,255,0.4);
+            transform: translateY(-3px); 
+            text-decoration: none; 
+            box-shadow: 0 8px 25px rgba(255,255,255,0.1);
+        }
+
+        /* ============================================
+           FOOTER PREMIUM
+           ============================================ */
         .footer-main {
             background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
-            color: var(--blanco); padding: 70px 0 30px;
+            color: var(--blanco); 
+            padding: 80px 0 30px;
+            position: relative;
+            overflow: hidden;
         }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 50px; }
-        .footer-col h4 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; color: var(--dorado-claro); }
-        .footer-col p { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.7; }
+        .footer-main::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+        }
+        .footer-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 50px; 
+            margin-bottom: 60px; 
+            position: relative;
+            z-index: 1;
+        }
+        .footer-col h4 { 
+            font-size: 1rem; 
+            margin-bottom: 22px; 
+            font-weight: 700; 
+            color: var(--dorado-claro);
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; left: 0;
+            width: 30px; height: 2px;
+            background: var(--dorado);
+            border-radius: 1px;
+        }
+        .footer-col p { 
+            color: rgba(255,255,255,0.65); 
+            font-size: 0.92rem; 
+            line-height: 1.8; 
+        }
         .footer-col a { 
-            color: rgba(255,255,255,0.7); text-decoration: none; display: block; 
-            padding: 6px 0; font-size: 0.92rem; transition: var(--transicion); 
+            color: rgba(255,255,255,0.65); 
+            text-decoration: none; 
+            display: block; 
+            padding: 8px 0; 
+            font-size: 0.92rem; 
+            transition: var(--transicion); 
+            position: relative;
+            padding-left: 0;
         }
-        .footer-col a:hover { color: var(--dorado-claro); padding-left: 4px; }
+        .footer-col a::before {
+            content: '>';
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            transition: var(--transicion);
+            color: var(--dorado);
+        }
+        .footer-col a:hover { 
+            color: var(--dorado-claro); 
+            padding-left: 15px; 
+        }
+        .footer-col a:hover::before {
+            opacity: 1;
+            left: 0;
+        }
         .footer-bottom { 
-            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; 
-            text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); 
+            border-top: 1px solid rgba(255,255,255,0.08); 
+            padding-top: 30px; 
+            text-align: center; 
+            font-size: 0.88rem; 
+            color: rgba(255,255,255,0.4);
+            position: relative;
+            z-index: 1;
+        }
+        .footer-bottom a {
+            color: var(--dorado-claro);
+            text-decoration: none;
+            transition: var(--transicion);
+        }
+        .footer-bottom a:hover {
+            color: var(--dorado);
         }
 
-        /* UTILIDADES */
-        .bg-white { background: var(--blanco); }
-        .bg-light { background: var(--gris-fondo); }
-        .text-center { text-align: center; }
+        /* Social icons */
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            transition: var(--transicion);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .social-links a:hover {
+            background: var(--dorado);
+            color: var(--verde-oscuro);
+            transform: translateY(-3px);
+            border-color: var(--dorado);
+        }
 
-        /* RESPONSIVE */
+        /* ============================================
+           GRUPO DERECHA: PARTICIPA + SMITHSONIAN
+           ============================================ */
+        .nav-right-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .nav-right-group .nav-cta {
+            background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+            color: var(--blanco);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(26,71,42,0.3);
+            transition: var(--transicion);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .nav-right-group .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .nav-right-group .nav-cta:hover::before {
+            left: 100%;
+        }
+
+        .nav-right-group .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26,71,42,0.4);
+        }
+
+        .nav-logo-derecha {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            text-decoration: none;
+            margin-right: -4px;
+        }
+        .nav-logo-img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+            transition: var(--transicion);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+            margin-right: 4px; 
+        }
+        .nav-logo-derecha:hover .nav-logo-img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-links { 
-                display: none; position: absolute; top: 64px; left: 0; right: 0; 
+                display: none; position: absolute; top: 68px; left: 0; right: 0; 
                 background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
                 flex-direction: column; padding: 20px; gap: 4px; 
                 border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
             }
             .nav-links.active { display: flex; }
             .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
+            .nav-links a::after { display: none; }
             .nav-cta { margin-left: 0 !important; text-align: center; }
-            section { padding: 50px 0; }
-            .page-header { padding: 100px 0 40px; }
-            .enfoque-table { font-size: 0.85rem; }
-            .enfoque-table th, .enfoque-table td { padding: 12px 16px; }
+            .nav-right-group { display: none; }
+            .nav-links .nav-cta-mobile {
+                display: block;
+                background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+                color: var(--blanco) !important;
+                text-align: center;
+                border-radius: 10px;
+                margin-top: 8px;
+            }
+            section { padding: 60px 0; }
+            .hero-main { min-height: 50vh; }
             .vision-mision-grid { grid-template-columns: 1fr; }
+            .enfoque-table { font-size: 0.85rem; }
+            .enfoque-table th, .enfoque-table td { padding: 14px 18px; }
         }
 
-.nav-logo-derecha {
-    display: flex;
-    align-items: center;
-    margin-left: 16px;
-    flex-shrink: 0;
-    text-decoration: none;
-}
+        @media (min-width: 769px) {
+            .nav-links .nav-cta-mobile { display: none; }
+            .nav-container {
+                display: grid;
+                grid-template-columns: auto 1fr auto;
+                align-items: center;
+            }
+            .nav-logo { justify-self: start; }
+            .nav-links { justify-self: center; margin-left: 0; }
+            .nav-right-group { justify-self: end; }
+        }
 
-.nav-logo-img {
-    height: 36px;
-    width: auto;
-    object-fit: contain;
-    transition: var(--transicion);
-}
-
-.nav-logo-derecha:hover .nav-logo-img {
-    transform: scale(1.05);
-    opacity: 0.9;
-}
-
-
+        /* ============================================
+           ANIMACIONES DE ENTRADA
+           ============================================ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+        .fade-in-delay-4 { transition-delay: 0.4s; }
     </style>
 </head>
 <body>
 
     <!-- ============================================
-         NAVEGACIÓN
+         NAVEGACIÓN FIJA - PREMIUM
          ============================================ -->
-<nav class="nav-top" id="navbar">
-    <div class="nav-container">
-        <!-- Logo izquierdo -->
-        <a href="index.html" class="nav-logo">
-            <span class="nav-logo-icon">📷</span>
-            <span>Snapshot Perú</span>
-        </a>
+    <nav class="nav-top" id="navbar">
+        <div class="nav-container">
+            <!-- Logo izquierdo -->
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📷</span>
+                <span>Snapshot Perú</span>
+            </a>
 
-        <!-- Links + menú móvil -->
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="sobre.html" class="active">Sobre el Proyecto</a></li>
-            <li><a href="colaboradores.html">Colaboradores</a></li>
-            <li><a href="protocolo.html">Protocolo</a></li>
-            <li><a href="mapa.html">¿Quiénes se suman?</a></li>
-            <li><a href="galeria.html">Galería</a></li>
-            <li><a href="investigacion.html">Investigación</a></li>
-            <li><a href="noticias.html">Noticias</a></li>
-            <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
-        </ul>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
-        <!-- Logo Smithsonian a la derecha -->
-        <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
-            <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
-        </a>
-    </div>
-</nav>
+            <!-- Menú principal -->
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="sobre.html" class="active">Sobre el Proyecto</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
+                <li><a href="mapa.html">¿Quiénes Participan?</a></li>
+                <li><a href="investigacion.html">Publicaciones Científicas</a></li>
+                <li class="nav-cta-mobile"><a href="contacto.html">Participa →</a></li>
+            </ul>
+
+            <!-- Grupo derecha: Participa + Smithsonian -->
+            <div class="nav-right-group">
+                <a href="contacto.html" class="nav-cta">Participa →</a>
+                <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
+                    <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
+                </a>
+            </div>
+        </div>
+    </nav>
 
     <!-- ============================================
-         HEADER DE PÁGINA
+         HERO CON FONDO3.JPG + BURBUJAS FLOTANTES
          ============================================ -->
-    <header class="page-header">
-        <div class="page-header-content">
-            <a href="index.html" class="btn-volver">← Volver al inicio</a>
-            <h1>Sobre el Proyecto</h1>
-            <p>Origen, visión, misión y enfoque técnico de Snapshot Perú</p>
+    <section class="hero-main">
+        <div class="lens-flare" style="top: 20%; left: 10%;"></div>
+        <div class="lens-flare" style="bottom: 30%; right: 15%; animation-delay: -5s;"></div>
+
+        <div class="particles-container" id="particles"></div>
+        <div class="hero-pattern"></div>
+        <div class="hero-vignette"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-globe-americas"></i>
+                Parte de Snapshot Global · Perú 2026
+            </div>
+            <h1 class="hero-title">
+                <span class="title-accent">Sobre</span> el Proyecto
+            </h1>
+            <p class="hero-subtitle">Origen, visión, misión y enfoque técnico de Snapshot Perú</p>
         </div>
-    </header>
+
+        <div class="scroll-indicator" onclick="document.getElementById('origen').scrollIntoView({behavior:'smooth'})">
+            <span>Descubre</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
 
     <!-- ============================================
          ORIGEN
          ============================================ -->
-    <section class="bg-white">
+    <section class="bg-white" id="origen">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Nuestros inicios</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-seedling"></i> Nuestros inicios</span>
                 <h2 class="section-title">Origen</h2>
             </div>
-            <div class="origen-content">
+            <div class="origen-content fade-in fade-in-delay-1">
                 <p>
                     <strong>Snapshot Perú nace en 2026</strong> como parte de la expansión de <strong>Snapshot Global</strong>, una iniciativa creada por el <strong>Smithsonian Institution</strong> en 2019 en los Estados Unidos. Snapshot Global utiliza cámaras trampa y protocolos estandarizados para monitorear comunidades de mamíferos a gran escala, generando bases de datos colaborativas, comparables y de largo plazo.
                 </p>
@@ -419,23 +1052,23 @@
     </section>
 
     <!-- ============================================
-         VISIÓN Y MISIÓN
+         VISIÓN Y MISIÓN - TARJETAS 3D
          ============================================ -->
     <section class="bg-light">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Nuestra dirección</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-compass"></i> Nuestra dirección</span>
                 <h2 class="section-title">Visión y Misión</h2>
             </div>
             <div class="vision-mision-grid">
-                <div class="vision-mision-card">
+                <div class="vision-mision-card fade-in fade-in-delay-1">
                     <div class="card-icon">🎯</div>
                     <h3>Visión</h3>
                     <p>
                         Contar con un <strong>fotomonitoreo nacional anual y colaborativo</strong> que cubra las 24 regiones del Perú y sus ecosistemas clave —Amazonía, Andes y costa—, generando información estandarizada que fortalezca el monitoreo de biodiversidad, apoye la toma de decisiones en conservación y conecte a investigadores, comunidades, áreas protegidas e instituciones en una red sostenible de conocimiento.
                     </p>
                 </div>
-                <div class="vision-mision-card">
+                <div class="vision-mision-card fade-in fade-in-delay-2">
                     <div class="card-icon">🚀</div>
                     <h3>Misión</h3>
                     <p>
@@ -447,54 +1080,56 @@
     </section>
 
     <!-- ============================================
-         ENFOQUE TÉCNICO
+         ENFOQUE TÉCNICO - TABLA PREMIUM
          ============================================ -->
     <section class="bg-white">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Cómo lo hacemos</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-cogs"></i> Cómo lo hacemos</span>
                 <h2 class="section-title">Enfoque Técnico</h2>
                 <p class="section-subtitle">Nuestro protocolo garantiza datos estandarizados, comparables y de alta calidad a nivel nacional.</p>
             </div>
-            
-            <table class="enfoque-table">
-                <thead>
-                    <tr>
-                        <th>Aspecto</th>
-                        <th>Descripción</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Estandarización</strong></td>
-                        <td>Protocolo nacional con especificaciones mínimas para equipamiento, configuración de cámaras, esfuerzo de muestreo y registro de metadatos.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Ventana de muestreo</strong></td>
-                        <td>Preferentemente época seca (<strong>1 de agosto – 30 de septiembre</strong>), con margen operativo de ±2 semanas según condiciones locales.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Esfuerzo mínimo</strong></td>
-                        <td><strong>400 trampas-noche</strong> y <strong>15 ubicaciones distintas</strong> por área de estudio.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Distribución espacial</strong></td>
-                        <td>Cámaras separadas <strong>200 m – 5 km</strong>, representando un único ecosistema y nivel de urbanización.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Gestión de datos</strong></td>
-                        <td>Plataforma <strong>Wildlife Insights</strong> para almacenamiento, clasificación con apoyo de IA y colaboración abierta.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Control de calidad</strong></td>
-                        <td>Validación de instalación/retiro, revisión taxonómica por comité científico y periodo de acceso restringido de <strong>12 meses</strong>.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Ética y seguridad</strong></td>
-                        <td>Sin atrayentes, protección de datos personales, resguardo de ubicaciones de especies sensibles.</td>
-                    </tr>
-                </tbody>
-            </table>
+
+            <div class="fade-in fade-in-delay-1">
+                <table class="enfoque-table">
+                    <thead>
+                        <tr>
+                            <th>Aspecto</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Estandarización</strong></td>
+                            <td>Protocolo nacional con especificaciones mínimas para equipamiento, configuración de cámaras, esfuerzo de muestreo y registro de metadatos.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ventana de muestreo</strong></td>
+                            <td>Preferentemente época seca (<strong>1 de agosto – 30 de septiembre</strong>), con margen operativo de ±2 semanas según condiciones locales.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Esfuerzo mínimo</strong></td>
+                            <td><strong>400 trampas-noche</strong> y <strong>15 ubicaciones distintas</strong> por área de estudio.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Distribución espacial</strong></td>
+                            <td>Cámaras separadas <strong>200 m – 5 km</strong>, representando un único ecosistema y nivel de urbanización.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gestión de datos</strong></td>
+                            <td>Plataforma <strong>Wildlife Insights</strong> para almacenamiento, clasificación con apoyo de IA y colaboración abierta.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Control de calidad</strong></td>
+                            <td>Validación de instalación/retiro, revisión taxonómica por comité científico y periodo de acceso restringido de <strong>12 meses</strong>.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ética y seguridad</strong></td>
+                            <td>Sin atrayentes, protección de datos personales, resguardo de ubicaciones de especies sensibles.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
 
@@ -503,37 +1138,37 @@
          ============================================ -->
     <section class="bg-light">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Nuestra meta</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-bullseye"></i> Nuestra meta</span>
                 <h2 class="section-title">Objetivos Principales</h2>
             </div>
-            
+
             <div style="max-width: 800px; margin: 0 auto;">
-                <div class="objetivo-item">
+                <div class="objetivo-item fade-in fade-in-delay-1">
                     <div class="objetivo-num">1</div>
                     <div class="objetivo-text">
                         <strong>Integrar datos de cámaras trampa</strong> generados en diferentes regiones del Perú en una base de datos nacional unificada, accesible para investigación y conservación.
                     </div>
                 </div>
-                <div class="objetivo-item">
+                <div class="objetivo-item fade-in fade-in-delay-2">
                     <div class="objetivo-num">2</div>
                     <div class="objetivo-text">
                         <strong>Promover estándares técnicos</strong> para el diseño, instalación, manejo y análisis de datos de fotomonitoreo, asegurando la comparabilidad entre sitios.
                     </div>
                 </div>
-                <div class="objetivo-item">
+                <div class="objetivo-item fade-in fade-in-delay-3">
                     <div class="objetivo-num">3</div>
                     <div class="objetivo-text">
                         <strong>Fortalecer capacidades</strong> en instituciones, comunidades y equipos de campo mediante capacitaciones y acompañamiento técnico.
                     </div>
                 </div>
-                <div class="objetivo-item">
+                <div class="objetivo-item fade-in fade-in-delay-4">
                     <div class="objetivo-num">4</div>
                     <div class="objetivo-text">
                         <strong>Generar productos científicos y técnicos</strong> para la toma de decisiones en conservación, gestión territorial y políticas públicas.
                     </div>
                 </div>
-                <div class="objetivo-item">
+                <div class="objetivo-item fade-in">
                     <div class="objetivo-num">5</div>
                     <div class="objetivo-text">
                         <strong>Impulsar una red colaborativa</strong> de monitoreo de biodiversidad que articule el trabajo de diversos actores a nivel nacional.
@@ -544,43 +1179,43 @@
     </section>
 
     <!-- ============================================
-         PRINCIPIOS DE TRABAJO
+         PRINCIPIOS DE TRABAJO - TARJETAS 3D
          ============================================ -->
     <section class="bg-white">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Nuestros valores</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-heart"></i> Nuestros valores</span>
                 <h2 class="section-title">Principios de Trabajo</h2>
             </div>
-            
+
             <div class="grid-3">
-                <div class="card text-center">
-                    <div class="card-icon">🔬</div>
+                <div class="card-3d fade-in fade-in-delay-1">
+                    <div class="card-icon-3d">🔬</div>
                     <h3>Ciencia Colaborativa</h3>
                     <p>Trabajamos juntos para generar conocimiento compartido y accesible para toda la comunidad científica.</p>
                 </div>
-                <div class="card text-center">
-                    <div class="card-icon">🔒</div>
+                <div class="card-3d fade-in fade-in-delay-2">
+                    <div class="card-icon-3d">🔒</div>
                     <h3>Datos Responsables</h3>
                     <p>Gestionamos la información con ética, respetando la sensibilidad de ciertos datos y la privacidad de las comunidades.</p>
                 </div>
-                <div class="card text-center">
-                    <div class="card-icon">✍️</div>
+                <div class="card-3d fade-in fade-in-delay-3">
+                    <div class="card-icon-3d">✍️</div>
                     <h3>Reconocimiento de Autoría</h3>
                     <p>Valoramos y reconocemos las contribuciones de cada participante en las publicaciones y productos del proyecto.</p>
                 </div>
-                <div class="card text-center">
-                    <div class="card-icon">🤲</div>
+                <div class="card-3d fade-in fade-in-delay-1">
+                    <div class="card-icon-3d">🤲</div>
                     <h3>Participación Local</h3>
                     <p>Involucramos activamente a las comunidades en el monitoreo, la conservación y la toma de decisiones.</p>
                 </div>
-                <div class="card text-center">
-                    <div class="card-icon">📋</div>
+                <div class="card-3d fade-in fade-in-delay-2">
+                    <div class="card-icon-3d">📋</div>
                     <h3>Transparencia</h3>
                     <p>Compartimos abiertamente nuestros protocolos, procesos y resultados para fortalecer la práctica del monitoreo.</p>
                 </div>
-                <div class="card text-center">
-                    <div class="card-icon">🛡️</div>
+                <div class="card-3d fade-in fade-in-delay-3">
+                    <div class="card-icon-3d">🛡️</div>
                     <h3>Conservación Basada en Evidencia</h3>
                     <p>Tomamos decisiones informadas por datos científicos sólidos que aporten al manejo y conservación de la biodiversidad.</p>
                 </div>
@@ -589,26 +1224,51 @@
     </section>
 
     <!-- ============================================
-         FOOTER
+         CTA FINAL
+         ============================================ -->
+    <section class="cta-final">
+        <div class="container">
+            <div class="fade-in">
+                <h2>Sé parte del cambio</h2>
+                <p>
+                    Cada cámara trampa cuenta una historia. Cada foto es un paso hacia la conservación. 
+                    Únete a la red de fotomonitoreo más grande del Perú.
+                </p>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" class="btn btn-primary" target="_blank">
+                    <i class="fas fa-camera-retro"></i> Participa ahora
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER PREMIUM
          ============================================ -->
     <footer class="footer-main">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>📷 Snapshot Perú</h4>
-                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa.</p>
+                    <h4><i class="fas fa-camera"></i> Snapshot Perú</h4>
+                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa. Parte de la red Snapshot Global.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
                 <div class="footer-col">
                     <h4>Explorar</h4>
                     <a href="index.html">Inicio</a>
+                    <a href="sobre.html">Sobre el Proyecto</a>
                     <a href="protocolo.html">Protocolo</a>
-                    <a href="galeria.html">Galería</a>
                     <a href="investigacion.html">Investigación</a>
                 </div>
                 <div class="footer-col">
                     <h4>Participa</h4>
                     <a href="contacto.html">Únete al proyecto</a>
                     <a href="colaboradores.html">Red de colaboradores</a>
+                    <a href="noticias.html">Noticias y convocatorias</a>
                 </div>
                 <div class="footer-col">
                     <h4>Contacto</h4>
@@ -616,19 +1276,76 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Snapshot Perú</p>
+                <p>&copy; 2026 Snapshot Perú &middot; Parte de <a href="https://www.snapshot-global.org/" target="_blank">Snapshot Global</a></p>
             </div>
         </div>
     </footer>
 
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
     <script>
+        // Menu toggle
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+
+        // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
+        });
+
+        // Particulas flotantes (burbujas)
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // Animacion de entrada al scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Efecto 3D en tarjetas con mouse
+        document.querySelectorAll('.vision-mision-card, .card-3d').forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+            });
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = '';
+            });
         });
     </script>
 

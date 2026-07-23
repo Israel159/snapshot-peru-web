@@ -6,7 +6,8 @@
     <title>Snapshot Perú - Fotomonitoreo Nacional</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
     :root {
         --verde-oscuro: #1a472a;
@@ -24,7 +25,9 @@
         --gris-suave: #e8ede9;
         --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
         --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
-        --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        --sombra-fuerte: 0 20px 60px rgba(26, 71, 42, 0.2);
+        --transicion: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        --transicion-lenta: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -37,62 +40,203 @@
         line-height: 1.7;
         font-size: 16px;
         -webkit-font-smoothing: antialiased;
+        overflow-x: hidden;
     }
 
     /* ============================================
-       NAVEGACIÓN FIJA - CORREGIDA
+       PRELOADER - CÁMARA FOTOGRÁFICA
+       ============================================ */
+    .preloader {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--verde-oscuro);
+        z-index: 99999;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .preloader.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+    .camera-body {
+        width: 120px;
+        height: 80px;
+        background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+        border-radius: 12px;
+        position: relative;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        animation: cameraShake 2s ease-in-out infinite;
+    }
+    .camera-lens {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #333, #111);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        border: 3px solid #444;
+        overflow: hidden;
+    }
+    .camera-lens::before {
+        content: '';
+        position: absolute;
+        top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        width: 30px; height: 30px;
+        background: linear-gradient(135deg, #1a472a, #2d6a4f);
+        border-radius: 50%;
+        animation: lensPulse 1.5s ease-in-out infinite;
+    }
+    .camera-lens::after {
+        content: '';
+        position: absolute;
+        top: 10%; right: 15%;
+        width: 8px; height: 8px;
+        background: rgba(255,255,255,0.3);
+        border-radius: 50%;
+    }
+    .camera-flash {
+        position: absolute;
+        top: -5px; right: 15px;
+        width: 20px; height: 12px;
+        background: #fff;
+        border-radius: 3px;
+        animation: flashBlink 2s ease-in-out infinite;
+    }
+    .preloader-text {
+        color: var(--dorado-claro);
+        font-family: 'Playfair Display', serif;
+        font-size: 1.2rem;
+        margin-top: 25px;
+        letter-spacing: 3px;
+        animation: textFade 2s ease-in-out infinite;
+    }
+    @keyframes cameraShake {
+        0%, 100% { transform: rotate(0deg); }
+        25% { transform: rotate(-1deg); }
+        75% { transform: rotate(1deg); }
+    }
+    @keyframes lensPulse {
+        0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        50% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.8; }
+    }
+    @keyframes flashBlink {
+        0%, 90%, 100% { opacity: 1; }
+        95% { opacity: 0.3; }
+    }
+    @keyframes textFade {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+    }
+
+    /* ============================================
+       NAVEGACIÓN FIJA - PREMIUM
        ============================================ */
     .nav-top {
         position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-        background: rgba(255,255,255,0.95);
-        backdrop-filter: blur(20px);
-        border-bottom: 1px solid rgba(26,71,42,0.08);
+        background: rgba(255,255,255,0.92);
+        backdrop-filter: blur(20px) saturate(180%);
+        border-bottom: 1px solid rgba(26,71,42,0.06);
         transition: var(--transicion);
     }
-    .nav-top.scrolled { box-shadow: var(--sombra-suave); }
-
-    .nav-container {
-        max-width: 1200px; margin: 0 auto; padding: 0 20px;
-        display: flex; 
-        justify-content: space-between; 
-        align-items: center;
-        height: 64px;
-        gap: 16px;
+    .nav-top.scrolled { 
+        box-shadow: var(--sombra-suave); 
+        background: rgba(255,255,255,0.97);
     }
 
+.nav-container {
+    max-width: 1200px; 
+    margin: 0 auto; 
+    padding: 0 8px 0 24px;
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    height: 68px;
+    gap: 16px;
+}
+
     .nav-logo {
-        display: flex; align-items: center; gap: 8px;
+        display: flex; align-items: center; gap: 10px;
         text-decoration: none; color: var(--verde-oscuro);
         font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
         white-space: nowrap; flex-shrink: 0;
+        transition: var(--transicion)
     }
-    .nav-logo-icon { font-size: 1.4rem; }
+    .nav-logo:hover { transform: scale(1.02); }
+    .nav-logo-icon { 
+        font-size: 1.5rem; 
+        filter: drop-shadow(0 2px 4px rgba(26,71,42,0.2));
+        animation: logoFloat 3s ease-in-out infinite;
+    }
+    @keyframes logoFloat {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-3px); }
+    }
 
-    .nav-links { 
-        display: flex; list-style: none; gap: 2px; 
-        align-items: center; margin-left: auto;
-    }
+.nav-links { 
+    display: flex; 
+    list-style: none; 
+    gap: 2px; 
+    align-items: center; 
+    margin-left: auto;
+}
     .nav-links a {
         color: var(--texto-claro); text-decoration: none;
-        padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
+        padding: 7px 12px; border-radius: 8px; font-size: 0.82rem;
         font-weight: 500; transition: var(--transicion);
         white-space: nowrap;
+        position: relative;
+    }
+    .nav-links a::after {
+        content: '';
+        position: absolute;
+        bottom: 2px; left: 50%;
+        width: 0; height: 2px;
+        background: var(--verde-primario);
+        transition: var(--transicion);
+        transform: translateX(-50%);
+        border-radius: 1px;
     }
     .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
-    .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
+    .nav-links a:hover::after { width: 60%; }
+    .nav-links a.active { 
+        color: var(--verde-oscuro); 
+        background: var(--verde-fondo); 
+        font-weight: 600; 
+    }
+    .nav-links a.active::after { width: 60%; }
 
     .nav-cta {
-        background: var(--verde-primario) !important; 
+        background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro)) !important; 
         color: var(--blanco) !important;
-        padding: 8px 14px !important; 
-        border-radius: 8px !important;
+        padding: 9px 18px !important; 
+        border-radius: 10px !important;
         font-weight: 600 !important; 
         font-size: 0.82rem !important;
-        margin-left: 4px;
+        margin-left: 6px;
+        box-shadow: 0 4px 15px rgba(26,71,42,0.3);
+        transition: var(--transicion) !important;
+        position: relative;
+        overflow: hidden;
     }
+    .nav-cta::after { display: none !important; }
+    .nav-cta::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        transition: left 0.5s ease;
+    }
+    .nav-cta:hover::before { left: 100%; }
     .nav-cta:hover { 
-        background: var(--verde-oscuro) !important; 
-        color: var(--blanco) !important; 
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(26,71,42,0.4) !important;
     }
 
     .menu-toggle { 
@@ -102,7 +246,7 @@
     }
 
     /* ============================================
-       HERO CON FONDO DE CÁMARA TRAMPA
+       HERO CON EFECTO 3D PARALLAX
        ============================================ */
     .hero-main {
         min-height: 100vh;
@@ -111,32 +255,62 @@
         justify-content: center;
         position: relative;
         overflow: hidden;
+        perspective: 1000px;
     }
 
-    /* Capa 1: La foto de cámara trampa */
+    /* Capa 1: La foto de camara trampa con efecto parallax */
     .hero-main::before {
         content: '';
         position: absolute;
-        top: 0; left: 0; right: 0; bottom: 0;
+        top: -10%; left: -10%; right: -10%; bottom: -10%;
         background: url("imagenes/fondo_1.png") center/cover no-repeat;
         z-index: 0;
+        transform: translateZ(-1px) scale(1.2);
+        animation: heroZoom 20s ease-in-out infinite alternate;
+    }
+    @keyframes heroZoom {
+        0% { transform: translateZ(-1px) scale(1.2); }
+        100% { transform: translateZ(-1px) scale(1.3); }
     }
 
-    /* Capa 2: Overlay verde semi-transparente */
+    /* Capa 2: Overlay con gradiente dinamico */
     .hero-main::after {
         content: '';
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
         background: linear-gradient(
             135deg,
-            rgba(26, 71, 42, 0.88) 0%,
-            rgba(45, 106, 79, 0.82) 40%,
-            rgba(64, 145, 108, 0.75) 100%
+            rgba(26, 71, 42, 0.92) 0%,
+            rgba(45, 106, 79, 0.85) 35%,
+            rgba(64, 145, 108, 0.78) 70%,
+            rgba(26, 71, 42, 0.88) 100%
         );
         z-index: 1;
     }
 
-    /* Capa 3: Patrón decorativo sutil */
+    /* Particulas flotantes */
+    .particles-container {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        z-index: 2;
+        pointer-events: none;
+        overflow: hidden;
+    }
+    .particle {
+        position: absolute;
+        width: 4px; height: 4px;
+        background: rgba(212, 165, 116, 0.6);
+        border-radius: 50%;
+        animation: particleFloat linear infinite;
+    }
+    @keyframes particleFloat {
+        0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translateY(-10vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Capa 3: Patron decorativo sutil */
     .hero-pattern {
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
@@ -145,243 +319,1175 @@
         pointer-events: none;
     }
 
+    /* Efecto de vineta */
+    .hero-vignette {
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        box-shadow: inset 0 0 150px rgba(0,0,0,0.4);
+        z-index: 2;
+        pointer-events: none;
+    }
+
     .hero-content {
         text-align: center;
         color: var(--blanco);
-        max-width: 800px;
-        padding: 120px 24px 80px;
+        max-width: 850px;
+        padding: 140px 24px 100px;
         position: relative;
         z-index: 3;
+        animation: heroFadeIn 1.2s ease-out;
+    }
+    @keyframes heroFadeIn {
+        0% { opacity: 0; transform: translateY(40px); }
+        100% { opacity: 1; transform: translateY(0); }
     }
 
     .hero-badge {
-        display: inline-block;
-        background: rgba(255,255,255,0.12);
-        backdrop-filter: blur(10px);
-        padding: 8px 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(15px);
+        padding: 10px 24px;
         border-radius: 50px;
         font-size: 0.85rem;
         font-weight: 500;
-        margin-bottom: 30px;
-        border: 1px solid rgba(255,255,255,0.2);
+        margin-bottom: 35px;
+        border: 1px solid rgba(255,255,255,0.15);
+        animation: badgePulse 3s ease-in-out infinite;
+        cursor: default;
+    }
+    @keyframes badgePulse {
+        0%, 100% { box-shadow: 0 0 0 0 rgba(212, 165, 116, 0.3); }
+        50% { box-shadow: 0 0 20px 5px rgba(212, 165, 116, 0.15); }
     }
 
     .hero-title {
-        font-size: clamp(2.5rem, 6vw, 4.5rem);
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2.8rem, 7vw, 5.5rem);
         font-weight: 800;
         margin-bottom: 20px;
         letter-spacing: -2px;
-        line-height: 1.1;
-        text-shadow: 0 2px 20px rgba(0,0,0,0.2);
+        line-height: 1.05;
+        text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+        position: relative;
+    }
+    .hero-title .title-accent {
+        color: var(--dorado);
+        position: relative;
+        display: inline-block;
+    }
+    .hero-title .title-accent::after {
+        content: '';
+        position: absolute;
+        bottom: 5px; left: 0; right: 0;
+        height: 8px;
+        background: linear-gradient(90deg, var(--dorado), transparent);
+        opacity: 0.4;
+        border-radius: 4px;
+        z-index: -1;
     }
 
     .hero-subtitle {
-        font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(1.2rem, 2.5vw, 1.6rem);
         opacity: 0.95;
         margin-bottom: 25px;
         font-weight: 400;
-        max-width: 600px;
+        font-style: italic;
+        max-width: 650px;
         margin-left: auto;
         margin-right: auto;
-        text-shadow: 0 1px 10px rgba(0,0,0,0.15);
+        text-shadow: 0 2px 15px rgba(0,0,0,0.2);
+        letter-spacing: 0.5px;
     }
 
     .hero-desc {
         font-size: 1.05rem;
-        opacity: 0.9;
-        max-width: 650px;
-        margin: 0 auto 40px;
-        line-height: 1.8;
+        opacity: 0.88;
+        max-width: 680px;
+        margin: 0 auto 45px;
+        line-height: 1.9;
+        font-weight: 300;
     }
 
     .hero-buttons { 
         display: flex;
-        gap: 14px;
+        gap: 16px;
         justify-content: center; 
         flex-wrap: wrap;
-        margin-top: 10px; 
+        margin-top: 15px; 
     }
 
-    /* BOTONES */
+    /* BOTONES PREMIUM */
     .btn {
-        display: inline-flex; align-items: center; gap: 8px;
-        padding: 14px 28px; border-radius: 12px; text-decoration: none;
+        display: inline-flex; align-items: center; gap: 10px;
+        padding: 15px 32px; border-radius: 14px; text-decoration: none;
         font-weight: 600; font-size: 0.95rem; transition: var(--transicion);
         border: 2px solid transparent; cursor: pointer; line-height: 1;
+        position: relative;
+        overflow: hidden;
     }
+    .btn::before {
+        content: '';
+        position: absolute;
+        top: 0; left: -100%;
+        width: 100%; height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+        transition: left 0.6s ease;
+    }
+    .btn:hover::before { left: 100%; }
     .btn-primary {
-        background: var(--dorado); color: var(--verde-oscuro);
-        box-shadow: 0 4px 15px rgba(212,165,116,0.4);
+        background: linear-gradient(135deg, var(--dorado), #c49464);
+        color: var(--verde-oscuro);
+        box-shadow: 0 6px 25px rgba(212,165,116,0.45), 0 2px 8px rgba(212,165,116,0.3);
+        border: none;
     }
     .btn-primary:hover { 
-        background: var(--dorado-claro); transform: translateY(-2px); 
-        box-shadow: 0 6px 20px rgba(212,165,116,0.5); text-decoration: none; 
+        background: linear-gradient(135deg, var(--dorado-claro), var(--dorado));
+        transform: translateY(-3px); 
+        box-shadow: 0 10px 35px rgba(212,165,116,0.55), 0 4px 12px rgba(212,165,116,0.35);
+        text-decoration: none; 
     }
     .btn-secondary {
-        background: rgba(255,255,255,0.12); color: var(--blanco);
-        border-color: rgba(255,255,255,0.3); backdrop-filter: blur(10px);
+        background: rgba(255,255,255,0.08); 
+        color: var(--blanco);
+        border-color: rgba(255,255,255,0.25); 
+        backdrop-filter: blur(15px);
     }
     .btn-secondary:hover { 
-        background: rgba(255,255,255,0.25); transform: translateY(-2px); text-decoration: none; 
+        background: rgba(255,255,255,0.18); 
+        border-color: rgba(255,255,255,0.4);
+        transform: translateY(-3px); 
+        text-decoration: none; 
+        box-shadow: 0 8px 25px rgba(255,255,255,0.1);
     }
 
-    /* SECCIONES */
+    /* Scroll indicator */
+    .scroll-indicator {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 3;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        animation: scrollBounce 2s ease-in-out infinite;
+        cursor: pointer;
+    }
+    .scroll-indicator span {
+        color: rgba(255,255,255,0.6);
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+    .scroll-indicator .scroll-line {
+        width: 1px;
+        height: 40px;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+        position: relative;
+    }
+    .scroll-indicator .scroll-line::after {
+        content: '';
+        position: absolute;
+        top: 0; left: -2px;
+        width: 5px; height: 5px;
+        background: var(--dorado);
+        border-radius: 50%;
+        animation: scrollDot 2s ease-in-out infinite;
+    }
+    @keyframes scrollBounce {
+        0%, 100% { transform: translateX(-50%) translateY(0); }
+        50% { transform: translateX(-50%) translateY(8px); }
+    }
+    @keyframes scrollDot {
+        0% { top: 0; opacity: 1; }
+        100% { top: 40px; opacity: 0; }
+    }
+
+    /* ============================================
+       MARQUEE DE FOTOS INFINITO
+       ============================================ */
+    .photo-marquee {
+        background: var(--verde-oscuro);
+        padding: 0;
+        overflow: hidden;
+        position: relative;
+    }
+    .photo-marquee::before,
+    .photo-marquee::after {
+        content: '';
+        position: absolute;
+        top: 0; bottom: 0;
+        width: 150px;
+        z-index: 2;
+        pointer-events: none;
+    }
+    .photo-marquee::before {
+        left: 0;
+        background: linear-gradient(to right, var(--verde-oscuro), transparent);
+    }
+    .photo-marquee::after {
+        right: 0;
+        background: linear-gradient(to left, var(--verde-oscuro), transparent);
+    }
+    .marquee-track {
+        display: flex;
+        gap: 0;
+        animation: marqueeScroll 30s linear infinite;
+        width: max-content;
+    }
+    .marquee-track:hover {
+        animation-play-state: paused;
+    }
+    .marquee-item {
+        width: 280px;
+        height: 180px;
+        flex-shrink: 0;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    .marquee-item img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+        filter: grayscale(30%);
+    }
+    .marquee-item:hover img {
+        transform: scale(1.15);
+        filter: grayscale(0%);
+    }
+    .marquee-item .marquee-overlay {
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        padding: 15px;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 500;
+        transform: translateY(100%);
+        transition: transform 0.4s ease;
+    }
+    .marquee-item:hover .marquee-overlay {
+        transform: translateY(0);
+    }
+    @keyframes marqueeScroll {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    /* ============================================
+       SECCIONES GENERALES
+       ============================================ */
     .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-    section { padding: 100px 0; }
-    .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+    section { padding: 100px 0; position: relative; }
+    .section-header { text-align: center; max-width: 700px; margin: 0 auto 70px; }
     .section-tag {
-        display: inline-block; color: var(--verde-primario);
-        font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-        letter-spacing: 2px; margin-bottom: 12px;
+        display: inline-flex; align-items: center; gap: 8px;
+        color: var(--verde-primario);
+        font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+        letter-spacing: 3px; margin-bottom: 16px;
+        padding: 6px 16px;
+        background: var(--verde-fondo);
+        border-radius: 50px;
     }
     .section-title {
-        font-size: clamp(1.8rem, 4vw, 2.6rem); color: var(--verde-oscuro);
-        margin-bottom: 16px; font-weight: 800; letter-spacing: -1px; line-height: 1.2;
+        font-family: 'Playfair Display', serif;
+        font-size: clamp(2rem, 4.5vw, 2.8rem); 
+        color: var(--verde-oscuro);
+        margin-bottom: 18px; 
+        font-weight: 700; 
+        letter-spacing: -1px; 
+        line-height: 1.15;
     }
-    .section-subtitle { color: var(--texto-muted); font-size: 1.1rem; line-height: 1.7; }
+    .section-subtitle { 
+        color: var(--texto-muted); 
+        font-size: 1.1rem; 
+        line-height: 1.8;
+        font-weight: 400;
+    }
 
-    /* GRIDS Y TARJETAS */
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
-    .card {
-        background: var(--blanco); border-radius: 16px; padding: 32px;
-        box-shadow: var(--sombra-suave); transition: var(--transicion);
+    /* ============================================
+       QUE ES SNAPSHOT PERU - TARJETAS 3D
+       ============================================ */
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 28px; }
+    .card-3d {
+        background: var(--blanco); 
+        border-radius: 20px; 
+        padding: 40px 32px;
+        box-shadow: var(--sombra-suave); 
+        transition: var(--transicion);
         border: 1px solid var(--gris-suave);
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        perspective: 1000px;
     }
-    .card:hover { 
-        transform: translateY(-4px); box-shadow: var(--sombra-media); 
+    .card-3d::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--verde-primario), var(--dorado));
+        transform: scaleX(0);
+        transition: transform 0.5s ease;
+        transform-origin: left;
+    }
+    .card-3d:hover::before { transform: scaleX(1); }
+    .card-3d:hover { 
+        transform: translateY(-8px) rotateX(2deg); 
+        box-shadow: var(--sombra-fuerte); 
         border-color: var(--verde-pastel); 
     }
-    .card-icon {
-        width: 56px; height: 56px; background: var(--verde-fondo);
-        border-radius: 14px; display: flex; align-items: center; justify-content: center;
-        font-size: 1.6rem; margin-bottom: 20px;
+    .card-icon-3d {
+        width: 64px; height: 64px; 
+        background: linear-gradient(135deg, var(--verde-fondo), #c8e6c9);
+        border-radius: 18px; 
+        display: flex; align-items: center; justify-content: center;
+        font-size: 1.8rem; 
+        margin-bottom: 24px;
+        box-shadow: 0 8px 20px rgba(45,106,79,0.15);
+        transition: var(--transicion);
     }
-    .card h3 { color: var(--verde-oscuro); font-size: 1.15rem; margin-bottom: 10px; font-weight: 700; }
-    .card p { color: var(--texto-muted); font-size: 0.95rem; line-height: 1.6; }
+    .card-3d:hover .card-icon-3d {
+        transform: scale(1.1) rotate(-5deg);
+        box-shadow: 0 12px 30px rgba(45,106,79,0.25);
+    }
+    .card-3d h3 { 
+        color: var(--verde-oscuro); 
+        font-size: 1.2rem; 
+        margin-bottom: 12px; 
+        font-weight: 700; 
+    }
+    .card-3d p { 
+        color: var(--texto-muted); 
+        font-size: 0.95rem; 
+        line-height: 1.7; 
+    }
 
-    /* ESTADÍSTICAS */
+    /* ============================================
+       POR QUE ES IMPORTANTE - LAYOUT ASIMETRICO
+       ============================================ */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 32px; }
+
+    .importance-text p {
+        margin-bottom: 20px; 
+        font-size: 1.05rem; 
+        line-height: 1.9;
+        color: var(--texto-claro);
+    }
+    .importance-text strong {
+        color: var(--verde-oscuro);
+        font-weight: 700;
+        position: relative;
+    }
+    .importance-text strong::after {
+        content: '';
+        position: absolute;
+        bottom: -2px; left: 0;
+        width: 100%; height: 3px;
+        background: linear-gradient(90deg, var(--dorado), transparent);
+        border-radius: 2px;
+        opacity: 0.5;
+    }
+
+    /* Tarjeta de objetivos con efecto glass */
+    .objectives-card {
+        background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario)); 
+        color: white;
+        border-radius: 24px;
+        padding: 36px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 20px 50px rgba(26,71,42,0.3);
+    }
+    .objectives-card::before {
+        content: '';
+        position: absolute;
+        top: -50%; right: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle, rgba(212,165,116,0.08) 0%, transparent 60%);
+        animation: objectivesGlow 8s ease-in-out infinite;
+    }
+    @keyframes objectivesGlow {
+        0%, 100% { transform: rotate(0deg); }
+        50% { transform: rotate(180deg); }
+    }
+    .objectives-card h3 {
+        color: var(--dorado-claro); 
+        font-size: 1.25rem; 
+        margin-bottom: 22px;
+        position: relative;
+        z-index: 1;
+    }
+    .objectives-card ul {
+        list-style: none; 
+        padding: 0; 
+        color: rgba(255,255,255,0.9);
+        position: relative;
+        z-index: 1;
+    }
+    .objectives-card li {
+        padding: 12px 0; 
+        border-bottom: 1px solid rgba(255,255,255,0.1); 
+        display: flex; 
+        align-items: center;
+        gap: 14px;
+        transition: var(--transicion);
+    }
+    .objectives-card li:last-child { border-bottom: none; }
+    .objectives-card li:hover {
+        padding-left: 8px;
+        color: var(--blanco);
+    }
+    .objectives-card li span {
+        font-size: 1.3rem;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+    }
+
+    /* Quote card con efecto de camara */
+    .quote-card {
+        background: var(--blanco);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: var(--sombra-suave);
+        border: 1px solid var(--gris-suave);
+        position: relative;
+        margin-top: 24px;
+    }
+    .quote-card::before {
+        content: '"';
+        position: absolute;
+        top: 10px; left: 20px;
+        font-family: 'Playfair Display', serif;
+        font-size: 5rem;
+        color: var(--verde-fondo);
+        line-height: 1;
+        opacity: 0.6;
+    }
+    .quote-card p {
+        color: var(--texto-muted); 
+        font-style: italic; 
+        text-align: center;
+        font-size: 1.05rem;
+        line-height: 1.8;
+        position: relative;
+        z-index: 1;
+        padding: 0 10px;
+    }
+
+    /* ============================================
+       GALERIA DE FOTOS TIPO POLAROID
+       ============================================ */
+    .gallery-section {
+        background: linear-gradient(180deg, var(--gris-fondo) 0%, var(--blanco) 100%);
+        padding: 100px 0;
+    }
+    .polaroid-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        padding: 20px 0;
+    }
+    .polaroid {
+        background: var(--blanco);
+        padding: 12px 12px 50px 12px;
+        border-radius: 4px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: var(--transicion);
+        position: relative;
+        transform: rotate(var(--rotation, 0deg));
+    }
+    .polaroid:nth-child(1) { --rotation: -3deg; }
+    .polaroid:nth-child(2) { --rotation: 2deg; }
+    .polaroid:nth-child(3) { --rotation: -1deg; }
+    .polaroid:nth-child(4) { --rotation: 3deg; }
+    .polaroid:nth-child(5) { --rotation: -2deg; }
+    .polaroid:nth-child(6) { --rotation: 1deg; }
+    .polaroid:hover {
+        transform: rotate(0deg) translateY(-10px) scale(1.03);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        z-index: 10;
+    }
+    .polaroid-img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        background: linear-gradient(135deg, var(--verde-fondo), var(--verde-pastel));
+        border-radius: 2px;
+        overflow: hidden;
+        position: relative;
+    }
+    .polaroid-img img {
+        width: 100%; height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+    .polaroid:hover .polaroid-img img {
+        transform: scale(1.1);
+    }
+    .polaroid-caption {
+        position: absolute;
+        bottom: 12px; left: 0; right: 0;
+        text-align: center;
+        font-family: 'Playfair Display', serif;
+        font-size: 0.9rem;
+        color: var(--texto-claro);
+        font-style: italic;
+    }
+    .polaroid-tag {
+        position: absolute;
+        top: 8px; right: 8px;
+        background: rgba(26,71,42,0.8);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 20px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        backdrop-filter: blur(5px);
+    }
+
+    /* ============================================
+       ESTADISTICAS ANIMADAS
+       ============================================ */
     .stats-bar {
         background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
-        padding: 60px 0;
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
     }
-    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
-    .stat-item { text-align: center; color: var(--blanco); }
-    .stat-number { font-size: 3rem; font-weight: 800; line-height: 1; margin-bottom: 8px; }
-    .stat-label { font-size: 0.95rem; opacity: 0.85; font-weight: 500; }
+    .stats-bar::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+        opacity: 0.5;
+    }
+    .stats-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+        gap: 40px; 
+        position: relative;
+        z-index: 1;
+    }
+    .stat-item { 
+        text-align: center; 
+        color: var(--blanco); 
+        position: relative;
+    }
+    .stat-item::after {
+        content: '';
+        position: absolute;
+        right: -20px; top: 50%;
+        transform: translateY(-50%);
+        width: 1px; height: 60%;
+        background: rgba(255,255,255,0.15);
+    }
+    .stat-item:last-child::after { display: none; }
+    .stat-number { 
+        font-size: 3.5rem; 
+        font-weight: 800; 
+        line-height: 1; 
+        margin-bottom: 10px;
+        font-family: 'Playfair Display', serif;
+        background: linear-gradient(135deg, var(--blanco), var(--dorado-claro));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    .stat-label { 
+        font-size: 0.95rem; 
+        opacity: 0.8; 
+        font-weight: 500;
+        letter-spacing: 1px;
+    }
 
-    /* MAPA */
-    .mapa-wrapper { border-radius: 16px; overflow: hidden; box-shadow: var(--sombra-media); border: 1px solid var(--gris-suave); }
+    /* ============================================
+       MAPA CON EFECTO 3D
+       ============================================ */
+    .mapa-wrapper { 
+        border-radius: 24px; 
+        overflow: hidden; 
+        box-shadow: var(--sombra-fuerte); 
+        border: 1px solid var(--gris-suave);
+        position: relative;
+        transform-style: preserve-3d;
+        transition: var(--transicion);
+    }
+    .mapa-wrapper:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 60px rgba(26,71,42,0.2);
+    }
+    .mapa-wrapper::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 5px;
+        background: linear-gradient(90deg, var(--verde-primario), var(--dorado), var(--verde-claro));
+        z-index: 10;
+    }
     .mapa-container { height: 500px; width: 100%; }
 
-    /* FOOTER */
+    /* ============================================
+       TIMELINE DE FOTOMONITOREO
+       ============================================ */
+    .timeline-section {
+        background: var(--gris-fondo);
+        padding: 100px 0;
+    }
+    .timeline {
+        position: relative;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 3px;
+        height: 100%;
+        background: linear-gradient(to bottom, var(--verde-primario), var(--dorado));
+        border-radius: 3px;
+    }
+    .timeline-item {
+        position: relative;
+        margin-bottom: 50px;
+        width: 50%;
+        padding: 0 40px;
+    }
+    .timeline-item:nth-child(odd) {
+        left: 0;
+        text-align: right;
+    }
+    .timeline-item:nth-child(even) {
+        left: 50%;
+        text-align: left;
+    }
+    .timeline-dot {
+        position: absolute;
+        width: 20px; height: 20px;
+        background: var(--blanco);
+        border: 4px solid var(--verde-primario);
+        border-radius: 50%;
+        top: 5px;
+    }
+    .timeline-item:nth-child(odd) .timeline-dot {
+        right: -10px;
+    }
+    .timeline-item:nth-child(even) .timeline-dot {
+        left: -10px;
+    }
+    .timeline-content {
+        background: var(--blanco);
+        padding: 24px;
+        border-radius: 16px;
+        box-shadow: var(--sombra-suave);
+        border: 1px solid var(--gris-suave);
+        transition: var(--transicion);
+    }
+    .timeline-content:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--sombra-media);
+    }
+    .timeline-content h4 {
+        color: var(--verde-oscuro);
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+    }
+    .timeline-content p {
+        color: var(--texto-muted);
+        font-size: 0.9rem;
+        line-height: 1.6;
+    }
+    .timeline-year {
+        display: inline-block;
+        background: var(--verde-primario);
+        color: white;
+        padding: 4px 14px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    /* ============================================
+       CTA FINAL
+       ============================================ */
+    .cta-final {
+        background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    .cta-final::before {
+        content: '';
+        position: absolute;
+        top: -50%; left: -50%;
+        width: 200%; height: 200%;
+        background: radial-gradient(circle at 30% 50%, rgba(212,165,116,0.08) 0%, transparent 50%);
+    }
+    .cta-final .container {
+        position: relative;
+        z-index: 1;
+        text-align: center;
+    }
+    .cta-final h2 {
+        font-family: 'Playfair Display', serif;
+        color: var(--blanco);
+        font-size: clamp(2rem, 4vw, 3rem);
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    .cta-final p {
+        color: rgba(255,255,255,0.7);
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto 40px;
+        line-height: 1.8;
+    }
+    .cta-final .btn-primary {
+        font-size: 1.1rem;
+        padding: 18px 40px;
+    }
+
+    /* ============================================
+       FOOTER PREMIUM
+       ============================================ */
     .footer-main {
         background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
-        color: var(--blanco); padding: 70px 0 30px;
+        color: var(--blanco); 
+        padding: 80px 0 30px;
+        position: relative;
+        overflow: hidden;
     }
-    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 50px; }
-    .footer-col h4 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; color: var(--dorado-claro); }
-    .footer-col p { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.7; }
+    .footer-main::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+    }
+    .footer-grid { 
+        display: grid; 
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+        gap: 50px; 
+        margin-bottom: 60px; 
+        position: relative;
+        z-index: 1;
+    }
+    .footer-col h4 { 
+        font-size: 1rem; 
+        margin-bottom: 22px; 
+        font-weight: 700; 
+        color: var(--dorado-claro);
+        letter-spacing: 1px;
+        position: relative;
+        display: inline-block;
+    }
+    .footer-col h4::after {
+        content: '';
+        position: absolute;
+        bottom: -8px; left: 0;
+        width: 30px; height: 2px;
+        background: var(--dorado);
+        border-radius: 1px;
+    }
+    .footer-col p { 
+        color: rgba(255,255,255,0.65); 
+        font-size: 0.92rem; 
+        line-height: 1.8; 
+    }
     .footer-col a { 
-        color: rgba(255,255,255,0.7); text-decoration: none; display: block; 
-        padding: 6px 0; font-size: 0.92rem; transition: var(--transicion); 
+        color: rgba(255,255,255,0.65); 
+        text-decoration: none; 
+        display: block; 
+        padding: 8px 0; 
+        font-size: 0.92rem; 
+        transition: var(--transicion); 
+        position: relative;
+        padding-left: 0;
     }
-    .footer-col a:hover { color: var(--dorado-claro); padding-left: 4px; }
+    .footer-col a::before {
+        content: '>';
+        position: absolute;
+        left: -15px;
+        opacity: 0;
+        transition: var(--transicion);
+        color: var(--dorado);
+    }
+    .footer-col a:hover { 
+        color: var(--dorado-claro); 
+        padding-left: 15px; 
+    }
+    .footer-col a:hover::before {
+        opacity: 1;
+        left: 0;
+    }
     .footer-bottom { 
-        border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; 
-        text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); 
+        border-top: 1px solid rgba(255,255,255,0.08); 
+        padding-top: 30px; 
+        text-align: center; 
+        font-size: 0.88rem; 
+        color: rgba(255,255,255,0.4);
+        position: relative;
+        z-index: 1;
+    }
+    .footer-bottom a {
+        color: var(--dorado-claro);
+        text-decoration: none;
+        transition: var(--transicion);
+    }
+    .footer-bottom a:hover {
+        color: var(--dorado);
     }
 
-    /* UTILIDADES */
-    .bg-white { background: var(--blanco); }
-    .bg-light { background: var(--gris-fondo); }
-    .text-center { text-align: center; }
-    .mt-20 { margin-top: 20px; }
-    .mt-40 { margin-top: 40px; }
+    /* Social icons */
+    .social-links {
+        display: flex;
+        gap: 12px;
+        margin-top: 20px;
+    }
+    .social-links a {
+        width: 40px; height: 40px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.08);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255,255,255,0.7);
+        font-size: 1rem;
+        transition: var(--transicion);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .social-links a:hover {
+        background: var(--dorado);
+        color: var(--verde-oscuro);
+        transform: translateY(-3px);
+        border-color: var(--dorado);
+    }
 
-    /* RESPONSIVE */
+    /* ============================================
+       LOGO DERECHA NAVEGACION
+       ============================================ */
+.nav-logo-derecha {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    text-decoration: none;
+    margin-right: -4px;
+}
+    .nav-logo-img {
+        height: 38px;
+        width: auto;
+        object-fit: contain;
+        transition: var(--transicion);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        margin-right: 4px; 
+    }
+    .nav-logo-derecha:hover .nav-logo-img {
+        transform: scale(1.08);
+        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+    }
+
+/* Centrado perfecto del menú en desktop */
+@media (min-width: 769px) {
+    .nav-container {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+    }
+
+    .nav-logo {
+        justify-self: start;
+    }
+
+    .nav-links {
+        margin-left: 0;
+        justify-self: center;
+    }
+
+    .nav-logo-derecha {
+        margin-left: 0;
+        justify-self: end;
+    }
+}
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
     @media (max-width: 768px) {
         .menu-toggle { display: block; }
         .nav-links { 
-            display: none; position: absolute; top: 64px; left: 0; right: 0; 
+            display: none; position: absolute; top: 68px; left: 0; right: 0; 
             background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
             flex-direction: column; padding: 20px; gap: 4px; 
             border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
         }
         .nav-links.active { display: flex; }
         .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
+        .nav-links a::after { display: none; }
         .nav-cta { margin-left: 0 !important; text-align: center; }
         .hero-buttons { flex-direction: column; align-items: center; }
-        .btn { width: 100%; justify-content: center; }
+        .btn { width: 100%; justify-content: center; max-width: 320px; }
         section { padding: 60px 0; }
         .stats-grid { grid-template-columns: repeat(2, 1fr); }
-        .stat-number { font-size: 2.2rem; }
+        .stat-number { font-size: 2.5rem; }
+        .stat-item::after { display: none; }
         .mapa-container { height: 350px; }
+        .timeline::before { left: 20px; }
+        .timeline-item { width: 100%; left: 0 !important; padding-left: 50px; padding-right: 0; text-align: left !important; }
+        .timeline-item:nth-child(odd) .timeline-dot,
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: 10px; right: auto;
+        }
+        .marquee-item { width: 200px; height: 140px; }
+        .polaroid-grid { grid-template-columns: repeat(2, 1fr); gap: 15px; }
     }
 
-    .nav-logo-derecha {
-        display: flex;
+    @media (max-width: 480px) {
+        .polaroid-grid { grid-template-columns: 1fr; }
+        .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ============================================
+       ANIMACIONES DE ENTRADA
+       ============================================ */
+    .fade-in {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+
+    /* Efecto de lente */
+    .lens-flare {
+        position: absolute;
+        width: 200px; height: 200px;
+        background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 2;
+        animation: lensFloat 10s ease-in-out infinite;
+    }
+    @keyframes lensFloat {
+        0%, 100% { transform: translate(0, 0); }
+        25% { transform: translate(30px, -20px); }
+        50% { transform: translate(-20px, 30px); }
+        75% { transform: translate(20px, 20px); }
+    }
+
+/* ============================================
+   GRUPO DERECHA: PARTICIPA + SMITHSONIAN
+   ============================================ */
+.nav-right-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+}
+
+/* Ajuste del botón Participa separado */
+.nav-right-group .nav-cta {
+    background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+    color: var(--blanco);
+    padding: 9px 18px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(26,71,42,0.3);
+    transition: var(--transicion);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.nav-right-group .nav-cta::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.nav-right-group .nav-cta:hover::before {
+    left: 100%;
+}
+
+.nav-right-group .nav-cta:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(26,71,42,0.4);
+}
+
+/* ============================================
+   NAVEGACIÓN - AJUSTE DEL CENTRADO
+   ============================================ */
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 68px;
+    gap: 16px;
+}
+
+/* Centrado perfecto del menú en desktop */
+@media (min-width: 769px) {
+    .nav-container {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
         align-items: center;
-        margin-left: 16px;
-        flex-shrink: 0;
-        text-decoration: none;
     }
 
-    .nav-logo-img {
-        height: 36px;
-        width: auto;
-        object-fit: contain;
-        transition: var(--transicion);
+    .nav-logo {
+        justify-self: start;
     }
 
-    .nav-logo-derecha:hover .nav-logo-img {
-        transform: scale(1.05);
-        opacity: 0.9;
+    .nav-links {
+        justify-self: center;
+        margin-left: 0;
     }
+
+    .nav-right-group {
+        justify-self: end;
+    }
+}
+
+/* ============================================
+   RESPONSIVE - MENÚ MÓVIL
+   ============================================ */
+@media (max-width: 768px) {
+    .menu-toggle { display: block; }
+    
+    .nav-links { 
+        display: none;
+        position: absolute;
+        top: 68px;
+        left: 0;
+        right: 0;
+        background: rgba(255,255,255,0.98);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 20px;
+        gap: 4px;
+        border-bottom: 1px solid var(--gris-suave);
+        box-shadow: var(--sombra-media);
+    }
+    
+    .nav-links.active { display: flex; }
+    
+    .nav-links a {
+        padding: 12px 16px;
+        display: block;
+        width: 100%;
+        font-size: 0.9rem;
+    }
+    
+    .nav-links a::after { display: none; }
+
+    /* En móvil: Participa va al final del menú desplegado */
+    .nav-right-group {
+        display: none; /* Se oculta en móvil */
+    }
+    
+    /* El Participa aparece dentro del menú desplegable en móvil */
+    .nav-links .nav-cta-mobile {
+        display: block;
+        background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+        color: var(--blanco) !important;
+        text-align: center;
+        border-radius: 10px;
+        margin-top: 8px;
+    }
+}
+
+@media (min-width: 769px) {
+    .nav-links .nav-cta-mobile {
+        display: none;
+    }
+}
+
 
     </style>
 </head>
 <body>
 
     <!-- ============================================
-         NAVEGACIÓN FIJA
+         PRELOADER - CAMARA FOTOGRAFICA
          ============================================ -->
-    <nav class="nav-top" id="navbar">
-        <div class="nav-container">
-            <a href="index.html" class="nav-logo">
-                <span class="nav-logo-icon">📷</span>
-                <span>Snapshot Perú</span>
-            </a>
+    <div class="preloader" id="preloader">
+        <div class="camera-body">
+            <div class="camera-flash"></div>
+            <div class="camera-lens"></div>
+        </div>
+        <div class="preloader-text">Cargando Snapshot Peru...</div>
+    </div>
 
-            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-            <ul class="nav-links" id="navLinks">
-                <li><a href="index.html" class="active">Inicio</a></li>
-                <li><a href="sobre.html">Sobre el Proyecto</a></li>
-                <li><a href="colaboradores.html">Colaboradores</a></li>
-                <li><a href="protocolo.html">Protocolo</a></li>
-                <li><a href="mapa.html">¿Quiénes se suman?</a></li>
-                <li><a href="galeria.html">Galería</a></li>
-                <li><a href="investigacion.html">Investigación</a></li>
-                <li><a href="noticias.html">Noticias</a></li>
-                <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
-            </ul>
+    <!-- ============================================
+         NAVEGACION FIJA
+         ============================================ -->
+<nav class="nav-top" id="navbar">
+    <div class="nav-container">
+        <!-- Logo izquierdo -->
+        <a href="index.html" class="nav-logo">
+            <span class="nav-logo-icon">📷</span>
+            <span>Snapshot Perú</span>
+        </a>
 
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+        
+        <!-- Menú principal-->
+        <ul class="nav-links" id="navLinks">
+            <li><a href="index.html" class="active">Inicio</a></li>
+            <li><a href="sobre.html">Sobre el Proyecto</a></li>
+            <li><a href="protocolo.html">Protocolo</a></li>
+            <li><a href="mapa.html">¿Quiénes Participan?</a></li>
+            <li><a href="investigacion.html">Publicaciones Científicas</a></li>
+            <li class="nav-cta-mobile"><a href="contacto.html">Participa →</a></li>
+        </ul>
+
+        <!-- Grupo derecha: Participa + Smithsonian -->
+        <div class="nav-right-group">
+            <a href="contacto.html" class="nav-cta">Participa →</a>
             <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
                 <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
             </a>
         </div>
-    </nav>
+    </div>
+</nav>
 
     <!-- ============================================
-         HERO PRINCIPAL CON FONDO DE CÁMARA TRAMPA
+         HERO CON EFECTO 3D PARALLAX
          ============================================ -->
     <section class="hero-main">
-        <!-- Patrón decorativo sobre la foto -->
+        <div class="lens-flare" style="top: 20%; left: 10%;"></div>
+        <div class="lens-flare" style="bottom: 30%; right: 15%; animation-delay: -5s;"></div>
+
+        <div class="particles-container" id="particles"></div>
         <div class="hero-pattern"></div>
+        <div class="hero-vignette"></div>
 
         <div class="hero-content">
-            <div class="hero-badge">🌿 Parte de Snapshot Global · Perú 2026</div>
-            <h1 class="hero-title">Snapshot Perú</h1>
+            <div class="hero-badge">
+                <i class="fas fa-globe-americas"></i>
+                Parte de Snapshot Global · Perú 2026
+            </div>
+            <h1 class="hero-title">
+                <span class="title-accent">Snapshot</span> Perú
+            </h1>
             <p class="hero-subtitle">Fotomonitoreo nacional para conocer, conservar y conectar la biodiversidad del Perú.</p>
             <p class="hero-desc">
                 Snapshot Perú es una iniciativa colaborativa orientada a integrar datos de cámaras trampa 
@@ -389,102 +1495,235 @@
                 decisiones en conservación y promover estándares comunes de fotomonitoreo en el país.
             </p>
             <div class="hero-buttons">
-                <a href="#que-es" class="btn btn-primary">Conoce el proyecto</a>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" class="btn btn-secondary" target="_blank">📝 Participa</a>
-                <a href="#mapa" class="btn btn-secondary">🗺️ Explora quiénes participan</a>
-                <a href="https://docs.google.com/document/d/1t6sX1TVXIEqcthvcypiBhHnVwJmLGqCp/edit" class="btn btn-secondary" target="_blank">📄 Descarga el protocolo</a>
+                <a href="#que-es" class="btn btn-primary">
+                    <i class="fas fa-camera"></i> Conoce el proyecto
+                </a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdj-KFuC43QChTDbqKShM4q3aIqNsBu0EcMIcD5d_LaZ4WJQA/viewform" class="btn btn-secondary" target="_blank">
+                    <i class="fas fa-edit"></i> Participa
+                </a>
+                <a href="https://docs.google.com/document/d/1t6sX1TVXIEqcthvcypiBhHnVwJmLGqCp/edit" class="btn btn-secondary" target="_blank">
+                    <i class="fas fa-file-alt"></i> Descarga el protocolo
+                </a>
             </div>
+        </div>
+
+        <div class="scroll-indicator" onclick="document.getElementById('que-es').scrollIntoView({behavior:'smooth'})">
+            <span>Descubre</span>
+            <div class="scroll-line"></div>
         </div>
     </section>
 
     <!-- ============================================
-         ¿QUÉ ES SNAPSHOT PERÚ?
+         MARQUEE DE FOTOS INFINITO
+         ============================================ -->
+<section class="photo-marquee">
+    <div class="marquee-track" id="marqueeTrack">
+        
+        <!-- ===== PRIMERA TANDA (fotos 1-15) ===== -->
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/1.JPG" alt="Fauna peruana 1">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/2.JPG" alt="Fauna peruana 2">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/3.JPG" alt="Fauna peruana 3">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/4.JPG" alt="Fauna peruana 4">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/5.JPG" alt="Fauna peruana 5">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/6.JPG" alt="Fauna peruana 6">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/7.JPG" alt="Fauna peruana 7">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/8.JPG" alt="Fauna peruana 8">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/9.JPG" alt="Fauna peruana 9">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/10.JPG" alt="Fauna peruana 10">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/11.JPG" alt="Fauna peruana 11">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/12.JPG" alt="Fauna peruana 12">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/13.JPG" alt="Fauna peruana 13">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/14.JPG" alt="Fauna peruana 14">
+            <div class="marquee-overlay">Fauna peruana 14">
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/15.JPG" alt="Fauna peruana 15">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+
+        <!-- ===== SEGUNDA TANDA (duplicado para loop infinito) ===== -->
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/1.JPG" alt="Fauna peruana 1">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/2.JPG" alt="Fauna peruana 2">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/3.JPG" alt="Fauna peruana 3">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/4.JPG" alt="Fauna peruana 4">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/5.JPG" alt="Fauna peruana 5">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/6.JPG" alt="Fauna peruana 6">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/7.JPG" alt="Fauna peruana 7">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/8.JPG" alt="Fauna peruana 8">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/9.JPG" alt="Fauna peruana 9">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/10.JPG" alt="Fauna peruana 10">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/11.JPG" alt="Fauna peruana 11">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/12.JPG" alt="Fauna peruana 12">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/13.JPG" alt="Fauna peruana 13">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/14.JPG" alt="Fauna peruana 14">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+        <div class="marquee-item">
+            <img src="imagenes/destacadas/15.JPG" alt="Fauna peruana 15">
+            <div class="marquee-overlay">Fauna peruana</div>
+        </div>
+
+    </div>
+</section>
+
+    <!-- ============================================
+         QUE ES SNAPSHOT PERU? - TARJETAS 3D
          ============================================ -->
     <section class="bg-white" id="que-es">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">¿Qué es?</span>
-                <h2 class="section-title">Snapshot Perú</h2>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-question-circle"></i> Que es?</span>
+                <h2 class="section-title">Snapshot Peru</h2>
                 <p class="section-subtitle">
-                    Una iniciativa que busca reunir esfuerzos de monitoreo con cámaras trampa realizados por 
-                    instituciones públicas, ONG, universidades, áreas protegidas, comunidades, investigadores 
-                    independientes y proyectos de conservación.
+                    Una iniciativa que busca reunir esfuerzos de monitoreo con camaras trampa realizados por 
+                    instituciones publicas, ONG, universidades, areas protegidas, comunidades, investigadores 
+                    independientes y proyectos de conservacion.
                 </p>
             </div>
 
             <div class="grid-3">
-                <div class="card text-center">
-                    <div class="card-icon">🤝</div>
+                <div class="card-3d text-center fade-in fade-in-delay-1">
+                    <div class="card-icon-3d">🤝</div>
                     <h3>Colaborativo</h3>
-                    <p>Trabajamos en red con múltiples actores del país para unificar esfuerzos de monitoreo en una base de datos nacional.</p>
+                    <p>Trabajamos en red con multiples actores del pais para unificar esfuerzos de monitoreo en una base de datos nacional.</p>
                 </div>
-                <div class="card text-center">
-                    <div class="card-icon">📊</div>
+                <div class="card-3d text-center fade-in fade-in-delay-2">
+                    <div class="card-icon-3d">📊</div>
                     <h3>Estandarizado</h3>
-                    <p>Utilizamos protocolos técnicos comunes que permiten comparar datos a nivel nacional y con otros países Snapshot.</p>
+                    <p>Utilizamos protocolos tecnicos comunes que permiten comparar datos a nivel nacional y con otros paises Snapshot.</p>
                 </div>
-                <div class="card text-center">
-                    <div class="card-icon">🌎</div>
+                <div class="card-3d text-center fade-in fade-in-delay-3">
+                    <div class="card-icon-3d">🌎</div>
                     <h3>Nacional</h3>
-                    <p>Cobertura en todo el territorio peruano, abarcando diversos ecosistemas: Amazonía, Andes y Costa.</p>
+                    <p>Cobertura en todo el territorio peruano, abarcando diversos ecosistemas: Amazonia, Andes y Costa.</p>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ============================================
-         ¿POR QUÉ ES IMPORTANTE?
+         POR QUE ES IMPORTANTE?
          ============================================ -->
     <section class="bg-light">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">¿Por qué?</span>
-                <h2 class="section-title">¿Por qué es importante?</h2>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-lightbulb"></i> Por que?</span>
+                <h2 class="section-title">Por que es importante?</h2>
             </div>
 
             <div class="grid-2">
-                <div>
-                    <p style="margin-bottom: 18px; font-size: 1.05rem; line-height: 1.8;">
-                        <strong style="color: var(--verde-oscuro);">Snapshot Perú se inspira en la experiencia de Snapshot USA</strong>, 
+                <div class="importance-text fade-in fade-in-delay-1">
+                    <p>
+                        <strong>Snapshot Peru se inspira en la experiencia de Snapshot USA</strong>, 
                         una iniciativa de fotomonitoreo nacional lanzada en 2019 por el Smithsonian Institution y el 
-                        North Carolina Museum of Natural Sciences, que utiliza cámaras trampa y protocolos estandarizados 
-                        para monitorear mamíferos a gran escala en los Estados Unidos.
+                        North Carolina Museum of Natural Sciences, que utiliza camaras trampa y protocolos estandarizados 
+                        para monitorear mamiferos a gran escala en los Estados Unidos.
                     </p>
-                    <p style="margin-bottom: 18px; font-size: 1.05rem; line-height: 1.8;">
+                    <p>
                         Desde entonces, este modelo ha demostrado el valor de generar bases de datos colaborativas, 
-                        comparables y de largo plazo para entender cómo las poblaciones de fauna responden a cambios 
+                        comparables y de largo plazo para entender como las poblaciones de fauna responden a cambios 
                         en el uso del suelo, la cobertura vegetal y el clima.
                     </p>
-                    <p style="font-size: 1.05rem; line-height: 1.8;">
-                        Snapshot Perú propone desarrollar un fotomonitoreo nacional anual y colaborativo con 
-                        cámaras trampa, orientado al registro de mamíferos y otra fauna terrestre en todo el país.
+                    <p>
+                        Snapshot Peru propone desarrollar un fotomonitoreo nacional anual y colaborativo con 
+                        camaras trampa, orientado al registro de mamiferos y otra fauna terrestre en todo el pais.
                     </p>
                 </div>
-                <div>
-                    <div class="card" style="background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario)); color: white;">
-                        <h3 style="color: var(--dorado-claro); font-size: 1.2rem; margin-bottom: 18px;">🎯 Objetivos del fotomonitoreo</h3>
-                        <ul style="list-style: none; padding: 0; color: rgba(255,255,255,0.9);">
-                            <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; gap: 10px;">
-                                <span>📍</span> Evaluar distribución y presencia de especies
-                            </li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; gap: 10px;">
-                                <span>📈</span> Medir abundancia relativa
-                            </li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; gap: 10px;">
-                                <span>🕐</span> Analizar patrones de actividad
-                            </li>
-                            <li style="padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.15); display: flex; gap: 10px;">
-                                <span>🌿</span> Comparar entre ecosistemas
-                            </li>
-                            <li style="padding: 10px 0; display: flex; gap: 10px;">
-                                <span>👥</span> Evaluar impacto de intervención humana
-                            </li>
+                <div class="fade-in fade-in-delay-2">
+                    <div class="objectives-card">
+                        <h3><i class="fas fa-bullseye"></i> Objetivos del fotomonitoreo</h3>
+                        <ul>
+                            <li><span>📍</span> Evaluar distribucion y presencia de especies</li>
+                            <li><span>📈</span> Medir abundancia relativa</li>
+                            <li><span>🕐</span> Analizar patrones de actividad</li>
+                            <li><span>🌿</span> Comparar entre ecosistemas</li>
+                            <li><span>👥</span> Evaluar impacto de intervencion humana</li>
                         </ul>
                     </div>
-                    <div class="card mt-20">
-                        <p style="color: var(--texto-muted); font-style: italic; text-align: center;">
-                            "Esta información será clave para identificar vacíos de conocimiento, fortalecer el monitoreo 
-                            de biodiversidad a escala nacional y aportar datos comparables a iniciativas globales de conservación."
+                    <div class="quote-card mt-20">
+                        <p>
+                            "Esta informacion sera clave para identificar vacios de conocimiento, fortalecer el monitoreo 
+                            de biodiversidad a escala nacional y aportar datos comparables a iniciativas globales de conservacion."
                         </p>
                     </div>
                 </div>
@@ -493,26 +1732,36 @@
     </section>
 
 
+
+
+
+
     <!-- ============================================
-         FOOTER
+         FOOTER PREMIUM
          ============================================ -->
     <footer class="footer-main">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>📷 Snapshot Perú</h4>
-                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa. Parte de la red Snapshot Global.</p>
+                    <h4><i class="fas fa-camera"></i> Snapshot Peru</h4>
+                    <p>Fotomonitoreo nacional de biodiversidad mediante camaras trampa. Parte de la red Snapshot Global.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
                 <div class="footer-col">
                     <h4>Explorar</h4>
                     <a href="sobre.html">Sobre el Proyecto</a>
                     <a href="protocolo.html">Protocolo</a>
-                    <a href="galeria.html">Galería</a>
-                    <a href="investigacion.html">Investigación</a>
+                    <a href="galeria.html">Galeria</a>
+                    <a href="investigacion.html">Investigacion</a>
                 </div>
                 <div class="footer-col">
                     <h4>Participa</h4>
-                    <a href="contacto.html">Únete al proyecto</a>
+                    <a href="contacto.html">Unete al proyecto</a>
                     <a href="colaboradores.html">Red de colaboradores</a>
                     <a href="noticias.html">Noticias y convocatorias</a>
                 </div>
@@ -522,7 +1771,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Snapshot Perú · Parte de <a href="https://www.snapshot-global.org/" target="_blank" style="color: var(--dorado-claro);">Snapshot Global</a></p>
+                <p>&copy; 2026 Snapshot Peru &middot; Parte de <a href="https://www.snapshot-global.org/" target="_blank">Snapshot Global</a></p>
             </div>
         </div>
     </footer>
@@ -531,17 +1780,121 @@
          SCRIPTS
          ============================================ -->
     <script>
+        // Preloader
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('preloader').classList.add('hidden');
+            }, 2000);
+        });
+
+        // Menu toggle
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
 
+        // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
         });
 
+        // Particulas flotantes
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                particle.style.animationDelay = (Math.random() * 10) + 's';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
 
+        // Animacion de entrada al scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Contador animado para estadisticas
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-target'));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    element.textContent = target + '+';
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current);
+                }
+            }, 16);
+        }
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const numbers = entry.target.querySelectorAll('.stat-number');
+                    numbers.forEach(num => {
+                        if (!num.classList.contains('counted')) {
+                            num.classList.add('counted');
+                            animateCounter(num);
+                        }
+                    });
+                }
+            });
+        }, { threshold: 0.3 });
+
+        document.querySelectorAll('.stats-bar').forEach(bar => {
+            statsObserver.observe(bar);
+        });
+
+        // Efecto parallax en hero
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-main');
+            if (hero) {
+                const speed = 0.5;
+                hero.style.backgroundPositionY = (scrolled * speed) + 'px';
+            }
+        });
+
+        // Efecto 3D en tarjetas con mouse
+        document.querySelectorAll('.card-3d').forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 20;
+                const rotateY = (centerX - x) / 20;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+            });
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = '';
+            });
+        });
     </script>
 
 </body>
