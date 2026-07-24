@@ -6,7 +6,8 @@
     <title>Investigación - Snapshot Perú</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,800;1,400;1,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         :root {
             --verde-oscuro: #1a472a;
@@ -24,11 +25,13 @@
             --gris-suave: #e8ede9;
             --sombra-suave: 0 4px 20px rgba(26, 71, 42, 0.08);
             --sombra-media: 0 8px 30px rgba(26, 71, 42, 0.12);
-            --transicion: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --sombra-fuerte: 0 20px 60px rgba(26, 71, 42, 0.2);
+            --transicion: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transicion-lenta: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -37,361 +40,1017 @@
             line-height: 1.7;
             font-size: 16px;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* NAVEGACIÓN */
+        /* ============================================
+           NAVEGACIÓN FIJA - PREMIUM
+           ============================================ */
         .nav-top {
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            background: rgba(255,255,255,0.95);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(26,71,42,0.08);
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid rgba(26,71,42,0.06);
             transition: var(--transicion);
         }
-        .nav-top.scrolled { box-shadow: var(--sombra-suave); }
-.nav-container {
-    max-width: 1200px; margin: 0 auto; padding: 0 20px;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    height: 64px;
-    gap: 16px;  /* ← esta línea */
-}
+        .nav-top.scrolled { 
+            box-shadow: var(--sombra-suave); 
+            background: rgba(255,255,255,0.97);
+        }
+        .nav-container {
+            max-width: 1200px; 
+            margin: 0 auto; 
+            padding: 0 24px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            height: 68px;
+            gap: 16px;
+        }
         .nav-logo {
-            display: flex; align-items: center; gap: 8px;
+            display: flex; align-items: center; gap: 10px;
             text-decoration: none; color: var(--verde-oscuro);
             font-weight: 800; font-size: 1.25rem; letter-spacing: -0.5px;
             white-space: nowrap; flex-shrink: 0;
+            transition: var(--transicion)
         }
-        .nav-logo-icon { font-size: 1.4rem; }
+        .nav-logo:hover { transform: scale(1.02); }
+        .nav-logo-icon { 
+            font-size: 1.5rem; 
+            filter: drop-shadow(0 2px 4px rgba(26,71,42,0.2));
+            animation: logoFloat 3s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
         .nav-links { 
-            display: flex; list-style: none; gap: 2px; 
-            align-items: center; margin-left: auto;
+            display: flex; 
+            list-style: none; 
+            gap: 2px; 
+            align-items: center; 
+            justify-self: center;
+            margin-left: 0;
         }
         .nav-links a {
             color: var(--texto-claro); text-decoration: none;
-            padding: 6px 10px; border-radius: 6px; font-size: 0.82rem;
+            padding: 7px 12px; border-radius: 8px; font-size: 0.82rem;
             font-weight: 500; transition: var(--transicion);
             white-space: nowrap;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 2px; left: 50%;
+            width: 0; height: 2px;
+            background: var(--verde-primario);
+            transition: var(--transicion);
+            transform: translateX(-50%);
+            border-radius: 1px;
         }
         .nav-links a:hover { color: var(--verde-primario); background: var(--verde-fondo); }
-        .nav-links a.active { color: var(--verde-oscuro); background: var(--verde-fondo); font-weight: 600; }
-        .nav-cta {
-            background: var(--verde-primario) !important; 
-            color: var(--blanco) !important;
-            padding: 8px 14px !important; 
-            border-radius: 8px !important;
-            font-weight: 600 !important; 
-            font-size: 0.82rem !important;
-            margin-left: 4px;
+        .nav-links a:hover::after { width: 60%; }
+        .nav-links a.active { 
+            color: var(--verde-oscuro); 
+            background: var(--verde-fondo); 
+            font-weight: 600; 
         }
-        .nav-cta:hover { background: var(--verde-oscuro) !important; color: var(--blanco) !important; }
+        .nav-links a.active::after { width: 60%; }
+
+        .nav-right-group {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+            justify-self: end;
+        }
+        .nav-right-group .nav-cta {
+            background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+            color: var(--blanco);
+            padding: 9px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            text-decoration: none;
+            box-shadow: 0 4px 15px rgba(26,71,42,0.3);
+            transition: var(--transicion);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        .nav-right-group .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        .nav-right-group .nav-cta:hover::before { left: 100%; }
+        .nav-right-group .nav-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(26,71,42,0.4);
+        }
+
+        .nav-logo-derecha {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            text-decoration: none;
+        }
+        .nav-logo-img {
+            height: 38px;
+            width: auto;
+            object-fit: contain;
+            transition: var(--transicion);
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+        .nav-logo-derecha:hover .nav-logo-img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15));
+        }
+
         .menu-toggle { 
             display: none; background: none; border: none; 
             font-size: 1.4rem; cursor: pointer; 
             color: var(--verde-oscuro); padding: 8px; 
         }
 
-        /* HEADER */
-        .page-header {
-            background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
+        /* ============================================
+           HERO CON FONDO DE INVESTIGACIÓN + BURBUJAS
+           ============================================ */
+        .hero-investigacion {
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            perspective: 1000px;
+        }
+
+        /* Capa 1: La foto de fondo con efecto parallax */
+        .hero-investigacion::before {
+            content: '';
+            position: absolute;
+            top: -10%; left: -10%; right: -10%; bottom: -10%;
+            background: url("imagenes/fondo_investigacion.jpg") center/cover no-repeat;
+            z-index: 0;
+            transform: translateZ(-1px) scale(1.2);
+            animation: heroZoom 20s ease-in-out infinite alternate;
+        }
+        @keyframes heroZoom {
+            0% { transform: translateZ(-1px) scale(1.2); }
+            100% { transform: translateZ(-1px) scale(1.3); }
+        }
+
+        /* Capa 2: Overlay con gradiente */
+        .hero-investigacion::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(26, 71, 42, 0.92) 0%,
+                rgba(45, 106, 79, 0.85) 35%,
+                rgba(64, 145, 108, 0.78) 70%,
+                rgba(26, 71, 42, 0.88) 100%
+            );
+            z-index: 1;
+        }
+
+        /* Burbujas flotantes */
+        .bubbles-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .bubble {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.3), rgba(255,255,255,0.05));
+            border: 1px solid rgba(255,255,255,0.1);
+            animation: bubbleFloat linear infinite;
+            box-shadow: 0 0 20px rgba(212, 165, 116, 0.15), inset 0 0 10px rgba(255,255,255,0.1);
+        }
+        .bubble::after {
+            content: '';
+            position: absolute;
+            top: 15%; left: 20%;
+            width: 25%; height: 15%;
+            background: rgba(255,255,255,0.4);
+            border-radius: 50%;
+            transform: rotate(-45deg);
+        }
+        @keyframes bubbleFloat {
+            0% { transform: translateY(100vh) translateX(0) scale(0.8); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) translateX(30px) scale(1.2); opacity: 0; }
+        }
+
+        /* Patrón decorativo sutil */
+        .hero-pattern {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* Efecto de viñeta */
+        .hero-vignette {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            box-shadow: inset 0 0 150px rgba(0,0,0,0.4);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            text-align: center;
             color: var(--blanco);
-            padding: 120px 0 60px;
+            max-width: 850px;
+            padding: 140px 24px 80px;
+            position: relative;
+            z-index: 3;
+            animation: heroFadeIn 1.2s ease-out;
+        }
+        @keyframes heroFadeIn {
+            0% { opacity: 0; transform: translateY(40px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(15px);
+            padding: 10px 24px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 35px;
+            border: 1px solid rgba(255,255,255,0.15);
+            animation: badgePulse 3s ease-in-out infinite;
+            cursor: default;
+        }
+        @keyframes badgePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(212, 165, 116, 0.3); }
+            50% { box-shadow: 0 0 20px 5px rgba(212, 165, 116, 0.15); }
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.8rem, 7vw, 5rem);
+            font-weight: 800;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+            line-height: 1.05;
+            text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .hero-title .title-accent {
+            color: var(--dorado);
+            position: relative;
+            display: inline-block;
+        }
+        .hero-title .title-accent::after {
+            content: '';
+            position: absolute;
+            bottom: 5px; left: 0; right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, var(--dorado), transparent);
+            opacity: 0.4;
+            border-radius: 4px;
+            z-index: -1;
+        }
+
+        .hero-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+            opacity: 0.95;
+            margin-bottom: 25px;
+            font-weight: 400;
+            font-style: italic;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            text-shadow: 0 2px 15px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
+        }
+
+        .hero-desc {
+            font-size: 1.05rem;
+            opacity: 0.88;
+            max-width: 680px;
+            margin: 0 auto 45px;
+            line-height: 1.9;
+            font-weight: 300;
+        }
+
+        /* Scroll indicator */
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: scrollBounce 2s ease-in-out infinite;
+            cursor: pointer;
+        }
+        .scroll-indicator span {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .scroll-indicator .scroll-line {
+            width: 1px;
+            height: 40px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.6), transparent);
+            position: relative;
+        }
+        .scroll-indicator .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -2px;
+            width: 5px; height: 5px;
+            background: var(--dorado);
+            border-radius: 50%;
+            animation: scrollDot 2s ease-in-out infinite;
+        }
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+        @keyframes scrollDot {
+            0% { top: 0; opacity: 1; }
+            100% { top: 40px; opacity: 0; }
+        }
+
+        /* Lente flare */
+        .lens-flare {
+            position: absolute;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(212,165,116,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 2;
+            animation: lensFloat 10s ease-in-out infinite;
+        }
+        @keyframes lensFloat {
+            0%, 100% { transform: translate(0, 0); }
+            25% { transform: translate(30px, -20px); }
+            50% { transform: translate(-20px, 30px); }
+            75% { transform: translate(20px, 20px); }
+        }
+
+        /* ============================================
+           SECCIONES GENERALES
+           ============================================ */
+        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+        section { padding: 100px 0; position: relative; }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 70px; }
+        .section-tag {
+            display: inline-flex; align-items: center; gap: 8px;
+            color: var(--verde-primario);
+            font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 3px; margin-bottom: 16px;
+            padding: 6px 16px;
+            background: var(--verde-fondo);
+            border-radius: 50px;
+        }
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2rem, 4.5vw, 2.8rem); 
+            color: var(--verde-oscuro);
+            margin-bottom: 18px; 
+            font-weight: 700; 
+            letter-spacing: -1px; 
+            line-height: 1.15;
+        }
+        .section-subtitle { 
+            color: var(--texto-muted); 
+            font-size: 1.1rem; 
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        /* ============================================
+           PUBLICACIONES - TARJETAS PREMIUM
+           ============================================ */
+        .pub-section {
+            background: linear-gradient(180deg, var(--gris-fondo) 0%, var(--blanco) 100%);
+        }
+        .pub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+            gap: 28px;
+        }
+        .pub-card {
+            background: var(--blanco);
+            border-radius: 20px;
+            padding: 36px 32px;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--gris-suave);
+            transition: var(--transicion);
+            position: relative;
+            overflow: hidden;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .pub-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--verde-primario), var(--dorado));
+            transform: scaleX(0);
+            transition: transform 0.5s ease;
+            transform-origin: left;
+        }
+        .pub-card:hover::before { transform: scaleX(1); }
+        .pub-card:hover { 
+            transform: translateY(-8px); 
+            box-shadow: var(--sombra-fuerte); 
+            border-color: var(--verde-pastel); 
+        }
+        .pub-card .meta {
+            display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px;
+        }
+        .pub-card .meta span {
+            font-size: 0.78rem; color: var(--verde-primario);
+            font-weight: 600; background: var(--verde-fondo);
+            padding: 5px 12px; border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+        .pub-card .meta span.year-tag {
+            background: linear-gradient(135deg, var(--dorado), #c49464);
+            color: var(--verde-oscuro);
+        }
+        .pub-card h3 {
+            color: var(--verde-oscuro); 
+            font-size: 1.1rem;
+            margin-bottom: 14px; 
+            font-weight: 700;
+            line-height: 1.4;
+            letter-spacing: -0.3px;
+        }
+        .pub-card p {
+            color: var(--texto-muted); 
+            font-size: 0.95rem; 
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        .pub-card .pub-link {
+            display: inline-flex; 
+            align-items: center; 
+            gap: 8px;
+            color: var(--verde-primario); 
+            font-weight: 600;
+            font-size: 0.9rem; 
+            text-decoration: none;
+            padding: 8px 0;
+            transition: var(--transicion);
+            position: relative;
+        }
+        .pub-card .pub-link::after {
+            content: '';
+            position: absolute;
+            bottom: 6px; left: 0;
+            width: 0; height: 2px;
+            background: var(--dorado);
+            transition: width 0.3s ease;
+        }
+        .pub-card .pub-link:hover { color: var(--verde-oscuro); }
+        .pub-card .pub-link:hover::after { width: 100%; }
+        .pub-card .pub-link i {
+            transition: transform 0.3s ease;
+        }
+        .pub-card .pub-link:hover i {
+            transform: translateX(4px);
+        }
+
+        /* ============================================
+           DATOS ABIERTOS - CARD ESPECIAL
+           ============================================ */
+        .datos-section {
+            background: var(--blanco);
             position: relative;
             overflow: hidden;
         }
-        .page-header::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        .datos-section::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%232d6a4f' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            opacity: 0.5;
         }
-        .page-header-content {
-            max-width: 1100px; margin: 0 auto; padding: 0 24px;
-            position: relative; z-index: 1;
-        }
-        .btn-volver {
-            display: inline-flex; align-items: center; gap: 6px;
-            color: rgba(255,255,255,0.85); text-decoration: none;
-            font-size: 0.9rem; font-weight: 500;
-            padding: 8px 16px; border-radius: 8px;
-            transition: var(--transicion); margin-bottom: 20px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        .btn-volver:hover {
-            background: rgba(255,255,255,0.2);
-            color: var(--blanco); text-decoration: none;
-        }
-        .page-header h1 {
-            font-size: clamp(2rem, 4vw, 3rem); font-weight: 800;
-            margin-bottom: 10px; letter-spacing: -1px;
-        }
-        .page-header p {
-            font-size: 1.1rem; opacity: 0.85; max-width: 600px;
-        }
-
-        /* SECCIONES */
-        .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
-        section { padding: 80px 0; }
-        .section-header { text-align: center; max-width: 700px; margin: 0 auto 50px; }
-        .section-tag {
-            display: inline-block; color: var(--verde-primario);
-            font-size: 0.8rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 2px; margin-bottom: 12px;
-        }
-        .section-title {
-            font-size: clamp(1.6rem, 3.5vw, 2.2rem); color: var(--verde-oscuro);
-            margin-bottom: 14px; font-weight: 800; letter-spacing: -1px;
-        }
-        .section-subtitle { color: var(--texto-muted); font-size: 1.05rem; line-height: 1.7; }
-
-        /* PUBLICACIONES */
-        .pub-card {
-            background: var(--blanco); border-radius: 16px; padding: 28px 32px;
-            box-shadow: var(--sombra-suave); border: 1px solid var(--gris-suave);
-            margin-bottom: 16px; transition: var(--transicion);
-            border-left: 4px solid var(--verde-primario);
-        }
-        .pub-card:hover { box-shadow: var(--sombra-media); transform: translateX(4px); }
-        .pub-card h3 {
-            color: var(--verde-oscuro); font-size: 1.05rem;
-            margin-bottom: 10px; font-weight: 600;
-        }
-        .pub-card p {
-            color: var(--texto-muted); font-size: 0.92rem;
-            margin-bottom: 12px; line-height: 1.6;
-        }
-        .pub-card .meta {
-            display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 10px;
-        }
-        .pub-card .meta span {
-            font-size: 0.8rem; color: var(--verde-primario);
-            font-weight: 600; background: var(--verde-fondo);
-            padding: 4px 10px; border-radius: 6px;
-        }
-        .pub-card a {
-            color: var(--verde-primario); font-weight: 600;
-            font-size: 0.9rem; text-decoration: none;
-        }
-        .pub-card a:hover { text-decoration: underline; }
-
-        /* DATOS ABIERTOS */
         .datos-card {
             background: linear-gradient(135deg, var(--verde-oscuro), var(--verde-primario));
-            border-radius: 20px; padding: 48px;
-            color: var(--blanco); text-align: center;
+            border-radius: 24px; 
+            padding: 60px 48px;
+            color: var(--blanco); 
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(26,71,42,0.3);
+        }
+        .datos-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(212,165,116,0.08) 0%, transparent 60%);
+            animation: objectivesGlow 8s ease-in-out infinite;
+        }
+        @keyframes objectivesGlow {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(180deg); }
         }
         .datos-card h3 {
-            color: var(--dorado-claro); font-size: 1.4rem;
-            margin-bottom: 16px; font-weight: 700;
+            color: var(--dorado-claro); 
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            margin-bottom: 20px; 
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
         }
         .datos-card p {
-            color: rgba(255,255,255,0.9); max-width: 600px;
-            margin: 0 auto 24px; line-height: 1.7;
+            color: rgba(255,255,255,0.9); 
+            max-width: 650px;
+            margin: 0 auto 28px; 
+            line-height: 1.8;
+            font-size: 1.05rem;
+            position: relative;
+            z-index: 1;
+        }
+        .datos-card .datos-meta {
+            display: inline-flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        .datos-card .datos-meta span {
+            font-size: 0.9rem; 
+            color: var(--dorado-claro);
+            background: rgba(255,255,255,0.08);
+            padding: 8px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        /* FOOTER */
+        /* ============================================
+           TIMELINE DE INVESTIGACIÓN
+           ============================================ */
+        .timeline-section {
+            background: var(--gris-fondo);
+            padding: 100px 0;
+        }
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--verde-primario), var(--dorado));
+            border-radius: 3px;
+        }
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            width: 50%;
+            padding: 0 40px;
+        }
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+        .timeline-dot {
+            position: absolute;
+            width: 20px; height: 20px;
+            background: var(--blanco);
+            border: 4px solid var(--verde-primario);
+            border-radius: 50%;
+            top: 5px;
+        }
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+        .timeline-content {
+            background: var(--blanco);
+            padding: 24px;
+            border-radius: 16px;
+            box-shadow: var(--sombra-suave);
+            border: 1px solid var(--gris-suave);
+            transition: var(--transicion);
+        }
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--sombra-media);
+        }
+        .timeline-content h4 {
+            color: var(--verde-oscuro);
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+        .timeline-content p {
+            color: var(--texto-muted);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        .timeline-year {
+            display: inline-block;
+            background: var(--verde-primario);
+            color: white;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        /* ============================================
+           FOOTER PREMIUM
+           ============================================ */
         .footer-main {
             background: linear-gradient(135deg, var(--verde-oscuro), #0f2e1b);
-            color: var(--blanco); padding: 70px 0 30px;
+            color: var(--blanco); 
+            padding: 80px 0 30px;
+            position: relative;
+            overflow: hidden;
         }
-        .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 40px; margin-bottom: 50px; }
-        .footer-col h4 { font-size: 1rem; margin-bottom: 20px; font-weight: 700; color: var(--dorado-claro); }
-        .footer-col p { color: rgba(255,255,255,0.7); font-size: 0.92rem; line-height: 1.7; }
+        .footer-main::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--dorado), transparent);
+        }
+        .footer-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 50px; 
+            margin-bottom: 60px; 
+            position: relative;
+            z-index: 1;
+        }
+        .footer-col h4 { 
+            font-size: 1rem; 
+            margin-bottom: 22px; 
+            font-weight: 700; 
+            color: var(--dorado-claro);
+            letter-spacing: 1px;
+            position: relative;
+            display: inline-block;
+        }
+        .footer-col h4::after {
+            content: '';
+            position: absolute;
+            bottom: -8px; left: 0;
+            width: 30px; height: 2px;
+            background: var(--dorado);
+            border-radius: 1px;
+        }
+        .footer-col p { 
+            color: rgba(255,255,255,0.65); 
+            font-size: 0.92rem; 
+            line-height: 1.8; 
+        }
         .footer-col a { 
-            color: rgba(255,255,255,0.7); text-decoration: none; display: block; 
-            padding: 6px 0; font-size: 0.92rem; transition: var(--transicion); 
+            color: rgba(255,255,255,0.65); 
+            text-decoration: none; 
+            display: block; 
+            padding: 8px 0; 
+            font-size: 0.92rem; 
+            transition: var(--transicion); 
+            position: relative;
+            padding-left: 0;
         }
-        .footer-col a:hover { color: var(--dorado-claro); padding-left: 4px; }
+        .footer-col a::before {
+            content: '>';
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            transition: var(--transicion);
+            color: var(--dorado);
+        }
+        .footer-col a:hover { 
+            color: var(--dorado-claro); 
+            padding-left: 15px; 
+        }
+        .footer-col a:hover::before {
+            opacity: 1;
+            left: 0;
+        }
         .footer-bottom { 
-            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 25px; 
-            text-align: center; font-size: 0.88rem; color: rgba(255,255,255,0.5); 
+            border-top: 1px solid rgba(255,255,255,0.08); 
+            padding-top: 30px; 
+            text-align: center; 
+            font-size: 0.88rem; 
+            color: rgba(255,255,255,0.4);
+            position: relative;
+            z-index: 1;
+        }
+        .footer-bottom a {
+            color: var(--dorado-claro);
+            text-decoration: none;
+            transition: var(--transicion);
+        }
+        .footer-bottom a:hover {
+            color: var(--dorado);
+        }
+        .social-links {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .social-links a {
+            width: 40px; height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.7);
+            font-size: 1rem;
+            transition: var(--transicion);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .social-links a:hover {
+            background: var(--dorado);
+            color: var(--verde-oscuro);
+            transform: translateY(-3px);
+            border-color: var(--dorado);
         }
 
-        .bg-white { background: var(--blanco); }
-        .bg-light { background: var(--gris-fondo); }
-        .text-center { text-align: center; }
-        .mt-20 { margin-top: 20px; }
-        .mt-40 { margin-top: 40px; }
+        /* ============================================
+           ANIMACIONES DE ENTRADA
+           ============================================ */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .fade-in-delay-1 { transition-delay: 0.1s; }
+        .fade-in-delay-2 { transition-delay: 0.2s; }
+        .fade-in-delay-3 { transition-delay: 0.3s; }
+        .fade-in-delay-4 { transition-delay: 0.4s; }
 
+        /* ============================================
+           RESPONSIVE
+           ============================================ */
         @media (max-width: 768px) {
             .menu-toggle { display: block; }
             .nav-links { 
-                display: none; position: absolute; top: 64px; left: 0; right: 0; 
+                display: none; position: absolute; top: 68px; left: 0; right: 0; 
                 background: rgba(255,255,255,0.98); backdrop-filter: blur(20px); 
                 flex-direction: column; padding: 20px; gap: 4px; 
                 border-bottom: 1px solid var(--gris-suave); box-shadow: var(--sombra-media); 
             }
             .nav-links.active { display: flex; }
             .nav-links a { padding: 12px 16px; display: block; width: 100%; font-size: 0.9rem; }
-            .nav-cta { margin-left: 0 !important; text-align: center; }
-            section { padding: 50px 0; }
-            .page-header { padding: 100px 0 40px; }
+            .nav-links a::after { display: none; }
+            .nav-right-group { display: none; }
+            .nav-links .nav-cta-mobile {
+                display: block;
+                background: linear-gradient(135deg, var(--verde-primario), var(--verde-oscuro));
+                color: var(--blanco) !important;
+                text-align: center;
+                border-radius: 10px;
+                margin-top: 8px;
+            }
+            section { padding: 60px 0; }
+            .pub-grid { grid-template-columns: 1fr; }
+            .datos-card { padding: 40px 24px; }
+            .timeline::before { left: 20px; }
+            .timeline-item { width: 100%; left: 0 !important; padding-left: 50px; padding-right: 0; text-align: left !important; }
+            .timeline-item:nth-child(odd) .timeline-dot,
+            .timeline-item:nth-child(even) .timeline-dot {
+                left: 10px; right: auto;
+            }
         }
-
-.nav-logo-derecha {
-    display: flex;
-    align-items: center;
-    margin-left: 16px;
-    flex-shrink: 0;
-    text-decoration: none;
-}
-
-.nav-logo-img {
-    height: 36px;
-    width: auto;
-    object-fit: contain;
-    transition: var(--transicion);
-}
-
-.nav-logo-derecha:hover .nav-logo-img {
-    transform: scale(1.05);
-    opacity: 0.9;
-}
+        @media (min-width: 769px) {
+            .nav-links .nav-cta-mobile { display: none; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- NAVEGACIÓN -->
-<nav class="nav-top" id="navbar">
-    <div class="nav-container">
-        <!-- Logo izquierdo -->
-        <a href="index.html" class="nav-logo">
-            <span class="nav-logo-icon">📷</span>
-            <span>Snapshot Perú</span>
-        </a>
+    <!-- ============================================
+         NAVEGACIÓN FIJA
+         ============================================ -->
+    <nav class="nav-top" id="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="nav-logo-icon">📷</span>
+                <span>Snapshot Perú</span>
+            </a>
 
-        <!-- Links + menú móvil -->
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
-        <ul class="nav-links" id="navLinks">
-            <li><a href="index.html">Inicio</a></li>
-            <li><a href="sobre.html">Sobre el Proyecto</a></li>
-            <li><a href="colaboradores.html">Colaboradores</a></li>
-            <li><a href="protocolo.html">Protocolo</a></li>
-            <li><a href="mapa.html">¿Quiénes se suman?</a></li>
-            <li><a href="galeria.html">Galería</a></li>
-            <li><a href="investigacion.html" class="active">Investigación</a></li>
-            <li><a href="noticias.html">Noticias</a></li>
-            <li><a href="contacto.html" class="nav-cta">Participa →</a></li>
-        </ul>
+            <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 
-        <!-- Logo Smithsonian a la derecha -->
-        <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
-            <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
-        </a>
-    </div>
-</nav>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="sobre.html">Sobre el Proyecto</a></li>
+                <li><a href="protocolo.html">Protocolo</a></li>
+                <li><a href="mapa.html">¿Quiénes Participan?</a></li>
+                <li><a href="investigacion.html" class="active">Publicaciones Científicas</a></li>
+                <li class="nav-cta-mobile"><a href="contacto.html">Participa →</a></li>
+            </ul>
 
-    <!-- HEADER -->
-    <header class="page-header">
-        <div class="page-header-content">
-            <a href="index.html" class="btn-volver">← Volver al inicio</a>
-            <h1>Investigación y Publicaciones</h1>
-            <p>Ciencia generada a partir del fotomonitoreo colaborativo</p>
+            <div class="nav-right-group">
+                <a href="contacto.html" class="nav-cta">Participa →</a>
+                <a href="https://www.si.edu" target="_blank" class="nav-logo-derecha">
+                    <img src="logos/smithsonian.png" alt="Smithsonian" class="nav-logo-img">
+                </a>
+            </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- PUBLICACIONES GLOBALES -->
-    <section class="bg-white">
+    <!-- ============================================
+         HERO CON FONDO DE INVESTIGACIÓN + BURBUJAS
+         ============================================ -->
+    <section class="hero-investigacion">
+        <div class="lens-flare" style="top: 15%; left: 8%;"></div>
+        <div class="lens-flare" style="bottom: 25%; right: 12%; animation-delay: -5s;"></div>
+
+        <div class="bubbles-container" id="bubbles"></div>
+        <div class="hero-pattern"></div>
+        <div class="hero-vignette"></div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fas fa-flask"></i>
+                Ciencia y Conservación
+            </div>
+            <h1 class="hero-title">
+                <span class="title-accent">Investigación</span>
+            </h1>
+            <p class="hero-subtitle">Ciencia generada a partir del fotomonitoreo colaborativo</p>
+            <p class="hero-desc">
+                Exploramos los hallazgos científicos que surgen de las redes de cámaras trampa a nivel global 
+                y local. Desde los primeros estudios de Snapshot USA hasta los proyectos emergentes en el Perú, 
+                cada publicación fortalece nuestro conocimiento sobre la biodiversidad terrestre.
+            </p>
+        </div>
+
+        <div class="scroll-indicator" onclick="document.getElementById('publicaciones').scrollIntoView({behavior:'smooth'})">
+            <span>Explorar</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         PUBLICACIONES CIENTÍFICAS
+         ============================================ -->
+    <section class="pub-section" id="publicaciones">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Ciencia</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-microscope"></i> Ciencia</span>
                 <h2 class="section-title">Publicaciones Científicas</h2>
                 <p class="section-subtitle">Investigaciones asociadas a iniciativas Snapshot a nivel global</p>
             </div>
-            
-            <div class="pub-card">
-                <div class="meta">
-                    <span>Snapshot USA</span>
-                    <span>2019</span>
-                </div>
-                <h3>SNAPSHOT USA 2019: A coordinated national camera trap survey of the United States</h3>
-                <p>
-                    Primera publicación del proyecto Snapshot USA que estableció el modelo de fotomonitoreo 
-                    nacional coordinado usando cámaras trampa en todo Estados Unidos. El estudio demostró 
-                    la viabilidad de monitorear comunidades de mamíferos a escala continental mediante 
-                    protocolos estandarizados y colaboración entre múltiples instituciones.
-                </p>
-                <a href="https://www.researchgate.net/publication/350570790_SNAPSHOT_USA_2019_a_coordinated_national_camera_trap_survey_of_the_United_States" target="_blank">
-                    🔗 Ver en ResearchGate →
-                </a>
-            </div>
 
-            <div class="pub-card">
-                <div class="meta">
-                    <span>Snapshot USA</span>
-                    <span>2021-2023</span>
+            <div class="pub-grid">
+                <div class="pub-card fade-in fade-in-delay-1">
+                    <div class="meta">
+                        <span>Snapshot USA</span>
+                        <span class="year-tag">2019</span>
+                    </div>
+                    <h3>SNAPSHOT USA 2019: A coordinated national camera trap survey of the United States</h3>
+                    <p>
+                        Primera publicación del proyecto Snapshot USA que estableció el modelo de fotomonitoreo 
+                        nacional coordinado usando cámaras trampa en todo Estados Unidos. El estudio demostró 
+                        la viabilidad de monitorear comunidades de mamíferos a escala continental mediante 
+                        protocolos estandarizados y colaboración entre múltiples instituciones.
+                    </p>
+                    <a href="https://www.researchgate.net/publication/350570790_SNAPSHOT_USA_2019_a_coordinated_national_camera_trap_survey_of_the_United_States" target="_blank" class="pub-link">
+                        Ver en ResearchGate <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-                <h3>SNAPSHOT USA: The First Five Years of Data</h3>
-                <p>
-                    Análisis de los primeros cinco años de datos del proyecto Snapshot USA, publicado en 
-                    Global Ecology and Biogeography. El estudio presenta tendencias poblacionales de 
-                    mamíferos a nivel nacional y evalúa el impacto de factores ambientales y antropogénicos 
-                    en la distribución de especies.
-                </p>
-                <a href="https://research.fs.usda.gov/download/treesearch/69050.pdf" target="_blank">
-                    🔗 Descargar PDF →
-                </a>
-            </div>
 
-            <div class="pub-card">
-                <div class="meta">
-                    <span>Global Ecology</span>
-                    <span>2024</span>
+                <div class="pub-card fade-in fade-in-delay-2">
+                    <div class="meta">
+                        <span>Snapshot USA</span>
+                        <span class="year-tag">2021-2023</span>
+                    </div>
+                    <h3>SNAPSHOT USA: The First Five Years of Data</h3>
+                    <p>
+                        Análisis de los primeros cinco años de datos del proyecto Snapshot USA, publicado en 
+                        Global Ecology and Biogeography. El estudio presenta tendencias poblacionales de 
+                        mamíferos a nivel nacional y evalúa el impacto de factores ambientales y antropogénicos 
+                        en la distribución de especies.
+                    </p>
+                    <a href="https://research.fs.usda.gov/download/treesearch/69050.pdf" target="_blank" class="pub-link">
+                        Descargar PDF <i class="fas fa-arrow-right"></i>
+                    </a>
                 </div>
-                <h3>Global patterns in mammal communities from coordinated camera trap networks</h3>
-                <p>
-                    Artículo reciente sobre los resultados globales del proyecto Snapshot, integrando 
-                    datos de múltiples países para identificar patrones continentales en comunidades de 
-                    mamíferos y sus respuestas al cambio climático y al uso del suelo.
-                </p>
-                <a href="https://onlinelibrary.wiley.com/doi/10.1111/geb.70229" target="_blank">
-                    🔗 Ver en Wiley Online Library →
-                </a>
+
+                <div class="pub-card fade-in fade-in-delay-3">
+                    <div class="meta">
+                        <span>Global Ecology</span>
+                        <span class="year-tag">2024</span>
+                    </div>
+                    <h3>Global patterns in mammal communities from coordinated camera trap networks</h3>
+                    <p>
+                        Artículo reciente sobre los resultados globales del proyecto Snapshot, integrando 
+                        datos de múltiples países para identificar patrones continentales en comunidades de 
+                        mamíferos y sus respuestas al cambio climático y al uso del suelo.
+                    </p>
+                    <a href="https://onlinelibrary.wiley.com/doi/10.1111/geb.70229" target="_blank" class="pub-link">
+                        Ver en Wiley Online Library <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- DATOS DE SNAPSHOT PERÚ -->
-    <section class="bg-light">
+
+
+    <!-- ============================================
+         DATOS ABIERTOS
+         ============================================ -->
+    <section class="datos-section">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Próximamente</span>
+            <div class="section-header fade-in">
+                <span class="section-tag"><i class="fas fa-database"></i> Próximamente</span>
                 <h2 class="section-title">Datos de Snapshot Perú</h2>
             </div>
-            
-            <div class="datos-card">
-                <h3>📊 Datos abiertos en preparación</h3>
+
+            <div class="datos-card fade-in fade-in-delay-1">
+                <h3><i class="fas fa-chart-bar"></i> Datos abiertos en preparación</h3>
                 <p>
                     Los datos de Snapshot Perú serán publicados en repositorios abiertos una vez completada 
                     la primera temporada de muestreo (2026). La base de datos incluirá registros de 
                     especies, abundancia relativa, patrones de actividad y metadatos asociados a cada 
                     punto de muestreo.
                 </p>
-                <p style="font-size: 0.9rem; color: var(--dorado-claro); margin-bottom: 0;">
-                    <strong>Plataforma:</strong> Wildlife Insights · <strong>Disponibilidad:</strong> 2027
-                </p>
+                <div class="datos-meta">
+                    <span><i class="fas fa-cloud"></i> Wildlife Insights</span>
+                    <span><i class="fas fa-calendar"></i> Disponibilidad: 2027</span>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
+    <!-- ============================================
+         FOOTER PREMIUM
+         ============================================ -->
     <footer class="footer-main">
         <div class="container">
             <div class="footer-grid">
                 <div class="footer-col">
-                    <h4>📷 Snapshot Perú</h4>
-                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa.</p>
+                    <h4><i class="fas fa-camera"></i> Snapshot Perú</h4>
+                    <p>Fotomonitoreo nacional de biodiversidad mediante cámaras trampa. Parte de la red Snapshot Global.</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
                 </div>
                 <div class="footer-col">
                     <h4>Explorar</h4>
-                    <a href="index.html">Inicio</a>
                     <a href="sobre.html">Sobre el Proyecto</a>
                     <a href="protocolo.html">Protocolo</a>
                     <a href="galeria.html">Galería</a>
+                    <a href="investigacion.html">Investigación</a>
                 </div>
                 <div class="footer-col">
                     <h4>Participa</h4>
                     <a href="contacto.html">Únete al proyecto</a>
-                    <a href="mapa.html">Ver mapa de participantes</a>
+                    <a href="colaboradores.html">Red de colaboradores</a>
+                    <a href="noticias.html">Noticias y convocatorias</a>
                 </div>
                 <div class="footer-col">
                     <h4>Contacto</h4>
@@ -399,19 +1058,88 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>© 2026 Snapshot Perú</p>
+                <p>&copy; 2026 Snapshot Perú &middot; Parte de <a href="https://www.snapshot-global.org/" target="_blank">Snapshot Global</a></p>
             </div>
         </div>
     </footer>
 
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
     <script>
+        // Menu toggle
         function toggleMenu() {
             document.getElementById('navLinks').classList.toggle('active');
         }
+
+        // Navbar scroll effect
         window.addEventListener('scroll', function() {
             const nav = document.getElementById('navbar');
             if (window.scrollY > 50) nav.classList.add('scrolled');
             else nav.classList.remove('scrolled');
+        });
+
+        // Burbujas flotantes
+        function createBubbles() {
+            const container = document.getElementById('bubbles');
+            const sizes = [20, 30, 40, 50, 60, 80];
+            for (let i = 0; i < 25; i++) {
+                const bubble = document.createElement('div');
+                bubble.className = 'bubble';
+                const size = sizes[Math.floor(Math.random() * sizes.length)];
+                bubble.style.width = size + 'px';
+                bubble.style.height = size + 'px';
+                bubble.style.left = Math.random() * 100 + '%';
+                bubble.style.animationDuration = (Math.random() * 15 + 10) + 's';
+                bubble.style.animationDelay = (Math.random() * 15) + 's';
+                container.appendChild(bubble);
+            }
+        }
+        createBubbles();
+
+        // Animación de entrada al scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Efecto parallax en hero
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero-investigacion');
+            if (hero) {
+                const speed = 0.5;
+                hero.style.backgroundPositionY = (scrolled * speed) + 'px';
+            }
+        });
+
+        // Efecto 3D en tarjetas con mouse
+        document.querySelectorAll('.pub-card').forEach(card => {
+            card.addEventListener('mousemove', function(e) {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 25;
+                const rotateY = (centerX - x) / 25;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px)`;
+            });
+            card.addEventListener('mouseleave', function() {
+                card.style.transform = '';
+            });
         });
     </script>
 
